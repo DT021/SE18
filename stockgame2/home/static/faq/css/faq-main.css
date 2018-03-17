@@ -8,6 +8,12 @@ body {
   padding-top: 54px;
 }
 
+.faqHeader {
+  color:#FFFFFF;
+  font-size: 27px;
+  margin: 20px;
+}
+
 @media (min-width: 992px) {
   body {
     padding-top: 56px;
