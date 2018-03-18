@@ -35,5 +35,8 @@ def league2(request):
 def league3(request):
 	return HttpResponse("This is the league3 page.")
 def profile(request):
-	return HttpResponse("This is the profile page.")		
+	return HttpResponse("This is the profile page.")
+def buypage(request):
+	template = loader.get_template('buypage.html')
+	return HttpResponse(template.render({},request))
 # Create your views here.

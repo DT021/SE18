@@ -14,5 +14,6 @@ urlpatterns = [
 	path('league2', views.league2, name='league2'),
 	path('league3', views.league3, name='league3'),
 	path('profile', views.profile, name='profile'),
-	path('faq', views.faq, name='faq')
+	path('faq', views.faq, name='faq'),
+	path('buypage', views.buypage, name='buypage')
 	]
