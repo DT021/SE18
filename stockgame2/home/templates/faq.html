@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <title>Home</title>
+
+  <!-- Bootstrap core CSS -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+	
+	<!-- Custom styles for this template -->
+	<link href="/static/faq/css/faq-main.css" rel="stylesheet">
+	
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+</head>
+<body background = "/static/home2/city3.jpg" style = "background-repeat:no-repeat; background-size:cover;">
+
+  <!-- Navigation -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+    <div class="container">
+      <a class="navbar-brand" href=""><img src="/static/assets/img/navbar/TITANTrading_1.png" width="125" height="45" alt="logo"></a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarResponsive">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item active">
+            <a class="nav-link" href="#">Home
+              <span class="sr-only">(current)</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/dashboard">Dashboard</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/aboutus">About Us</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/profile">UserID</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+	</nav>
+	
+	<br><br><br>
+
+  <!-- Page Content -->
+  <div class="container">
+		<div class="faqHeader">Question Set 1</div>
+		<div id="faq" role="tablist" aria-multiselectable="true">
+
+			<div class="card">
+			<div class="card-header" role="tab" id="questionOne">
+			<h5 class="card-title">
+			<a data-toggle="collapse" data-parent="#faq" href="#answerOne" aria-expanded="true" aria-controls="answerOne">
+			Question 1
+			</a>
+			</h5>
+			</div>
+			<div id="answerOne" class="collapse show" role="tabcard" aria-labelledby="questionOne">
+			<div class="card-body">
+			Question 1 Answer
+			</div>
+			</div>
+			</div>
+			
+			<div class="card">
+			<div class="card-header" role="tab" id="questionTwo">
+			<h5 class="card-title">
+			<a class="collapsed" data-toggle="collapse" data-parent="#faq" href="#answerTwo" aria-expanded="false" aria-controls="answerTwo">
+			Question 2
+			</a>
+			</h5>
+			</div>
+			<div id="answerTwo" class="collapse" role="tabcard" aria-labelledby="questionTwo">
+			<div class="card-body">
+			Question 2 Answer
+			</div>
+			</div>
+			</div>
+			
+			<div class="card">
+			<div class="card-header" role="tab" id="questionThree">
+			<h5 class="card-title">
+			<a class="collapsed" data-toggle="collapse" data-parent="#faq" href="#answerThree" aria-expanded="true" aria-controls="answerThree">
+			Question 3
+			</a>
+			</h5>
+			</div>
+			<div id="answerThree" class="collapse in" role="tabcard" aria-labelledby="questionThree">
+			<div class="card-body">
+			Question 3 Answer
+			</div>
+			</div>
+			</div>
+			
+		</div>
+
+	
+		<div class="faqHeader">Question Set 2</div>
+		<div id="faqTabsTwo" role="tablist" aria-multiselectable="true">
+
+				<div class="card">
+				<div class="card-header" role="tab" id="questionFour">
+				<h5 class="card-title">
+				<a data-toggle="collapse" data-parent="#faqTabsTwo" href="#answerFour" aria-expanded="true" aria-controls="answerFour">
+				Question 4
+				</a>
+				</h5>
+				</div>
+				<div id="answerFour" class="collapse show" role="tabcard" aria-labelledby="questionOne">
+				<div class="card-body">
+				Question 4 Answer
+				</div>
+				</div>
+				</div>
+				
+				<div class="card">
+				<div class="card-header" role="tab" id="questionFive">
+				<h5 class="card-title">
+				<a class="collapsed" data-toggle="collapse" data-parent="#faq" href="#answerFive" aria-expanded="false" aria-controls="answerFive">
+				Question 5
+				</a>
+				</h5>
+				</div>
+				<div id="answerFive" class="collapse" role="tabcard" aria-labelledby="questionFive">
+				<div class="card-body">
+				Question 5 Answer
+				</div>
+				</div>
+				</div>
+				
+				<div class="card">
+				<div class="card-header" role="tab" id="quesionSix">
+				<h5 class="card-title">
+				<a class="collapsed" data-toggle="collapse" data-parent="#faq" href="#answerSix" aria-expanded="true" aria-controls="answerSix">
+				Question 6
+				</a>
+				</h5>
+				</div>
+				<div id="answerSix" class="collapse in" role="tabcard" aria-labelledby="quesionSix">
+				<div class="card-body">
+				Question 6 Answer
+				</div>
+				</div>
+				</div>
+				
+			</div>
+
+		<br><br><br>
+	
+	<!-- Footer -->
+  <footer class="py-5 bg-dark">
+    <div class="container">
+      <p class="m-0 text-center text-white">Copyright &copy; Your Website 2017</p>
+    </div>
+    <!-- /.container -->
+  </footer>
+
+  </div>
+
+</body>
+
+</html>
+

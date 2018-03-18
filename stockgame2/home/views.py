@@ -23,6 +23,9 @@ def dashboard(request):
 def createleague(request):
 	template = loader.get_template('createleague.html')
 	return HttpResponse(template.render({},request))
+def faq(request):
+	template = loader.get_template('faq.html')
+	return HttpResponse(template.render({},request))
 def universal(request):
 	return HttpResponse("This is the universal league page.")
 def league1(request):
