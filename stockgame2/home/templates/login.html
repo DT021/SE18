@@ -8,7 +8,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <!-- PAGE settings -->
 		<link rel="icon" href="/static/home2/titanhead_logo.png">
-		<title>Become a Titan</title>
+		<title>Login</title>
 
         <!-- CSS -->
         <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:400,100,300,500">
@@ -46,7 +46,7 @@
               <a class="nav-link js-scroll-trigger" style="color:#fff" href="/aboutus">About Us</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link js-scroll-trigger" style="color:#fff" href="/login">Login</a>
+              <a class="nav-link js-scroll-trigger" style="color:#fff" href="/signup">Sign Up</a>
             </li>
           </ul>
         </div>
@@ -54,81 +54,35 @@
     </nav> 
         <!-- Top content -->
         <div class="top-content">
-        	<div class="container" style="width:auto">
-                	
+        	<div class="container" style="padding-top:10%;align-items:center;width:auto;margin:auto;">	
                 <div class="row">
                     <div class="col-sm-6 col-sm-offset-2 text" style="margin-left:auto;margin-right: auto">
-                        <h1>Join the Titans!</h1>
-                        <div class="description">
-                        	<p>
-                                New to trading? You've come to the right place.
-                        	</p>
-                        </div>
+                        <h1>Login</h1>
                     </div>
                 </div>
                 
                 <div class="row">
-                    <div class="col-sm-10 col-sm-offset-1 show-forms">
-                    	<span class="show-register-form active">Register</span> 
+                    <div class="col-sm-5 col-sm-offset-1 show-forms" style ="margin: auto">
+                    	<span class="show-register-form"><a style="color:#fff" href="/signup">Register</a></span> 
                     	<span class="show-forms-divider">/</span> 
-                    	<span class="show-login-form"><a style="color:#fff"href="/login">Login</a></span>
+                    	<span class="show-login-form active">Login</span>
                     </div>
                 </div>
-                
-                <div class="row register-form">
-                    <div class="col-sm-6">
-						<form role="form" action="" method="post" class="r-form">
-	                    	<div class="form-group">
-	                    		<label class="sr-only" for="r-form-first-name">Username</label>
-	                        	<input type="text" name="r-form-first-name" placeholder="Username..." class="r-form-first-name form-control" id="r-form-first-name">
+                <div class ="row">
+                <div class="col-sm-5 col-sm-offset-1" style ="margin: auto">
+	                    	<div class="form-group" style="padding-top:5%">
+	                    		<label class="sr-only" for="l-form-username">Username</label>
+	                        	<input type="text" name="l-form-username" placeholder="Username..." class="l-form-username form-control" id="l-form-username">
 	                        </div>
 	                        <div class="form-group">
-	                        	<label class="sr-only" for="r-form-last-name">Password</label>
-	                        	<input type="text" name="r-form-last-name" placeholder="Password..." class="r-form-last-name form-control" id="r-form-last-name">
+	                        	<label class="sr-only" for="l-form-password">Password</label>
+	                        	<input type="password" name="l-form-password" placeholder="Password..." class="l-form-password form-control" id="l-form-password">
 	                        </div>
-                            <div class="form-group">
-                                <label class="sr-only" for="r-form-last-name">Password</label>
-                                <input type="text" name="r-form-last-name" placeholder="Confirm Password..." class="r-form-last-name form-control" id="r-form-last-name">
-                            </div>
-	                        <div class="form-group">
-	                        	<label class="sr-only" for="r-form-email">Email</label>
-	                        	<input type="text" name="r-form-email" placeholder="Email..." class="r-form-email form-control" id="r-form-email">
-	                        </div>
-	                        <div class="form-group">
-	                        	<label class="sr-only" for="r-form-about-yourself">About yourself</label>
-	                        	<textarea name="r-form-about-yourself" placeholder="About yourself..." 
-	                        				class="r-form-about-yourself form-control" id="r-form-about-yourself"></textarea>
-	                        </div>
-				           <a class="btn btn-primary" href="/home" style="align-items:center;justify-content:center">Sign Up!</a>
-						</form>   
-                    </div>
-                    <div class="col-sm-6 forms-right-icons">
-						<div class="row">
-							<div class="col-sm-2 icon"><i class="fa fa-line-chart" aria-hidden="true"></i></div>
-							<div class="col-sm-10">
-								<h3>Realistic Trading</h3>
-								<p>Gain the experience and satisfaction of buying/selling stocks without the risk.</p>
-							</div>
-						</div>
-						<div class="row">
-							<div class="col-sm-2 icon"><i class="fa fa-commenting"></i></div>
-							<div class="col-sm-10">
-								<h3>Private Leagues</h3>
-								<p>Compete with friends and see who can earn the most money in a certain amount of time.</p>
-							</div>
-						</div>
-						<div class="row">
-							<div class="col-sm-2 icon"><i class="fa fa-btc" aria-hidden="true"></i></div>
-							<div class="col-sm-10">
-								<h3>Cryptocurrency</h3>
-								<p>Familiarize yourself with the secrets of Cryptocurrency.</p>
-							</div>
-						</div>
-                    </div>
-                </div> 
+				            <button class="btn"><a style="color:#fff" href="/home">Sign in!</a></button>
+                	</div>
                 </div>
-                    
-        	</div>
+                </div>
+           </div>
         </div>
 
         <!-- Footer -->

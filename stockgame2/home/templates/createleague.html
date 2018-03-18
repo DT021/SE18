@@ -97,7 +97,7 @@
           <div class="invalid-feedback"> Please enter a valid starting balance. </div>
         </div>
         <div class="mb-3"> <label for="Join Password" class="text-light">Join Password</label>
-          <input type="text" class="form-control" id="address" placeholder="Enter password here." required=""><small class="text-light">(Invitees will join the league with this password.)</small>
+          <input type="password" class="form-control" id="address" placeholder="Enter password here." required=""><small class="text-light">(Invitees will join the league with this password.)</small>
           <div class="invalid-feedback"> Please enter a join password. </div>
         </div>
         <!--
@@ -113,13 +113,13 @@
           <div class="custom-control custom-radio">
             <input name="leagueType" type="radio" class="custom-control-input" required="" value="on" id="crypto"> <label class="custom-control-label text-light" for="debit">Crypto Market <span class="text-secondary">(Cryptocurrency Market)</span></label> </div>
         </div>
-        <div class="row">
-          <div class="col-md-3 mb-3"> <label for="cc-expiration" class="text-light">Start Date</label>
-            <input type="text" class="form-control" id="cc-expiration" placeholder="MM/DD/YYYY" required=""><small class="text-secondary">MM/DD/YYYY</small>
+        <div class="form-row">
+          <!--<div class="col"> <label for="cc-expiration" class="text-light">Start Date</label>
+            <input type="date" class="form-control" id="cc-expiration" placeholder="MM/DD/YYYY" required=""><small class="text-secondary">MM/DD/YYYY</small>
             <div class="invalid-feedback"> Start Date required </div>
-          </div>
-          <div class="col-md-3 mb-3"> <label for="cc-expiration" class="text-light">End Date</label>
-            <input type="text" class="form-control" id="cc-cvv" placeholder="MM/DD/YYYY" required=""> <small class="text-secondary">MM/DD/YYYY</small>
+          </div> -->
+          <div class="col"> <label for="cc-expiration" class="text-light">End Date</label>
+            <input type="date" class="form-control" id="cc-cvv" placeholder="MM/DD/YYYY" required=""> <small class="text-secondary">League End Date</small>
             <div class="invalid-feedback"> End Date required </div>
           </div>
         </div>
