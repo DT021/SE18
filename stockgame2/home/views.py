@@ -23,14 +23,24 @@ def dashboard(request):
 def createleague(request):
 	template = loader.get_template('createleague.html')
 	return HttpResponse(template.render({},request))
+def faq(request):
+	template = loader.get_template('faq.html')
+	return HttpResponse(template.render({},request))
 def universal(request):
 	return HttpResponse("This is the universal league page.")
 def league1(request):
-	return HttpResponse("This is the league1 page.")
+	template = loader.get_template('individualleague.html')
+	return HttpResponse(template.render({},request))
 def league2(request):
 	return HttpResponse("This is the league2 page.")
 def league3(request):
 	return HttpResponse("This is the league3 page.")
 def profile(request):
-	return HttpResponse("This is the profile page.")		
+	return HttpResponse("This is the profile page.")
+def buypage(request):
+	template = loader.get_template('buypage.html')
+	return HttpResponse(template.render({},request))
+def sellform(request):
+	template = loader.get_template('sellform.html')
+	return HttpResponse(template.render({},request))
 # Create your views here.
