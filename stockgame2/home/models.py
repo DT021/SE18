@@ -22,7 +22,16 @@ class League(models.Model):
 
 
 class Transaction(models.Model):
-
+	transactionID = models.IntegerField()
+	leagueID = models.IntegerField()
+	playerID = models.IntegerField()
+	price = models.DecimalField(decimal_places=2,max_digits=10)
+	ticker = models.CharField(max_length=5)
+	amtShares = models.IntegerField()
+	isBuy = models.BooleanField()
 
 class Asset(models.Model):
-		
+	ticker = models.CharField(max_length=5)
+	playerID = models.IntegerField()
+	amtShares = models.IntegerField()
+	buyingPrice = models.DecimalField(decimal_places=2,max_digits=10)
