@@ -40,4 +40,7 @@ def profile(request):
 def buypage(request):
 	template = loader.get_template('buypage.html')
 	return HttpResponse(template.render({},request))
+def sellform(request):
+	template = loader.get_template('sellform.html')
+	return HttpResponse(template.render({},request))
 # Create your views here.
