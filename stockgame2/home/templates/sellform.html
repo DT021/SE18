@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+	<!-- PAGE settings -->
+	<link rel="icon" href="/static/home2/titanhead_logo.png">
+  <title>Sell Page</title>
+  <!-- Bootstrap core CSS -->
+  <link href="/static/home2/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet"/>
+  <!-- Custom styles for this template -->
+  <link rel ="stylesheet" href="/static/home2/css/small-business.css" type="text/css">
+  <link rel="stylesheet" href="/static/sellform/css/tableform.css" type="text/css"/>
+
+</head>
+<body background = "/static/home2/city13.jpg" style = "background-repeat:no-repeat; background-size:cover;">
+
+  <!-- Navigation -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+    <div class="container">
+      <a class="navbar-brand" href=""><img src="/static/home2/TITANTrading_1.png" width="125" height="45" alt="logo"></a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarResponsive">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item active">
+            <a class="nav-link" href="#">Home
+              <span class="sr-only">(current)</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/dashboard">Dashboard</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/aboutus">About Us</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/profile">UserID</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Page Content -->
+  <div class="container">
+
+    <!-- Heading Row -->
+    <div class="row my-5">
+      <div class="col-lg-12">
+
+      <h2>Sell Form</h2>
+      <div class="row my-3"></div>
+      <div id="billing-info" class="row">
+        <div class="col-sm-7 form-group">
+          <input data-mirror type="text" class="form-control" placeholder="GOOGL"/>
+          <span class="error small text-danger"></span>
+          <label for="billing_firstName">Stock Symbol *</label>
+
+          <input type="email" class="form-control" placeholder="Number of Shares"/>
+          <span class="error small text-danger"></span>
+          <label for="billing_email">Quantity *</label>
+
+          <h4 class="mb-12 text-secondary">Price</h4>
+          <!--Radio group-->
+          <div class="row">
+              <div class = "col-sm-3">
+              <input name="group103" type="radio" class="with-gap" id="radio109">
+              <label for="radio109">Market</label>
+              </div>
+          </div>
+
+          <div class="row">
+                <div class = "col-sm-3">
+                <input name="group103" type="radio" class="with-gap" id="radio110" checked>
+                <label for="radio110">Limit</label>
+                </div>
+
+                <div class = "col-sm-8">
+                <input data-mirror type="text" class="form-control" placeholder="Price Limit"/>
+                <span class="error small text-danger"></span>
+              </div>
+          </div>
+
+          <div class="row">
+            <!--<div class="form-check radio-pink-gap">-->
+                <div class = "col-sm-3">
+                <input name="group103" type="radio" class="with-gap" id="radio111">
+                <label for="radio111">Stop</label>
+                </div>
+
+                <div class = "col-sm-8">
+                <input data-mirror type="text" class="form-control" placeholder="Stop Limit"/>
+                <span class="error small text-danger"></span>
+                </div>
+            <!--</div>-->
+          </div>
+          <!--Radio group-->
+
+        </div>
+
+        <div class="col-lg-5">
+
+          <h2>Trade Details</h2>
+          <!--<div id="billing-info" class="row">-->
+            <ul class="list-group">
+              <li class="list-group-item d-flex justify-content-between">
+
+                  <h6 class="my-0"><b>Stock ticker</b></h6> <small class="text-muted">(number)</small>
+
+                  <span class="text-muted">$12</span> </li>
+              <li class="list-group-item d-flex justify-content-between"> <span>Total (USD)</span> <b>$20</b> </li>
+            </ul>
+          <!--</div>-->
+
+          </div>
+      </div>
+
+      <div class="row my-5"><button type="button" class="btn btn-success btn-block btn-large">Submit</button></div>
+
+
+      </div>
+    </div>
+
+    </div>
+  </div>
+
+
+  <!-- Footer -->
+  <footer class="py-3 bg-dark">
+    <div class="container">
+      <p class="m-0 text-center text-white">Copyright &copy; Your Website 2017</p>
+    </div>
+    <!-- /.container -->
+  </footer>
+
+  <!-- Bootstrap core JavaScript -->
+  <script src="/static/home2/vendor/jquery/jquery.min.js"></script>
+  <script src="/static/home2/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+</body>
+
+</html>
