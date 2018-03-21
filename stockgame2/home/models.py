@@ -30,7 +30,113 @@ class Player(models.Model):
 
 
 class League(models.Model):
-
+        isUniversal = models.BooleanField()
+        settingID = models.ForeignKey(
+                Setting,
+                on_delete=models.CASCADE
+                verbose_name="the related setting",
+        )
+        numPlayers = models.IntegerField()
+        playerID1 = models.ForeignKey(
+                Player,
+                on_delete=models.CASCADE
+                verbose_name="the related player",
+        )
+        playerID2 = models.ForeignKey(
+                Player,
+                on_delete=models.CASCADE
+                verbose_name="the related player",
+        )
+        playerID3 = models.ForeignKey(
+                Player,
+                on_delete=models.CASCADE
+                verbose_name="the related player",
+        )
+        playerID4 = models.ForeignKey(
+                Player,
+                on_delete=models.CASCADE
+                verbose_name="the related player",
+        )
+        playerID5 = models.ForeignKey(
+                Player,
+                on_delete=models.CASCADE
+                verbose_name="the related player",
+        )
+        playerID6 = models.ForeignKey(
+                Player,
+                on_delete=models.CASCADE
+                verbose_name="the related player",
+        )
+        playerID7 = models.ForeignKey(
+                Player,
+                on_delete=models.CASCADE
+                verbose_name="the related player",
+        )
+        playerID8 = models.ForeignKey(
+                Player,
+                on_delete=models.CASCADE
+                verbose_name="the related player",
+        )
+        playerID9 = models.ForeignKey(
+                Player,
+                on_delete=models.CASCADE
+                verbose_name="the related player",
+        )
+        playerID10 = models.ForeignKey(
+                Player,
+                on_delete=models.CASCADE
+                verbose_name="the related player",
+        )
+        playerID11 = models.ForeignKey(
+                Player,
+                on_delete=models.CASCADE
+                verbose_name="the related player",
+        )
+        playerID12 = models.ForeignKey(
+                Player,
+                on_delete=models.CASCADE
+                verbose_name="the related player",
+        )
+        playerID13 = models.ForeignKey(
+                Player,
+                on_delete=models.CASCADE
+                verbose_name="the related player",
+        )
+        playerID14 = models.ForeignKey(
+                Player,
+                on_delete=models.CASCADE
+                verbose_name="the related player",
+        )
+        playerID15 = models.ForeignKey(
+                Player,
+                on_delete=models.CASCADE
+                verbose_name="the related player",
+        )
+        playerID16 = models.ForeignKey(
+                Player,
+                on_delete=models.CASCADE
+                verbose_name="the related player",
+        )
+        playerID17 = models.ForeignKey(
+                Player,
+                on_delete=models.CASCADE
+                verbose_name="the related player",
+        )
+        playerID18 = models.ForeignKey(
+                Player,
+                on_delete=models.CASCADE
+                verbose_name="the related player",
+        )
+        playerID19 = models.ForeignKey(
+                Player,
+                on_delete=models.CASCADE
+                verbose_name="the related player",
+        )
+        playerID20 = models.ForeignKey(
+                Player,
+                on_delete=models.CASCADE
+                verbose_name="the related player",
+        )
 
 class Transaction(models.Model):
         leagueID = models.ForeignKey(
