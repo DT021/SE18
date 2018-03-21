@@ -153,5 +153,10 @@ class Transaction(models.Model):
 class Asset(models.Model):
 	ticker = models.CharField(max_length=5)
 	playerID = models.IntegerField()
+	leagueID = models.ForeignKey(
+                League,
+                on_delete=models.CASCADE
+                verbose_name="the related league",
+        )
 	shares = models.IntegerField()
 	buyingPrice = models.DecimalField(decimal_places=2,max_digits=25)
