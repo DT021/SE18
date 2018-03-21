@@ -1,9 +1,7 @@
 from django.db import models
-
 # Create your models here.
 
 class User(models.Model):
-	userID = models.IntegerField()
 	username = models.CharField(max_length=20)
         password = models.CharField(max_length=20)
         email = models.CharField(max_length=40)
@@ -13,17 +11,33 @@ class User(models.Model):
         leagueID3 = models.IntegerField()
 
 class Setting(models.Model):
-
+	beginDate = models.DateTimeField()
+        endDate = models.DateTimeField()
+        startingBalance = models.DecimalField(decimal_places=2,max_digits=25)
+	adminID = models.IntegerField()
+        isCrypto = models.BooleanField()
+        joinPassword = models.CharField(max_length=20)
 	
 class Player(models.Model):
+        userID = models.ForeignKey(
+		User,
+		on_delete=models.CASCADE
+		verbose_name="the related user",
+	)
+        buyingPower = models.DecimalField(decimal_places=2,max_digits=25)
+        percentChange = models.DecimalField(decimal_places=2,max_digits=25)
+        totalWorth = models.DecimalField(decimal_places=2,max_digits=25)
 
 
 class League(models.Model):
 
 
 class Transaction(models.Model):
-	transactionID = models.IntegerField()
-	leagueID = models.IntegerField()
+        leagueID = models.ForeignKey(
+                League,
+                on_delete=models.CASCADE
+                verbose_name="the related league",
+        )
 	playerID = models.IntegerField()
 	price = models.DecimalField(decimal_places=2,max_digits=25)
 	ticker = models.CharField(max_length=5)
