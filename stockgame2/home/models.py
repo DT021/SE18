@@ -3,9 +3,9 @@ from django.db import models
 
 class User(models.Model):
 	username = models.CharField(max_length=20)
-    password = models.CharField(max_length=20)
-    email = models.CharField(max_length=40)
-    leagueID0 = models.IntegerField()
+	password = models.CharField(max_length=20)
+	email = models.CharField(max_length=40)
+	leagueID0 = models.IntegerField()
 	leagueID1 = models.IntegerField()
 	leagueID2 = models.IntegerField()
 	leagueID3 = models.IntegerField()
@@ -17,9 +17,9 @@ class Setting(models.Model):
 	adminID = models.IntegerField()
 	isCrypto = models.BooleanField()
 	joinPassword = models.CharField(max_length=20)
-	
+
 class Player(models.Model):
-    userID = models.ForeignKey(
+	userID = models.ForeignKey(
 		User,
 		on_delete=models.CASCADE
 		verbose_name="the related user",
@@ -35,7 +35,7 @@ class League(models.Model):
 		Setting,
 		on_delete=models.CASCADE
 		verbose_name="the related setting",
-    )
+	)
 	numPlayers = models.IntegerField()
 	playerID1 = models.ForeignKey(
 		Player,
