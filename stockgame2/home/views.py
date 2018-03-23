@@ -28,7 +28,7 @@ def faq(request):
 	return HttpResponse(template.render({},request))
 def universal(request):
 	return HttpResponse("This is the universal league page.")
-def league1(request):
+def league1(request):	# (request, league_id)
 	template = loader.get_template('individualleague.html')
 	return HttpResponse(template.render({},request))
 def league2(request):
