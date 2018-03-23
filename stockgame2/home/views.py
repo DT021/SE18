@@ -2,6 +2,20 @@ from django.shortcuts import render
 from django.template import loader
 from django.http import HttpResponse
 
+def submitSignup(request):
+    if request.method == "POST":
+        savedUser = request.POST.get("username", "")
+        savedPass = request.POST.get("password1", "")
+        confirmPass = request.POST.get("password2", "")
+        if password != confirmPass: # redirect to signup with error message
+            template = loader.get_template('signup.html')
+            return HttpResponse(template.render({},request))
+        savedEmail = request.POST.get("email", "")
+        user = User(username=savedUser, password=savedPass, email=savedEmail, leagueID0 = None, leagueID1 = None, leagueID2 = None, leagueID3 = None)
+        user.save()
+    template = loader.get_template('aboutus.html')
+    return HttpResponse(template.render({},request))
+
 def index(request):
 	template = loader.get_template('greet.html')
 	return HttpResponse(template.render({},request))
