@@ -17,5 +17,6 @@ urlpatterns = [
 	path('faq', views.faq, name='faq'),
 	path('buypage', views.buypage, name='buypage'),
 	path('sellform', views.sellform, name='sellform'),
-	path('profile', views.profile, name='profile')
+	path('profile', views.profile, name='profile'),
+	path('mission', views.mission, name="mission")
 	]
