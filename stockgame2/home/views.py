@@ -1,22 +1,23 @@
 from django.shortcuts import render
 from django.template import loader
 from django.http import HttpResponse
+from home.models import User
 
 def submitSignup(request):
-    if request.method == "POST":
-        return HttpResponse(request.POST.get("username", ""))
-        savedUser = request.POST.get("username", "")
-        savedPass = request.POST.get("password1", "")
-        confirmPass = request.POST.get("password2", "")
-        if password != confirmPass: # redirect to signup with error message
-            template = loader.get_template('signup.html')
-       #     return HttpResponse(template.render({},request))
-        savedEmail = request.POST.get("email", "")
-        user = User(username=savedUser, password=savedPass, email=savedEmail, leagueID0 = 0, leagueID1 = 0, leagueID2 = 0, leagueID3 = 0)
-        user.save()
-        user2 = User(username="savedUser", password="savedPass", email="savedEmail", leagueID0 = 0, leagueID1 = 0, leagueID2 = 0, leagueID3 = 0)
-        user2.save()
-    template = loader.get_template('aboutus.html') # should redirect to profile page with message indicating successful profile creation
+#    savedUser = request.POST.get("username", "")
+#    savedPass = request.POST.get("password1", "")
+#    confirmPass = request.POST.get("password2", "")
+#    if password != confirmPass: # redirect to signup with error message
+#        template = loader.get_template('signup.html')
+   #     return HttpResponse(template.render({},request))
+ #   savedEmail = request.POST.get("email", "")
+#    user = User(username=savedUser, password=savedPass, email=savedEmail, leagueID0 = 0, leagueID1 = 0, leagueID2 = 0, leagueID3 = 0)
+#    user.save()
+    user2 = User(username="savedUser", password="savedPass", email="savedEmail", leagueID0 = 0, leagueID1 = 0, leagueID2 = 0, leagueID3 = 0)
+    user2.save()
+ #   template = loader.get_template('aboutus.html') # should redirect to profile page with message indicating successful profile creation
+#    return HttpResponse(template.render({},request))
+    template = loader.get_template('aboutus.html')
     return HttpResponse(template.render({},request))
 
 def index(request):
