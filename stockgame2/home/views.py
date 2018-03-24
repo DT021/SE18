@@ -5,6 +5,8 @@ from home.models import User
 from home.forms import UserForm
 from django.http import HttpResponseRedirect
 from django.core.mail import send_mail
+from django.core.validators import validate_email
+
 
 def submitSignup(request):
 	if request.method == 'POST':
@@ -12,14 +14,20 @@ def submitSignup(request):
 		if form.is_valid():
 			username = form.cleaned_data['username']
 			pwd = form.cleaned_data['password']
+			c_pwd = form.cleaned_data['conf_pwd']
+			if pwd!=c_pwd:
+				form.add_error('conf_pwd', "Password does not match")
+				return render(request, 'signup.html', {'form': form})
 			email = form.cleaned_data['email']
 			user = User(username=username, password=pwd, email=email, leagueID0 = 0, leagueID1 = 0, leagueID2 = 0, leagueID3 = 0)
 			user.save()
 			return HttpResponseRedirect('/home')
+		else:
+			return render(request, 'signup.html', {'form': form})
 	else:
 		form = UserForm()
 
-	return render(request, 'signup.html', {'form': form})
+		return render(request, 'signup.html', {'form': form})
 #    savedUser = request.POST.get("username", "")
 #    savedPass = request.POST.get("password1", "")
 #    confirmPass = request.POST.get("password2", "")

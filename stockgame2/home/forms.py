@@ -9,4 +9,3 @@ class UserForm(forms.Form):
 	password = forms.CharField(max_length=20)
 	conf_pwd = forms.CharField(max_length=20)
 	email = forms.CharField(max_length=40, validators=[validators.validate_email])
-
