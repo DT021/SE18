@@ -1,3 +1,9 @@
 ul li{
 	display:inline-block
 }
+
+.dashboard-title {
+	text-align: center;
+	border-radius: 1rem;
+	padding-bottom: 10px;
+}

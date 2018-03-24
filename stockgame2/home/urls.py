@@ -20,5 +20,6 @@ urlpatterns = [
 	path('buypage', views.buypage, name='buypage'),
 	path('sellform', views.sellform, name='sellform'),
 	path('profile', views.profile, name='profile'),
-	path('mission', views.mission, name="mission")
+	path('mission', views.mission, name="mission"),
+	path('universal', views.universal, name='universal')
 	]
