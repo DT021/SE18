@@ -16,6 +16,7 @@
         <link rel="stylesheet" href="/static/homestyle/vendor/font-awesome/css/font-awesome.min.css">
 		<link rel="stylesheet" href="/static/assets/css/form-elements.css">
         <link rel="stylesheet" href="/static/assets/css/style.css">
+		<link rel="stylesheet" href="/static/assets/css/error.css">
 
         <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -90,29 +91,41 @@
                 
                 <div class="row register-form">
                     <div class="col-sm-6">
-						<form role="form" action="" method="post" class="r-form">
+						<!-- {% if form.errors %} -->
+							<!-- <p>NOT VALID</p> -->
+							<!-- {% for errors in form.errors %} -->
+								<!-- {{ errors }} -->
+							<!-- {% endfor %} -->
+						<!-- {% endif %} -->
+						<form role="form" action="/submitSignup" method="post" class="r-form">
+							{% csrf_token %}
+							{{ form.non_field_errors }}
 	                    	<div class="form-group">
-	                    		<label class="sr-only" for="r-form-first-name">Username</label>
-	                        	<input type="text" name="r-form-first-name" placeholder="Username..." class="r-form-first-name form-control" id="r-form-first-name">
+	                    		<label class="sr-only" for="r-form-first-name">{{ form.username }}</label>
+	                        	<input type="text" name="username" placeholder="Username..." class="r-form-first-name form-control" id="r-form-first-name">
 	                        </div>
 	                        <div class="form-group">
-	                        	<label class="sr-only" for="r-form-last-name">Password</label>
-	                        	<input type="text" name="r-form-last-name" placeholder="Password..." class="r-form-last-name form-control" id="r-form-last-name">
+	                        	{{ form.password.errors }}
+								<label class="sr-only" for="r-form-last-name">{{ form.password }}</label>
+	                        	<input type="text" name="password" placeholder="Password..." class="r-form-last-name form-control" id="r-form-last-name">
 	                        </div>
                             <div class="form-group">
-                                <label class="sr-only" for="r-form-last-name">Password</label>
-                                <input type="text" name="r-form-last-name" placeholder="Confirm Password..." class="r-form-last-name form-control" id="r-form-last-name">
+								{{ form.conf_pwd.errors }}
+                                <label class="sr-only" for="r-form-last-name">{{ form.conf_pwd }}</label>
+                                <input type="text" name="conf_pwd" placeholder="Confirm Password..." class="r-form-last-name form-control" id="r-form-last-name">
                             </div>
 	                        <div class="form-group">
-	                        	<label class="sr-only" for="r-form-email">Email</label>
-	                        	<input type="text" name="r-form-email" placeholder="Email..." class="r-form-email form-control" id="r-form-email">
+								{{ form.email.errors }}
+	                        	<label class="sr-only" for="r-form-email">{{ form.email }}</label>
+	                        	<input type="text" name="email" placeholder="Email..." class="r-form-email form-control" id="r-form-email">
 	                        </div>
-	                        <div class="form-group">
+	                        <!--<div class="form-group">
 	                        	<label class="sr-only" for="r-form-about-yourself">About yourself</label>
 	                        	<textarea name="r-form-about-yourself" placeholder="About yourself..." 
 	                        				class="r-form-about-yourself form-control" id="r-form-about-yourself"></textarea>
-	                        </div>
-				           <a class="btn btn-primary" href="/home" style="align-items:center;justify-content:center">Sign Up!</a>
+	                        </div> -->
+							<input class="btn btn-primary" type="submit" value="Sign Up!" />
+				            <!--<a class="btn btn-primary" href="/submitSignup" style="align-items:center;justify-content:center">Sign Up!</a>-->
 						</form>   
                     </div>
                     <div class="col-sm-6 forms-right-icons">
