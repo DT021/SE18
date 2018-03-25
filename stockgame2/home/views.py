@@ -3,6 +3,7 @@ from django.template import loader
 from django.http import HttpResponse
 from home.models import User
 from home.forms import UserForm
+from home.forms import LoginForm
 from django.http import HttpResponseRedirect
 from django.core.mail import send_mail
 from django.core.validators import validate_email
@@ -28,21 +29,27 @@ def submitSignup(request):
 		form = UserForm()
 
 		return render(request, 'signup.html', {'form': form})
-#    savedUser = request.POST.get("username", "")
-#    savedPass = request.POST.get("password1", "")
-#    confirmPass = request.POST.get("password2", "")
-#    if password != confirmPass: # redirect to signup with error message
-#        template = loader.get_template('signup.html')
-   #     return HttpResponse(template.render({},request))
- #   savedEmail = request.POST.get("email", "")
-#    user = User(username=savedUser, password=savedPass, email=savedEmail, leagueID0 = 0, leagueID1 = 0, leagueID2 = 0, leagueID3 = 0)
-#    user.save()
-# # user2 = User(username="savedUser", password="savedPass", email="savedEmail", leagueID0 = 0, leagueID1 = 0, leagueID2 = 0, leagueID3 = 0)
-# # user2.save()
- #   template = loader.get_template('aboutus.html') # should redirect to profile page with message indicating successful profile creation
-#    return HttpResponse(template.render({},request))
-# # template = loader.get_template('aboutus.html')
-# # return HttpResponse(template.render({},request))
+
+def submitLogin(request):
+	if request.method == 'POST':
+		form = LoginForm(request.POST)
+		if form.is_valid():
+			username = form.cleaned_data['username']
+			pwd = form.cleaned_data['password']
+			try:
+				user = User.objects.get(username=username)
+				if user.password != pwd:
+					form.add_error('password', "Incorrect password")
+					return render(request, 'login.html', {'form': form})
+			except User.DoesNotExist:
+				form.add_error('username', "Username does not exist")
+				return render(request, 'login.html', {'form': form})
+			return HttpResponseRedirect('/home')
+		else:
+			return render(request, 'login.html', {'form': form})
+	else:
+		form = LoginForm()
+		return render(request, 'login.html', {'form': form})
 	
 def get_user(request):
 	 # if this is a POST request we need to process the form data
