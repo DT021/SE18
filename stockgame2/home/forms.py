@@ -19,3 +19,8 @@ class LeagueForm(forms.Form):
 	adminID = forms.IntegerField()
 	isCrypto = forms.BooleanField()
 	joinPassword = forms.CharField(max_length=20)
+
+class LoginForm(forms.Form):
+	username = forms.CharField(label='Your name', max_length=20)
+	password = forms.CharField(max_length=20)
+

@@ -3,6 +3,7 @@ from django.template import loader
 from django.http import HttpResponse
 from home.models import User
 from home.forms import UserForm
+from home.forms import LoginForm
 from django.http import HttpResponseRedirect
 from django.core.mail import send_mail
 from django.core.validators import validate_email
@@ -27,6 +28,28 @@ def submitSignup(request):
 	else:
 		form = UserForm()
 		return render(request, 'signup.html', {'form': form})
+
+def submitLogin(request):
+	if request.method == 'POST':
+		form = LoginForm(request.POST)
+		if form.is_valid():
+			username = form.cleaned_data['username']
+			pwd = form.cleaned_data['password']
+			try:
+				user = User.objects.get(username=username)
+				if user.password != pwd:
+					form.add_error('password', "Incorrect password")
+					return render(request, 'login.html', {'form': form})
+			except User.DoesNotExist:
+				form.add_error('username', "Username does not exist")
+				return render(request, 'login.html', {'form': form})
+			return HttpResponseRedirect('/home')
+		else:
+			return render(request, 'login.html', {'form': form})
+	else:
+		form = LoginForm()
+		return render(request, 'login.html', {'form': form})
+	
 
 def get_user(request):
 	 # if this is a POST request we need to process the form data
