@@ -14,7 +14,7 @@ class User(models.Model):
 class Setting(models.Model):
 	beginDate = models.DateTimeField()
 	endDate = models.DateTimeField()
-	startingBalance = models.DecimalField(decimal_places=2,max_digits=25)
+	startingBalance = models.DecimalField(decimal_places=2,max_digits=40)
 	adminID = models.IntegerField()
 	isCrypto = models.BooleanField()
 	joinPassword = models.CharField(max_length=20)
@@ -26,6 +26,7 @@ class Player(models.Model):
 	totalWorth = models.DecimalField(decimal_places=2,max_digits=25)
 
 class League(models.Model):
+	name = models.CharField(max_length=50)
 	isUniversal = models.BooleanField()
 	settingID = models.ForeignKey(Setting, on_delete=models.CASCADE)
 	numPlayers = models.IntegerField()
