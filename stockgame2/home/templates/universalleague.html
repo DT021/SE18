@@ -9,7 +9,7 @@
     <meta name="author" content="">
 	<!-- PAGE settings -->
 	<link rel="icon" href="/static/home2/titanhead_logo_trans.png">
-    <title>League Dashboard</title>
+    <title>Universal League</title>
 
     <!-- Bootstrap core CSS -->
     <link href="/static/dashboard/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -29,7 +29,7 @@
     <link href="/static/dashboard2/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
   </head>
 
-  <body style = "background-color: rgba(169,225,236,0.5); background-repeat:no-repeat; background-size:cover; background-attachment: fixed;">
+  <body background = "/static/home2/skyscraper1.jpg" style = "background-repeat:no-repeat; background-size:cover; background-attachment: fixed;">
 
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
@@ -66,62 +66,93 @@
     <div class="container">
 
       <!-- Page Heading -->
-      <h1 class="my-4 dashboard-title">League Dashboard
+      <h1 class="my-4">Universal League
       </h1>
       <div class="row">
         <div class="col-lg-6 portfolio-item">
           <div class="card h-100">
             <div style="width:100%;text-align:center;">
-              <h2 style="font-size:1.6em;text-overflow:ellipsis;line-height:1.8rem;margin:0.1rem 0 0;overflow:hidden;z-index:1; position:relative;">Universal League</h2>
+              <h2 style="font-size:1.6em;text-overflow:ellipsis;line-height:1.8rem;margin:0.1rem 0 0;overflow:hidden;z-index:1; position:relative;">Leaderboard</h2>
             
-              <ul style="margin:0;padding:0; list-style-type:none;border-bottom:1px solid rgba(118,118,118,0.1);color:#767676;">
-              <li>Crypto · </li>
-              <li>Stock · </li>
-              <li>Timed</li>
-              </ul>
-            </div>
-            <div class="row">
-            <div class="col-lg-5" style="border-right:1px solid rgba(118,118,118,0.1);height:270px;">
-              <img style="margin:auto;position:absolute;top:0;bottom:0;left:0;right:0;" src="/static/home2/titanhead_logo_trans.png">
-            </div>
-            <div class="col-lg-7" style="padding-left:0;height:270px">
-              <ul style="margin:0;padding:0;font-size:1em;text-align:center;border-bottom:1px solid rgba(118,118,118,0.1);color:#767676;">
-                <li>Admin: N/A</li>
-              </ul>
-              <ul style="margin:0;padding:0;font-size:1em;text-align:center;border-bottom:1px solid rgba(118,118,118,0.1);color:#767676;">
-                <li>Created: March 03 2018</li>
-              </ul>
-              <ul style="margin:0;padding:0;font-size:1em;text-align:center;border-bottom:1px solid rgba(118,118,118,0.1);color:#767676;">
-                <li>Ends: December 02 2018</li>
-              </ul>
-              <ol style="list-style-type:none;margin:0;padding:0;font-size:1em;text-align:center;border-bottom:1px solid rgba(118,118,118,0.1);color:#767676;">
-                <li style="text-align:left">Player Information:</li>
-                <li>Rank:102</li>
-                <li>Buying Power: $10,321</li>
-                <li>Total Assets: $32,197</li>
-              </ol>
-              <div style="overflow-y:scroll;padding:.5em;text-align:left;white-space:normal;color:#0a0a0a;flex:1;height:100px">
-              <p>The universal league is a Titan Trading created league that all users are automatically a part of. Compete with all other Titan Trading users to find out who is the superior investor and how ready you are for real investment.</p>
-              </div>
-            </div>
-          </div>
-            <div class="container" style="width:100%; bottom:0; border-top:1px solid rgba(118,118,118,0.1);">
-              <h4 class="card-title">
-                <a href="/universal">Universal League</a>
-              </h4>
-              <p class="card-text" style="color:#767676;">Click the link for more information about your Universal League.</p>
-            </div>
+             <!-- /.col-lg-8 -->
+      <div class="col-lg-4" style="background-color:#fff;border-radius:.25rem">
+        <table style="width:100%;text-align:center">
+          <tr>
+            <th>Rank</th>
+            <th>UserName</th> 
+            <th>Total Assets</th>
+          </tr>
+          <tr>
+            <td>1</td>
+            <td>IvanMarsic</td> 
+            <td>$1,204,201</td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td>TimothyLiu</td> 
+            <td>$702,403</td>
+          </tr>
+          <tr>
+            <td>3</td>
+            <td>Avanish</td> 
+            <td>$702,201</td>
+          </tr>
+          <tr>
+            <td>4</td>
+            <td>Kristene</td> 
+            <td>$632,123</td>
+          </tr>
+          <tr>
+            <td>5</td>
+            <td>NickLurski</td> 
+            <td>$403,912</td>
+          </tr>
+          <tr>
+            <td>6</td>
+            <td>StevenAdler</td> 
+            <td>$403,083</td>
+          </tr>
+          <tr>
+            <td>7</td>
+            <td>Safa</td> 
+            <td>$132,617</td>
+          </tr>
+          <tr>
+            <td>8</td>
+            <td>KristianWu</td> 
+            <td>$52,952</td>
+          </tr>
+          <tr>
+            <td>9</td>
+            <td>Brooks</td> 
+            <td>$43,212</td>
+          </tr>
+          <tr>
+            <td>10</td>
+            <td>DavidZ</td> 
+            <td>$10,201</td>
+          </tr>
+
+        </table>
+        <div class="card-footer" style="background-color:#fff;text-align:center">
+          <div class="container" style="margin:auto;padding-top:4%">
+           <a class="btn btn-primary" href="/dashboard">Back to League Dashboard!</a>
           </div>
         </div>
+        
+      </div>
+      <!-- /.col-md-4 -->
+            </div>
+          </div>
+          </div>
+        
 
        <div class="col-lg-6 portfolio-item">
           <div class="card h-100">
             <div style="width:100%;text-align:center;">
-              <h2 style="font-size:1.6em;text-overflow:ellipsis;line-height:1.8rem;margin:0.1rem 0 0;overflow:hidden;z-index:1; position:relative;">Class Of SE18 League</h2>
+              <h2 style="font-size:1.6em;text-overflow:ellipsis;line-height:1.8rem;margin:0.1rem 0 0;overflow:hidden;z-index:1; position:relative;">Personal Info</h2>
             
               <ul style="margin:0;padding:0; list-style-type:none;border-bottom:1px solid rgba(118,118,118,0.1);color:#767676;">
-              <li>Stock · </li>
-              <li>Timed</li>
               </ul>
             </div>
             <div class="row">
@@ -129,58 +160,35 @@
               <img style="margin:auto;position:absolute;top:0;bottom:0;left:0;right:0;" src="/static/home2/se18.png">
             </div>
             <div class="col-lg-7" style="padding-left:0;height:270px">
-              <ul style="margin:0;padding:0;font-size:1em;text-align:center;border-bottom:1px solid rgba(118,118,118,0.1);color:#767676;">
-                <li>Admin: IvanMarsic</li>
-              </ul>
-              <ul style="margin:0;padding:0;font-size:1em;text-align:center;border-bottom:1px solid rgba(118,118,118,0.1);color:#767676;">
-                <li>Created: September 06 2018</li>
-              </ul>
-              <ul style="margin:0;padding:0;font-size:1em;text-align:center;border-bottom:1px solid rgba(118,118,118,0.1);color:#767676;">
-                <li>Ends: May 11 2018</li>
-              </ul>
-              <ol style="list-style-type:none;margin:0;padding:0;font-size:1em;text-align:center;border-bottom:1px solid rgba(118,118,118,0.1);color:#767676;">
-                <li style="text-align:left">Player Information:</li>
-                <li>Rank:1</li>
-                <li>Buying Power: $111,321</li>
-                <li>Total Assets: $302,197</li>
+               <ol style="list-style-type:none;margin:0;padding:0;font-size:1em;text-align:center;border-bottom:1px solid rgba(118,118,118,0.1);color:#767676;">
+                <li style="text-align:left">User Name:</li>
+                <li>Buying Power:</li>
+                <li>Rank: </li>
+                <li>Total Worth: </li>
               </ol>
-              <div style="overflow-y:scroll;padding:.5em;text-align:left;white-space:normal;color:#0a0a0a;flex:1;height:100px">
-              <p>A private league created for the students enrolled in Software Engineering 2018 Spring Semester.</p>
-              </div>
-            </div>
+              <ol style="list-style-type:none;margin:0;padding:0;font-size:1em;text-align:center;border-bottom:1px solid rgba(118,118,118,0.1);color:#767676;">
+                <li style="text-align:left">League Settings:</li>
+                <li>End Date:</li>
+                <li>League Admin: </li>
+                <li>Starting Balance: </li>
+                <li>Crypto or Not </li> 
+              </ol>
           </div>
-            <div class="container" style="width:100%; bottom:0; border-top:1px solid rgba(118,118,118,0.1);">
-              <h4 class="card-title">
-                <a href="/league1">Class Of SE18 League</a>
-              </h4>
-              <p class="card-text" style="color:#767676;">Click the link for more information about your private League.</p>
-            </div>
           </div>
         </div>
+    </div>
 
         <div class="col-lg-6 portfolio-item">
           <div class="card h-100">
-           <a href="/createleague"><div class="btn btn-success" style="width:100%;height:80%"><i class="fa fa-plus-square" style="font-size:400%;margin:auto"></i><h1>Create a League!</h1>
+           <a href="/buypage"><div class="btn btn-success" style="width:100%;height:40%"><i class="fa fa-plus-square" style="font-size:400%;margin:auto"></i><h1>BUY</h1>
           </div></a>
-            <div class="card-body">
-              <h4 class="card-title">
-                <a href="/faq">Learn more about Private Leagues.</a>
-              </h4>
-              <p class="card-text">Create a new league to start trading with friends!</p>
-            </div>
           </div>
         </div>
+        
         <div class="col-lg-6 portfolio-item">
           <div class="card h-100">
-
-          <a href="/createleague"><div class="btn btn-success" style="width:100%;height:80%" ><i class="fa fa-plus-square" style="font-size:400%;margin:auto"></i><h1>Create a League!</h1>
+          <a href="/sellform"><div class="btn btn-success" style="width:100%;height:40%" ><i class="fa fa-plus-square" style="font-size:400%;margin:auto"></i><h1>SELL</h1>
           </div></a>
-            <div class="card-body">
-              <h4 class="card-title">
-                <a href="/faq">Learn more about Private Leagues.</a>
-              </h4>
-              <p class="card-text">Create a new league to start trading with friends!</p>
-            </div>
           </div>
         </div>
       <!-- /.row -->
