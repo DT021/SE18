@@ -51,12 +51,13 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'stockgame.urls'
+LOGIN_REDIRECT_URL = 'home'
 
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [
-                BASE_DIR + '/home/templates'],
+        'DIRS': [os.path.join(BASE_DIR, 'home/templates/')],
+                #BASE_DIR + '/home/templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

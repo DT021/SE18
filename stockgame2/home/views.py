@@ -40,26 +40,26 @@ def submitSignup(request):
 		form = SignUpForm()
 		return render(request, 'signup.html', {'form': form})
 
-def submitLogin(request):
-	if request.method == 'POST':
-		form = LoginForm(request.POST)
-		if form.is_valid():
-			username = form.cleaned_data['username']
-			pwd = form.cleaned_data['password']
-			try:
-				user = User.objects.get(username=username)
-				if user.password != pwd:
-					form.add_error('password', "Incorrect password")
-					return render(request, 'login.html', {'form': form})
-			except User.DoesNotExist:
-				form.add_error('username', "Username does not exist")
-				return render(request, 'login.html', {'form': form})
-			return HttpResponseRedirect('/home')
-		else:
-			return render(request, 'login.html', {'form': form})
-	else:
-		form = LoginForm()
-		return render(request, 'login.html', {'form': form})
+# def submitLogin(request):
+	# if request.method == 'POST':
+		# form = LoginForm(request.POST)
+		# if form.is_valid():
+			# username = form.cleaned_data['username']
+			# pwd = form.cleaned_data['password']
+			# try:
+				# user = User.objects.get(username=username)
+				# if user.password != pwd:
+					# form.add_error('password', "Incorrect password")
+					# return render(request, 'login.html', {'form': form})
+			# except User.DoesNotExist:
+				# form.add_error('username', "Username does not exist")
+				# return render(request, 'login.html', {'form': form})
+			# return HttpResponseRedirect('/home')
+		# else:
+			# return render(request, 'login.html', {'form': form})
+	# else:
+		# form = LoginForm()
+		# return render(request, 'login.html', {'form': form})
 	
 
 def get_user(request):

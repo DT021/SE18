@@ -4,7 +4,7 @@ from django.core.validators import EmailValidator
 from django.utils.translation import gettext_lazy as _
 from django.core import validators
 from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User as auth_User
 
 class SignUpForm(UserCreationForm):
 	# username = forms.CharField(label='Your name', max_length=20)
@@ -12,7 +12,7 @@ class SignUpForm(UserCreationForm):
 	# conf_pwd = forms.CharField(max_length=20)
 	email = forms.EmailField(max_length=254, help_text='Required. Enter a valid email address.')
 	class Meta:
-		model = User
+		model = auth_User
 		fields = ('username', 'password1', 'password2', 'email')
 class LeagueForm(forms.Form):
 	isUniversal = forms.BooleanField()
