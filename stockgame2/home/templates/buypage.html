@@ -77,20 +77,30 @@
         </div>
         <div class="col-md-8 order-md-1">
           <h4 class="mb-3"><b>Transaction Information</b></h4>
-          <form class="needs-validation" novalidate="">
+          <form role="form" action="/submitBuy" method="post" class="r-form">
 
-            <div class="mb-3"> <label for="ticker">Stock Ticker</label>
-              <input type="text" class="form-control" placeholder="example: GOOG" required="" id="ticker">
+            <div class="mb-3"> 
+              <h5 class = "mb-3"><b>Stock Ticker</b></h5>
+              <label for = "ticker">{{ form.ticker.label_tag }}</label>
+              <input type="text" class="form-control" name = "ticker" placeholder="example: GOOG" required="" id="ticker">
               <div class="invalid-feedback"> Please enter a valid ticker symbol. </div>
             </div>
 
-            <div class="mb-3"> <label for="shares" >Number of Shares <!--<span class="text-muted">(Optional)</span>--></label>
-              <input type="number" class="form-control" min="0" placeholder="0" id="shares"> </div>
+            <div class="mb-3"> 
+              <h5 class = "mb-3"><b>Number of Shares</b></h5>
+              <label for="shares" >{{ form.shares.label_tag }}</label>
+              <input type="number" class="form-control" name = "shares" min="0" placeholder="0" id="shares"> 
+              </div>
+
             <div class="custom-control custom-checkbox">
-              <input type="checkbox" class="custom-control-input" value="off" id="isLimit"> <label class="custom-control-label" for="isLimit">Limit Order</label> </div>
+              <input type="checkbox" class="custom-control-input" value="off" id="isLimit"> <label class="custom-control-label" for="isLimit">Limit Order</label> 
+              </div>
+
             <div class="mb-3"> <label for="limit">Limit Price</label>
               <div class="input-group"> <span class="input-group-text">$</span>
-              <input type="number" min="0" step="0.01" data-number-to-fixed="2" data-number-stepfactor="100" class="form-control currency text-right" placeholder="0.00" required="" id="limit"> </div>
+              <input type="number" min="0" step="0.01" data-number-to-fixed="2" data-number-stepfactor="100" class="form-control currency text-right" placeholder="0.00" required="" id="limit"> 
+              </div>
+
               <div class="invalid-feedback"> Please enter a limit price. </div>
 
               <hr class="mb-4"> 

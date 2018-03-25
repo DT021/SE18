@@ -57,18 +57,20 @@
     <!-- Heading Row -->
     <div class="row my-5">
       <div class="col-lg-12">
-
+      <form role="form" action="/submitSell" method="post" class="r-form">
       <h2>Sell Form</h2>
       <div class="row my-3"></div>
       <div id="billing-info" class="row">
         <div class="col-sm-7 form-group">
-          <input data-mirror type="text" class="form-control" placeholder="GOOGL"/>
+          <h5>Stock Ticker</h5>
+          <label class="sr-only" for="r-form-first-name">{{ form.ticker.label_tag }}</label>
+          <input data-mirror type="text" name = "ticker" class="form-control" placeholder="GOOGL" id="ticker"/>
           <span class="error small text-danger"></span>
-          <label for="billing_firstName">Stock Symbol *</label>
 
-          <input type="email" class="form-control" placeholder="Number of Shares"/>
+          <h5>Number of Shares</h5>
+          <label class="sr-only" for="r-form-first-name">{{ form.shares.label_tag }}</label>
+          <input type="email" class="form-control" name = "shares" placeholder="0" id = "shares"/>
           <span class="error small text-danger"></span>
-          <label for="billing_email">Quantity *</label>
 
           <h4 class="mb-12 text-secondary">Price</h4>
           <!--Radio group-->
@@ -126,8 +128,7 @@
       </div>
 
       <div class="row my-5"><button type="button" class="btn btn-success btn-block btn-large">Submit</button></div>
-
-
+      </form>
       </div>
     </div>
 

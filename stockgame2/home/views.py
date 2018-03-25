@@ -40,6 +40,59 @@ def submitSignup(request):
 		form = SignUpForm()
 		return render(request, 'signup.html', {'form': form})
 
+def submitBuy(request):
+	if request.method == 'POST':
+		form = BuyForm(request.POST)
+		if form.is_valid():
+			form.save()
+			ticker = form.cleaned_data.get('ticker')
+			num_shares = form.cleaned_data.get('shares')
+			user = authenticate(ticker=ticker, shares=num_shares)
+			auth_login(request, user)
+			return redirect('/home')
+			# pwd = form.cleaned_data.get('password')
+			# c_pwd = form.cleaned_data['conf_pwd']
+			# if pwd!=c_pwd:
+				# form.add_error('conf_pwd', "Password does not match")
+				# return render(request, 'signup.html', {'form': form})
+			# email = form.cleaned_data['email']
+			# user = User(username=username, password=pwd, email=email, leagueID0 = 0, leagueID1 = 0, leagueID2 = 0, leagueID3 = 0)
+			# user.save()
+			# user = User.objects.create_user(username,pwd,email)
+			# user.save()
+			# return HttpResponseRedirect('/home')
+		else:
+			return render(request, 'buypage.html', {'form': form})
+	else:
+		form = BuyForm()
+		return render(request, 'buypage.html', {'form': form})
+
+def submitSell(request):
+	if request.method == 'POST':
+		form = SellForm(request.POST)
+		if form.is_valid():
+			form.save()
+			ticker = form.cleaned_data.get('ticker')
+			num_shares = form.cleaned_data.get('shares')
+			user = authenticate(ticker=ticker, shares=num_shares)
+			auth_login(request, user)
+			return redirect('/home')
+			# pwd = form.cleaned_data.get('password')
+			# c_pwd = form.cleaned_data['conf_pwd']
+			# if pwd!=c_pwd:
+				# form.add_error('conf_pwd', "Password does not match")
+				# return render(request, 'signup.html', {'form': form})
+			# email = form.cleaned_data['email']
+			# user = User(username=username, password=pwd, email=email, leagueID0 = 0, leagueID1 = 0, leagueID2 = 0, leagueID3 = 0)
+			# user.save()
+			# user = User.objects.create_user(username,pwd,email)
+			# user.save()
+			# return HttpResponseRedirect('/home')
+		else:
+			return render(request, 'sellform.html', {'form': form})
+	else:
+		form = SellForm()
+		return render(request, 'sellform.html', {'form': form})
 # def submitLogin(request):
 	# if request.method == 'POST':
 		# form = LoginForm(request.POST)
