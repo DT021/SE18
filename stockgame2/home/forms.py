@@ -25,15 +25,15 @@ class BuyForm(forms.Form):
 
 class LeagueForm(forms.Form):
 	lname = forms.CharField(max_length=50)
-	endDate = forms.DateTimeField()
+	endDate = forms.CharField(max_length=20)
 	startBalance = forms.DecimalField(decimal_places=2,max_digits=40)
 	leagueType = forms.CharField(max_length=10)
 	joinpwd = forms.CharField(max_length=20)
-	def clean_date(self):
-		endDate = self.cleaned_data['endDate']
-		if date < datetime.now():
-			raise forms.ValidationError("The date cannot be in the past!")
-		return endDate
+	# def clean_date(self):
+		# endDate = self.cleaned_data['endDate']
+		# if date < datetime.now():
+			# raise forms.ValidationError("The date cannot be in the past!")
+		# return endDate
 
 class LoginForm(forms.Form):
 	username = forms.CharField(label='Your name', max_length=20)

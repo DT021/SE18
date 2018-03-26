@@ -185,7 +185,9 @@ def home(request):
 	template = loader.get_template('home.html')
 	return HttpResponse(template.render({},request))
 def dashboard(request):
-	#currPlayer = Player.objects.get(userID=request
+	# players = Player.objects.filter(userID=request.user)
+	# for L in players:
+		
 	template = loader.get_template('dashboard.html')
 	return HttpResponse(template.render({},request))
 def createleague(request):
