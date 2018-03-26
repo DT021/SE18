@@ -188,7 +188,6 @@ def home(request):
 	template = loader.get_template('home.html')
 	return HttpResponse(template.render({},request))
 def dashboard(request):
-<<<<<<< HEAD
 	current_user = request.user
 	conn = psycopg2.connect(dbname="gyesfxht", user="gyesfxht", password="VwftaOkFDwF2LoGElDUxJ7i4kjJyALvy", host="stampy.db.elephantsql.com", port="5432")
 	cur = conn.cursor()
@@ -199,11 +198,6 @@ def dashboard(request):
 	'league1': x[1]
 	}
 	return render(request,'dashboard.html',context)
-=======
-	# players = Player.objects.filter(userID=request.user)
-	# for L in players:
-		
->>>>>>> bd734cc9be0645044cf2a4a79ec1da6426d5dfc4
 	template = loader.get_template('dashboard.html')
 	return HttpResponse(template.render({},request))
 def createleague(request):
