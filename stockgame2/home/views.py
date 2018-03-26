@@ -185,11 +185,11 @@ def home(request):
 	template = loader.get_template('home.html')
 	return HttpResponse(template.render({},request))
 def dashboard(request):
-	# players = Player.objects.filter(userID=request.user)
-	# for L in players:
-		
-	template = loader.get_template('dashboard.html')
-	return HttpResponse(template.render({},request))
+	players = Player.objects.filter(userID=request.user)
+	print(players)
+	return render(request, 'dashboard.html', {'players': players})
+	# template = loader.get_template('dashboard.html')
+	# return HttpResponse(template.render({},request))
 def createleague(request):
 	template = loader.get_template('createleague.html')
 	return HttpResponse(template.render({},request))
@@ -226,5 +226,8 @@ def mission(request):
 	return HttpResponse(template.render({},request))
 def joinleague(request):
 	template = loader.get_template('joinleague.html')
+	return HttpResponse(template.render({},request))
+def anonuser(request):
+	template = loader.get_template('anonuser.html')
 	return HttpResponse(template.render({},request))
 # Create your views here.
