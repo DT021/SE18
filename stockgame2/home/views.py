@@ -13,7 +13,8 @@ from django.shortcuts import render, redirect
 import datetime
 
 def newLeague(request):
-	if request.method == 'POST':
+	current_user = request.user
+	if (request.method == 'POST' and current_user.is_authenticated):
 		form = LeagueForm(request.POST)
 		if form.is_valid():
 			lname = form.cleaned_data.get('lname')
@@ -32,12 +33,9 @@ def newLeague(request):
 			b = False
 			if ltype=="crypto":
 				b = True
-			
-			new_league = League(adminID = request.user.id,name=lname,numPlayers=1,joinPassword=joinpwd,startingBalance=startbal,isCrypto=b, endDate=date_out,isUniversal=False)
+			new_league = League(adminID = current_user.id,name=lname,numPlayers=1,joinPassword=joinpwd,startingBalance=startbal,isCrypto=b, endDate=date_out,isUniversal=False)
 			new_league.save()
-			current_user = request.user
 			newPlayer = Player(leagueID=new_league,userID=current_user, buyingPower = startbal,percentChange=0,totalWorth=0)
-			
 			newPlayer.save()
 			return HttpResponseRedirect('/dashboard')
 		else:
