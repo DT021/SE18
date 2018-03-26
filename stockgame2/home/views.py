@@ -11,6 +11,7 @@ from django.contrib.auth import login as auth_login, authenticate
 from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import render, redirect
 import datetime
+import psycopg2
 
 def newLeague(request):
 	current_user = request.user
@@ -29,7 +30,6 @@ def newLeague(request):
 			# date_processing = [int(v) for v in date_processing]
 			# date_out = datetime.datetime(*date_processing)
 			date_out = datetime.datetime(*[int(v) for v in enddate.replace('T', '-').replace(':', '-').split('-')])
-
 			b = False
 			if ltype=="crypto":
 				b = True
@@ -180,6 +180,7 @@ def home(request):
 	template = loader.get_template('home.html')
 	return HttpResponse(template.render({},request))
 def dashboard(request):
+	#currPlayer = Player.objects.get(userID=request
 	template = loader.get_template('dashboard.html')
 	return HttpResponse(template.render({},request))
 def createleague(request):
