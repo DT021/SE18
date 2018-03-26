@@ -2,9 +2,11 @@ from django.shortcuts import render
 from django.template import loader
 from django.http import HttpResponse
 #from home.models import User
-from django.contrib.auth.models import User
 #from home.forms import UserForm
 from home.forms import LoginForm, SignUpForm, BuyForm
+from home.models import User, Player, League,Transaction, Asset, Setting
+from django.contrib.auth.models import User as auth_User
+from home.forms import SignUpForm, LeagueForm
 from django.http import HttpResponseRedirect
 from django.core.mail import send_mail
 from django.core.validators import validate_email
@@ -12,6 +14,30 @@ from django.contrib.auth import login as auth_login, authenticate
 from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import render, redirect
 
+def newLeague(request):
+	if request.method == 'POST':
+		form = LeagueForm(request.POST)
+		if form.is_valid():
+			form.save()
+			lname = form.cleaned_data.get('lname')
+			joinpwd = form.cleaned_data.get('joinpwd')
+			startbal = form.cleaned_data.get('startBalance')
+			ltype = form.cleaned_data.get('leagueType')
+			enddate = form.cleaned_data.get('endDate')
+			b = False
+			if ltype=="crypto":
+				b = True
+			newSetting = Setting( joinPassword=joinpwd,startingBalance=startbal,isCrypto=b, endDate=enddate)
+			newPlayer = Player(userID=0, buyingPower = startbal,percentChange=0,totalWorth=0)
+			new_league = League(name=lname,numPlayers=1,settingID=newSetting,isUniversal=false,playerID1=newPlayer)
+			new_league.save()
+			
+			return HttpResponseRedirect('/dashboard')
+		else:
+			return render(request, 'createleague.html', {'form': form})
+	else:
+		form = SignUpForm()
+		return render(request, 'createleague.html', {'form': form})
 
 def submitSignup(request):
 	if request.method == 'POST':
@@ -158,7 +184,8 @@ def faq(request):
 	template = loader.get_template('faq.html')
 	return HttpResponse(template.render({},request))
 def universal(request):
-	return HttpResponse("This is the universal league page.")
+	template = loader.get_template('universalleague.html')
+	return HttpResponse(template.render({},request))
 def league1(request):	# (request, league_id)
 	template = loader.get_template('individualleague.html')
 	return HttpResponse(template.render({},request))

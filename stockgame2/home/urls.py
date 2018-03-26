@@ -6,7 +6,8 @@ from django.conf.urls import include, url
 
 urlpatterns = [
 	path('', views.index, name='index'),
-	path('get_user', views.get_user, name = 'get_user'),
+	path('newLeague',views.newLeague,name='newLeague'),
+	#path('get_user', views.get_user, name = 'get_user'),
 	path('submitSignup', views.submitSignup, name = 'submitSignup'),
 	path('submitBuy', views.submitBuy, name = 'submitBuy'),
 	path('submitSell', views.submitSell, name = 'submitSell'),
@@ -29,4 +30,6 @@ urlpatterns = [
 	path('mission', views.mission, name="mission"),
 	path('accounts/', include('django.contrib.auth.urls')),
 	#path('accounts/login/', auth_views.LoginView.as_view(template_name='rlogin.html')),
+	path('universal', views.universal, name='universal')
+
 	]

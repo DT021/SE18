@@ -1,4 +1,5 @@
 from django import forms
+from datetime import datetime
 from django.core.exceptions import ValidationError
 from django.core.validators import EmailValidator
 from django.utils.translation import gettext_lazy as _
@@ -15,17 +16,22 @@ class SignUpForm(UserCreationForm):
 	class Meta:
 		model = auth_User
 		fields = ('username', 'password1', 'password2', 'email')
+
 class BuyForm(forms.Form):
-	ticker = forms.CharField(max_Length=20)
-	num_shares = forms.
+	ticker = forms.CharField(max_length=20)
+	num_shares = forms.DecimalField(decimal_places=0, max_digits=40)
+
 class LeagueForm(forms.Form):
-	isUniversal = forms.BooleanField()
-	numPlayers = forms.IntegerField()
-	beginDate = forms.DateTimeField()
+	lname = forms.CharField(max_length=50)
 	endDate = forms.DateTimeField()
-	startingBalance = forms.DecimalField(decimal_places=2,max_digits=40)
-	isCrypto = forms.BooleanField()
-	joinPassword = forms.CharField(max_length=20)
+	startBalance = forms.DecimalField(decimal_places=2,max_digits=40)
+	leagueType = forms.CharField(max_length=10)
+	joinpwd = forms.CharField(max_length=20)
+	def clean_date(self):
+		endDate = self.cleaned_data['endDate']
+		if date < datetime.now():
+			raise forms.ValidationError("The date cannot be in the past!")
+		return endDate
 
 class LoginForm(forms.Form):
 	username = forms.CharField(label='Your name', max_length=20)

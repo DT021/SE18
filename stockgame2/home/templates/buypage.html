@@ -35,16 +35,15 @@
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">About Titan</a>
             <div class="dropdown-menu">
+              <a class="dropdown-item" href="/aboutus">About Us</a>
               <a class="dropdown-item" href="/mission">Our Mission</a>
               <a class="dropdown-item" href="/faq">FAQ</a>
-              <a class="dropdown-item" href="/beginners">Beginners Guide</a>
             </div>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="/profile">UserID</a>
           </li>
         </ul>
-
       </div>
     </div>
   </nav>
@@ -82,14 +81,14 @@
             <div class="mb-3"> 
               <h5 class = "mb-3"><b>Stock Ticker</b></h5>
               <label for = "ticker">{{ form.ticker.label_tag }}</label>
-              <input type="text" class="form-control" name = "ticker" placeholder="example: GOOG" required="" id="ticker">
+              <input name = "ticker" type="text" class="form-control"  placeholder="example: GOOG" required="" id="ticker">
               <div class="invalid-feedback"> Please enter a valid ticker symbol. </div>
             </div>
 
             <div class="mb-3"> 
               <h5 class = "mb-3"><b>Number of Shares</b></h5>
               <label for="shares" >{{ form.shares.label_tag }}</label>
-              <input type="number" class="form-control" name = "shares" min="0" placeholder="0" id="shares"> 
+              <input name = "shares" type="number" class="form-control"  min="0" placeholder="0" id="numshares"> 
               </div>
 
             <div class="custom-control custom-checkbox">
