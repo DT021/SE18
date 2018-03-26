@@ -4,7 +4,7 @@ from django.http import HttpResponse
 #from home.models import User
 from django.contrib.auth.models import User
 #from home.forms import UserForm
-from home.forms import LoginForm, SignUpForm
+from home.forms import LoginForm, SignUpForm, BuyForm
 from django.http import HttpResponseRedirect
 from django.core.mail import send_mail
 from django.core.validators import validate_email
@@ -48,7 +48,6 @@ def submitBuy(request):
 			ticker = form.cleaned_data.get('ticker')
 			num_shares = form.cleaned_data.get('shares')
 			user = authenticate(ticker=ticker, shares=num_shares)
-			auth_login(request, user)
 			return redirect('/home')
 			# pwd = form.cleaned_data.get('password')
 			# c_pwd = form.cleaned_data['conf_pwd']
