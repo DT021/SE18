@@ -201,7 +201,6 @@ def dashboard(request):
 	# template = loader.get_template('dashboard.html')
 	# return HttpResponse(template.render({},request))
 
->>>>>>> 0b96910629328d211e9507bc39dba8a458ac0f41
 def createleague(request):
 	template = loader.get_template('createleague.html')
 	return HttpResponse(template.render({},request))
