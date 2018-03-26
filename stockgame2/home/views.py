@@ -213,9 +213,18 @@ def sellform(request):
 	template = loader.get_template('sellform.html')
 	return HttpResponse(template.render({},request))
 def profile(request):
-	template = loader.get_template('profile.html')
-	return HttpResponse(template.render({},request))
+	current_user = request.user
+	if (current_user.is_authenticated):
+		template = loader.get_template('profile.html')
+		return HttpResponse(template.render({},request))
+	else:
+		template = loader.get_template('anonuser.html')
+		return HttpResponse(template.render({},request))
+
 def mission(request):
 	template = loader.get_template('mission.html')
+	return HttpResponse(template.render({},request))
+def joinleague(request):
+	template = loader.get_template('joinleague.html')
 	return HttpResponse(template.render({},request))
 # Create your views here.

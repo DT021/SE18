@@ -7,17 +7,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta name="description" content="">
   <meta name="author" content="">
-	
+
 	<!-- PAGE settings -->
 	<link rel="icon" href="/static/home2/titanhead_logo_trans.png">
-  <title>USEID's Page</title>
+  <title>{{request.user.username}}'s Page</title>
 
   <!-- Bootstrap core CSS -->
 	<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 	<!-- Custom styles for this template -->
 	<link href="/static/profile/css/profile.css" rel="stylesheet">
-	
+
 	<!-- JS Scripts -->
 	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
@@ -50,13 +50,13 @@
 						</div>
 					</li>
 					<li class="nav-item">
-						<a class="nav-link" href="/profile">UserID</a>
+						<a class="nav-link" href="/profile">{{request.user.username}}</a>
 					</li>
 				</ul>
 			</div>
 		</div>
 	</nav>
-	
+
 	<br><br><br>
 
 	<!-- Page Content -->
@@ -66,7 +66,7 @@
 					<div class="panel panel-default">
 						<div class="userprofile social ">
 							<div class="userpic"> <img src="\static\profile\img\USERID_profilepic.png" alt="" class="userpicimg"> </div>
-							<h1 class="username">USERID Name</h1>
+							<h1 class="username">{{request.user.username}}</h1>
 							</div>
 						</div>
 
@@ -74,44 +74,44 @@
 					</div>
 				</div>
 				<!-- /.col-md-12 -->
-				<div class="col-md-4 col-sm-12 pull-right background-filler">
+				<div class="col-md-12 col-sm-12 pull-right background-filler">
 					<br>
 					<div class="panel panel-default">
 						<div>
-							<h1 class="page-header small">Personal Details</h1>
-							<p class="page-subtitle small">Limited information is visible</p>
+							<h1 class="page-header small"><font size="5"><b>Personal Details</b></font></h1>
+							<p class="page-subtitle small"><font size="4">I am a novice investor!</font> </p>
 						</div>
 						<div>
-								<h1 class="page-header small">Achievements</h1>
-								<p class="page-subtitle small">USERID's Achivements</p>
+								<h1 class="page-header small"><font size="5"><b>Achievements</b></font></h1>
+								<p class="page-subtitle small"><font size = "4">{{request.user.username}}'s Achievements</font></p>
 							</div>
 						<div class="col-md-12 photolist">
 							<div class="row">
-								<div class="col-sm-3 col-xs-3"><img src="http://via.placeholder.com/250x250" class="" alt=""> </div>
-								<div class="col-sm-3 col-xs-3"><img src="http://via.placeholder.com/250x250" class="" alt=""> </div>
-								<div class="col-sm-3 col-xs-3"><img src="http://via.placeholder.com/250x250" class="" alt=""> </div>
-								<div class="col-sm-3 col-xs-3"><img src="http://via.placeholder.com/250x250" class="" alt=""> </div>
+								<div class="col-sm-3 col-xs-3"><img src= "/static/home2/titanhead_logo.png" class="" alt=""> </div>
+								<div class="col-sm-3 col-xs-3"><img src="/static/home2/titanhead_logo.png" class="" alt=""> </div>
+								<div class="col-sm-3 col-xs-3"><img src="/static/home2/titanhead_logo.png" class="" alt=""> </div>
+								<div class="col-sm-3 col-xs-3"><img src="/static/home2/titanhead_logo.png" class="" alt=""> </div>
 							</div>
 						</div>
 						<div class="clearfix"></div>
 					</div>
 					<div class="panel panel-default">
 						<div>
-							<h1 class="page-header small">All Time Stats</h1>
-							<p class="page-subtitle small">Like to work fr different business</p>
+							<h1 class="page-header small"><font size="5"><b>About Me</b></font></h1>
+							<p class="page-subtitle small"><font size = "4">I want to learn how to trade cryptocurrency. Titan Trading helped me learn how to trade without risk! </font></p>
 						</div>
 						<div class="col-md-12">
 							<ul class="list-group">
 								<li class="list-group-item"><span class="fa fa-male"></span> Holds $X across all leagues</li>
 								<li class="list-group-item"><span class="fa fa-institution"></span> Sold X stocks since joining</li>
-								<li class="list-group-item"><span class="fa fa-clock-o"></span> Aquired X stocks since joining </li>
+								<li class="list-group-item"><span class="fa fa-clock-o"></span> Acquired X stocks since joining </li>
 								<li class="list-group-item"><span class="fa fa-user"></span> Attained global rank of X </li>
 							</ul>
 						</div>
 						<div class="clearfix"></div>
 					</div>
 				</div>
-				<div class="col-md-7 col-sm-12 pull-left posttimeline background-filler">
+			<!--	<div class="col-md-7 col-sm-12 pull-left posttimeline background-filler">
 					<br>
 					<div class="panel panel-default">
 						<div class="col-md-12">
@@ -121,7 +121,7 @@
 									<h4 class="media-heading">Lucky Sans<br>
 										<small><i class="fa fa-clock-o"></i> Yesterday, 2:00 am</small> </h4>
 									<p>Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin commodo. Cras purus odio. </p>
-	
+
 									<ul class="nav nav-pills pull-left ">
 										<li><a href="" title=""><i class="glyphicon glyphicon-thumbs-up"></i> 2015</a></li>
 										<li><a href="" title=""><i class=" glyphicon glyphicon-comment"></i> 25</a></li>
@@ -155,12 +155,11 @@
 						</div>
 					</div>
 				</div>
-			</div>
+			</div> -->
 	</div>
 	</div>
-	
+
 
 </body>
 
 </html>
-

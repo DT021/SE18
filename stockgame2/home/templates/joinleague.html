@@ -16,7 +16,9 @@
         <link rel="stylesheet" href="/static/homestyle/vendor/font-awesome/css/font-awesome.min.css">
 		<link rel="stylesheet" href="/static/assets/css/form-elements.css">
         <link rel="stylesheet" href="/static/assets/css/style.css">
-		<link rel="stylesheet" href="/static/assets/css/error.css">
+        <link rel="stylesheet" href="/static/assets/css/error.css">
+        <link rel="stylesheet" href="/static/home2/css/titan-trading.css">  
+
         <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
         <!--[if lt IE 9]>
@@ -33,7 +35,7 @@
 
     </head>
 
-    <body background="/static/homestyle/img/header.jpg" style = "background-repeat:no-repeat; background-size:cover;">
+    <body background="/static/home2/network.png" style = "background-repeat:no-repeat; background-size:cover;">
     
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
@@ -76,17 +78,10 @@
         	<div class="container" style="padding-top:10%;align-items:center;width:auto;margin:auto;">	
                 <div class="row">
                     <div class="col-sm-6 col-sm-offset-2 text" style="margin-left:auto;margin-right: auto">
-                        <h1>Login</h1>
+                        <h1>Join a League!</h1>
                     </div>
                 </div>
                 
-                <div class="row">
-                    <div class="col-sm-5 col-sm-offset-1 show-forms" style ="margin: auto">
-                    	<span class="show-register-form"><a style="color:#fff" href="/signup">Register</a></span> 
-                    	<span class="show-forms-divider">/</span> 
-                    	<span class="show-login-form active">Login</span>
-                    </div>
-                </div>
                 <div class ="row">
                     <div class="col-sm-5 col-sm-offset-1" style ="margin: auto">
                         {% if form.errors %}
@@ -107,15 +102,15 @@
 	                    	<div class="form-group" style="padding-top:5%">
 								<div style="background-color:#fff">{{ form.username.errors }}</div>
                                 <label class="sr-only" for="l-form-username">{{ form.username.label_tag }}</label>
-	                        	<input type="text" name="username" placeholder="Username..." class="l-form-username form-control" id="l-form-username">
+	                        	<input type="text" name="username" placeholder="League Name" class="l-form-username form-control" id="l-form-username">
 	                        </div>
 	                        <div class="form-group">
                                 <div style="background-color:#fff">{{ form.password.errors }}</div>
                                 <label class="sr-only" for="l-form-password">{{ form.password.label_tag }}</label>
-	                        	<input type="password" name="password" placeholder="Password..." class="l-form-password form-control" id="l-form-password">
+	                        	<input type="password" name="password" placeholder="Join Password" class="l-form-password form-control" id="l-form-password">
 	                        </div>
 							<input type="hidden" name="next" value="{{ next }}" />
-				            <button type="submit" class="btn"><a style="color:#fff">Sign in!</a></button>
+				            <button type="submit" class="btn"><a href="/dashboard" style="color:#fff">Join!</a></button>
                         </form>
                 	</div>
                 </div>
