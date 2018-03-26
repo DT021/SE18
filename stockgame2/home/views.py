@@ -12,10 +12,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import render, redirect
 import datetime
 import psycopg2
-<<<<<<< HEAD
-=======
 
->>>>>>> bd734cc9be0645044cf2a4a79ec1da6426d5dfc4
 def newLeague(request):
 	current_user = request.user
 	if (request.method == 'POST' and current_user.is_authenticated):
@@ -197,9 +194,20 @@ def dashboard(request):
 	'league0': x[0],
 	'league1': x[1]
 	}
+<<<<<<< HEAD
 	return render(request,'dashboard.html',context)
 	template = loader.get_template('dashboard.html')
 	return HttpResponse(template.render({},request))
+=======
+
+
+	players = Player.objects.filter(userID=request.user)
+	print(players)
+	return render(request, 'dashboard.html', {'players': players}, context)
+	# template = loader.get_template('dashboard.html')
+	# return HttpResponse(template.render({},request))
+
+>>>>>>> 0b96910629328d211e9507bc39dba8a458ac0f41
 def createleague(request):
 	template = loader.get_template('createleague.html')
 	return HttpResponse(template.render({},request))
@@ -236,5 +244,8 @@ def mission(request):
 	return HttpResponse(template.render({},request))
 def joinleague(request):
 	template = loader.get_template('joinleague.html')
+	return HttpResponse(template.render({},request))
+def anonuser(request):
+	template = loader.get_template('anonuser.html')
 	return HttpResponse(template.render({},request))
 # Create your views here.
