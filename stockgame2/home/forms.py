@@ -29,11 +29,19 @@ class LeagueForm(forms.Form):
 	startBalance = forms.DecimalField(decimal_places=2,max_digits=40)
 	leagueType = forms.CharField(max_length=10)
 	joinpwd = forms.CharField(max_length=20)
+<<<<<<< HEAD
 	#def clean_date(self):
 	#	endDate = self.cleaned_data['endDate']
 	#	if date < datetime.now():
 	#		raise forms.ValidationError("The date cannot be in the past!")
 	#	return endDate
+=======
+	# def clean_date(self):
+		# endDate = self.cleaned_data['endDate']
+		# if date < datetime.now():
+			# raise forms.ValidationError("The date cannot be in the past!")
+		# return endDate
+>>>>>>> bd734cc9be0645044cf2a4a79ec1da6426d5dfc4
 
 class LoginForm(forms.Form):
 	username = forms.CharField(label='Your name', max_length=20)
