@@ -3,7 +3,7 @@ from django.template import loader
 from django.http import HttpResponse
 from home.models import User, Player, League,Transaction, Asset
 from django.contrib.auth.models import User as auth_User
-from home.forms import SignUpForm, LeagueForm
+from home.forms import SignUpForm, LeagueForm, BuyForm
 from django.http import HttpResponseRedirect
 from django.core.mail import send_mail
 from django.core.validators import validate_email
@@ -75,10 +75,15 @@ def submitBuy(request):
 	if request.method == 'POST':
 		form = BuyForm(request.POST)
 		if form.is_valid():
-			form.save()
+			current_user = request.user
 			ticker = form.cleaned_data.get('ticker')
-			num_shares = form.cleaned_data.get('shares')
-			user = authenticate(ticker=ticker, shares=num_shares)
+			shares = form.cleaned_data.get('shares')
+			buyingPrice = form.cleaned_data.get('buyingPrice')
+			new_asset = Asset(ticker = ticker, playerID = current_user.player, leagueID = "tmpLeagueID", shares = shares, buyingPrice = buyingPrice)
+			new_asset.save()
+			tmpPrice = 0
+			new_transaction = Transaction(leagueID = "tmpLeagueID", playerID = current_user.playerID, price = tmpPrice, ticker = ticker, shares = share, isBuy = True) 
+			new_transaction.save()
 			return redirect('/home')
 			# pwd = form.cleaned_data.get('password')
 			# c_pwd = form.cleaned_data['conf_pwd']
