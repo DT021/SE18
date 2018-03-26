@@ -194,6 +194,11 @@ def dashboard(request):
 	'league0': x[0],
 	'league1': x[1]
 	}
+<<<<<<< HEAD
+	return render(request,'dashboard.html',context)
+	template = loader.get_template('dashboard.html')
+	return HttpResponse(template.render({},request))
+=======
 
 
 	players = Player.objects.filter(userID=request.user)
@@ -202,6 +207,7 @@ def dashboard(request):
 	# template = loader.get_template('dashboard.html')
 	# return HttpResponse(template.render({},request))
 
+>>>>>>> 0b96910629328d211e9507bc39dba8a458ac0f41
 def createleague(request):
 	template = loader.get_template('createleague.html')
 	return HttpResponse(template.render({},request))
