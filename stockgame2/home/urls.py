@@ -7,7 +7,7 @@ from django.conf.urls import include, url
 urlpatterns = [
 	path('', views.index, name='index'),
 	path('get_user', views.get_user, name = 'get_user'),
-	path('submitSignup', views.submitSignup, name = 'submitSignup'),
+	path('submitSignup2', views.submitSignup2, name = 'submitSignup2'),
 	path('signup', views.signup, name ='signup'),
 	path('login', views.login, name='login'),
 	#path('submitLogin', views.submitLogin, name = 'submitLogin'),
@@ -29,5 +29,4 @@ urlpatterns = [
 	#path('accounts/login/', auth_views.LoginView.as_view(template_name='rlogin.html')),
 	path('universal', views.universal, name='universal'),
 	path('joinleague', views.joinleague, name='joinleague')
-
 	]

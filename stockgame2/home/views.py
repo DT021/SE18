@@ -4,13 +4,14 @@ from django.http import HttpResponse
 #from home.models import User
 from django.contrib.auth.models import User
 #from home.forms import UserForm
-from home.forms import LoginForm, SignUpForm
+from home.forms import LoginForm, SignUpForm, signupform2
 from django.http import HttpResponseRedirect
 from django.core.mail import send_mail
 from django.core.validators import validate_email
 from django.contrib.auth import login as auth_login, authenticate
 from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import render, redirect
+from . import methods
 
 
 def submitSignup(request):
@@ -39,6 +40,10 @@ def submitSignup(request):
 	else:
 		form = SignUpForm()
 		return render(request, 'signup.html', {'form': form})
+def submitSignup2(request):
+	if request.method == 'POST':
+		methods.adduser(request.POST['username'], request.POST['password1'], request.POST['email'])
+		return redirect('/home')
 
 # def submitLogin(request):
 	# if request.method == 'POST':

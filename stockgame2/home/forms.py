@@ -14,6 +14,10 @@ class SignUpForm(UserCreationForm):
 	class Meta:
 		model = auth_User
 		fields = ('username', 'password1', 'password2', 'email')
+class signupform2(forms.Form):
+	username = forms.CharField(max_length=20)
+	password = forms.CharField(max_length=20)
+	email = forms.CharField(max_length=50)
 class LeagueForm(forms.Form):
 	isUniversal = forms.BooleanField()
 	numPlayers = forms.IntegerField()
