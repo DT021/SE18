@@ -1,10 +1,9 @@
 from django.shortcuts import render
 from django.template import loader
 from django.http import HttpResponse
-#from home.models import User
-from django.contrib.auth.models import User
-#from home.forms import UserForm
-from home.forms import LoginForm, SignUpForm
+from home.models import User, Player, League,Transaction, Asset, Setting
+from django.contrib.auth.models import User as auth_User
+from home.forms import SignUpForm, LeagueForm
 from django.http import HttpResponseRedirect
 from django.core.mail import send_mail
 from django.core.validators import validate_email
@@ -12,6 +11,30 @@ from django.contrib.auth import login as auth_login, authenticate
 from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import render, redirect
 
+def newLeague(request):
+	if request.method == 'POST':
+		form = LeagueForm(request.POST)
+		if form.is_valid():
+			form.save()
+			lname = form.cleaned_data.get('lname')
+			joinpwd = form.cleaned_data.get('joinpwd')
+			startbal = form.cleaned_data.get('startBalance')
+			ltype = form.cleaned_data.get('leagueType')
+			enddate = form.cleaned_data.get('endDate')
+			b = False
+			if ltype=="crypto":
+				b = True
+			newSetting = Setting( joinPassword=joinpwd,startingBalance=startbal,isCrypto=b, endDate=enddate)
+			newPlayer = Player(userID=0, buyingPower = startbal,percentChange=0,totalWorth=0)
+			new_league = League(name=lname,numPlayers=1,settingID=newSetting,isUniversal=false,playerID1=newPlayer)
+			new_league.save()
+			
+			return HttpResponseRedirect('/dashboard')
+		else:
+			return render(request, 'createleague.html', {'form': form})
+	else:
+		form = SignUpForm()
+		return render(request, 'createleague.html', {'form': form})
 
 def submitSignup(request):
 	if request.method == 'POST':
@@ -39,27 +62,6 @@ def submitSignup(request):
 	else:
 		form = SignUpForm()
 		return render(request, 'signup.html', {'form': form})
-
-# def submitLogin(request):
-	# if request.method == 'POST':
-		# form = LoginForm(request.POST)
-		# if form.is_valid():
-			# username = form.cleaned_data['username']
-			# pwd = form.cleaned_data['password']
-			# try:
-				# user = User.objects.get(username=username)
-				# if user.password != pwd:
-					# form.add_error('password', "Incorrect password")
-					# return render(request, 'login.html', {'form': form})
-			# except User.DoesNotExist:
-				# form.add_error('username', "Username does not exist")
-				# return render(request, 'login.html', {'form': form})
-			# return HttpResponseRedirect('/home')
-		# else:
-			# return render(request, 'login.html', {'form': form})
-	# else:
-		# form = LoginForm()
-		# return render(request, 'login.html', {'form': form})
 	
 
 def get_user(request):
