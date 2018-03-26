@@ -1,10 +1,7 @@
 from django.shortcuts import render
 from django.template import loader
 from django.http import HttpResponse
-#from home.models import User
-#from home.forms import UserForm
-from home.forms import LoginForm, SignUpForm, BuyForm
-from home.models import User, Player, League,Transaction, Asset, Setting
+from home.models import User, Player, League,Transaction, Asset
 from django.contrib.auth.models import User as auth_User
 from home.forms import SignUpForm, LeagueForm
 from django.http import HttpResponseRedirect
@@ -13,25 +10,33 @@ from django.core.validators import validate_email
 from django.contrib.auth import login as auth_login, authenticate
 from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import render, redirect
+import datetime
 
 def newLeague(request):
-	if request.method == 'POST':
+	current_user = request.user
+	if (request.method == 'POST' and current_user.is_authenticated):
 		form = LeagueForm(request.POST)
 		if form.is_valid():
-			form.save()
 			lname = form.cleaned_data.get('lname')
 			joinpwd = form.cleaned_data.get('joinpwd')
 			startbal = form.cleaned_data.get('startBalance')
 			ltype = form.cleaned_data.get('leagueType')
 			enddate = form.cleaned_data.get('endDate')
+			print(enddate)
+			#date_in = u'enddate' # replace this string with whatever method or function collects your data
+			# date_processing = enddate.replace('T', '-').replace(':', '-').split('-')
+			# print(date_processing)
+			# date_processing = [int(v) for v in date_processing]
+			# date_out = datetime.datetime(*date_processing)
+			date_out = datetime.datetime(*[int(v) for v in enddate.replace('T', '-').replace(':', '-').split('-')])
+
 			b = False
 			if ltype=="crypto":
 				b = True
-			newSetting = Setting( joinPassword=joinpwd,startingBalance=startbal,isCrypto=b, endDate=enddate)
-			newPlayer = Player(userID=0, buyingPower = startbal,percentChange=0,totalWorth=0)
-			new_league = League(name=lname,numPlayers=1,settingID=newSetting,isUniversal=false,playerID1=newPlayer)
+			new_league = League(adminID = current_user.id,name=lname,numPlayers=1,joinPassword=joinpwd,startingBalance=startbal,isCrypto=b, endDate=date_out,isUniversal=False)
 			new_league.save()
-			
+			newPlayer = Player(leagueID=new_league,userID=current_user, buyingPower = startbal,percentChange=0,totalWorth=0)
+			newPlayer.save()
 			return HttpResponseRedirect('/dashboard')
 		else:
 			return render(request, 'createleague.html', {'form': form})
