@@ -127,4 +127,7 @@ def profile(request):
 def mission(request):
 	template = loader.get_template('mission.html')
 	return HttpResponse(template.render({},request))
+def joinleague(request):
+	template = loader.get_template('joinleague.html')
+	return HttpResponse(template.render({},request))
 # Create your views here.

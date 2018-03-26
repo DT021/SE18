@@ -27,6 +27,7 @@ urlpatterns = [
 	path('mission', views.mission, name="mission"),
 	path('accounts/', include('django.contrib.auth.urls')),
 	#path('accounts/login/', auth_views.LoginView.as_view(template_name='rlogin.html')),
-	path('universal', views.universal, name='universal')
+	path('universal', views.universal, name='universal'),
+	path('joinleague', views.joinleague, name='joinleague')
 
 	]
