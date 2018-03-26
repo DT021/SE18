@@ -30,7 +30,7 @@
   </head>
 
   <body style = "background-color: rgba(169,225,236,0.5); background-repeat:no-repeat; background-size:cover; background-attachment: fixed;">
-
+    
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
       <div class="container">
@@ -130,10 +130,10 @@
             </div>
             <div class="col-lg-7" style="padding-left:0;height:270px">
               <ul style="margin:0;padding:0;font-size:1em;text-align:center;border-bottom:1px solid rgba(118,118,118,0.1);color:#767676;">
-                <li>Admin: IvanMarsic</li>
+                <li>Admin: {{league0}}</li>
               </ul>
               <ul style="margin:0;padding:0;font-size:1em;text-align:center;border-bottom:1px solid rgba(118,118,118,0.1);color:#767676;">
-                <li>Created: September 06 2018</li>
+                <li>Created: {{request.user}}</li>
               </ul>
               <ul style="margin:0;padding:0;font-size:1em;text-align:center;border-bottom:1px solid rgba(118,118,118,0.1);color:#767676;">
                 <li>Ends: May 11 2018</li>
@@ -191,7 +191,7 @@
 
     </div>
     <!-- /.container -->
-
+</form>
   <!-- Footer -->
 	<footer class="py-2 filter-dark" style="background-color: rgba(81,81,81,0.9)">
     <div class="container">

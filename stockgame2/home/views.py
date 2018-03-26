@@ -11,7 +11,7 @@ from django.contrib.auth import login as auth_login, authenticate
 from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import render, redirect
 import datetime
-
+import psycopg2
 def newLeague(request):
 	current_user = request.user
 	if (request.method == 'POST' and current_user.is_authenticated):
@@ -185,6 +185,16 @@ def home(request):
 	template = loader.get_template('home.html')
 	return HttpResponse(template.render({},request))
 def dashboard(request):
+	current_user = request.user
+	conn = psycopg2.connect(dbname="gyesfxht", user="gyesfxht", password="VwftaOkFDwF2LoGElDUxJ7i4kjJyALvy", host="stampy.db.elephantsql.com", port="5432")
+	cur = conn.cursor()
+	cur.execute('SELECT * from "home_player" WHERE "userID_id" = %s', [current_user.id])
+	x = cur.fetchall()
+	context = {
+	'league0': x[0],
+	'league1': x[1]
+	}
+	return render(request,'dashboard.html',context)
 	template = loader.get_template('dashboard.html')
 	return HttpResponse(template.render({},request))
 def createleague(request):
