@@ -97,14 +97,17 @@ def submitBuy(request):
 			# user.save()
 			# return HttpResponseRedirect('/home')
 		else:
-			return render(request, 'buypage.html', {'form': form})
+			 return redirect("/dashboard")
+			#return render(request, 'buypage.html', {'form': form})
 	else:
 		form = BuyForm()
-		return render(request, 'buypage.html', {'form': form})
+		return redirect("/dashboard")
+		#return render(request, 'buypage.html', {'form': form})
 
 def submitSell(request):
 	if request.method == 'POST':
 		form = SellForm(request.POST)
+		return redirect("/dashboard")
 		if form.is_valid():
 			form.save()
 			ticker = form.cleaned_data.get('ticker')
@@ -124,10 +127,12 @@ def submitSell(request):
 			# user.save()
 			# return HttpResponseRedirect('/home')
 		else:
-			return render(request, 'sellform.html', {'form': form})
+			#return render(request, 'sellform.html', {'form': form})
+			return redirect("/dashboard")
 	else:
 		form = SellForm()
-		return render(request, 'sellform.html', {'form': form})
+		return redirect("/dashboard")
+		#return render(request, 'sellform.html', {'form': form})
 # def submitLogin(request):
 	# if request.method == 'POST':
 		# form = LoginForm(request.POST)
