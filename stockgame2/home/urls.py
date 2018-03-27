@@ -2,11 +2,14 @@ from django.urls import path
 from . import views
 from django.contrib.auth import views as auth_views
 from django.conf.urls import include, url
+from django.views.generic.base import TemplateView
 
 
 urlpatterns = [
 	path('', views.index, name='index'),
 	path('newLeague',views.newLeague,name='newLeague'),
+	#path('', TemplateView.as_view(template_name='home.html'), name='home'),
+	path('logout_view',views.logout_view,name='logout_view'),
 	#path('get_user', views.get_user, name = 'get_user'),
 	path('submitSignup', views.submitSignup, name = 'submitSignup'),
 	path('submitBuy', views.submitBuy, name = 'submitBuy'),
