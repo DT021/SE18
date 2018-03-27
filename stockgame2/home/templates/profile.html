@@ -27,7 +27,7 @@
 <body background = "/static/home2/city3.jpg" style = "background-repeat:no-repeat; background-size:cover; background-attachment: fixed;">
 <div class="background-shade">
   <!-- Navigation -->
-	<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
 		<div class="container">
 			<a class="navbar-brand" href="/home"><img src="/static/home2/logo_trans.png" width="125" height="45" alt="logo"></a>
 			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
@@ -49,9 +49,14 @@
 							<a class="dropdown-item" href="/faq">FAQ</a>
 						</div>
 					</li>
-					<li class="nav-item">
-						<a class="nav-link" href="/profile">{{request.user.username}}</a>
-					</li>
+					<li class="nav-item dropdown">
+							<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">UserID</a>
+							<div class="dropdown-menu">
+								<a class="dropdown-item" href="/profile">Profile</a>
+								<a class="dropdown-item" href="/settings">Settings</a>
+								<a class="dropdown-item" href="/logout">Log Out</a>
+							</div>
+						</li>
 				</ul>
 			</div>
 		</div>
@@ -80,10 +85,12 @@
 					<div class="panel panel-default">
 						<div>
 							<h1 class="page-header small"><font size="5"><b>Personal Details</b></font></h1>
+							<hr>
 							<p class="page-subtitle small"><font size="4">I am a novice investor!</font> </p>
 						</div>
 						<div>
 								<h1 class="page-header small"><font size="5"><b>Achievements</b></font></h1>
+								<hr>
 								<p class="page-subtitle small"><font size = "4">{{request.user.username}}'s Achievements</font></p>
 							</div>
 						<div class="col-md-12 photolist">
@@ -99,6 +106,7 @@
 					<div class="panel panel-default">
 						<div>
 							<h1 class="page-header small"><font size="5"><b>About Me</b></font></h1>
+							<hr>
 							<p class="page-subtitle small"><font size = "4">I want to learn how to trade cryptocurrency. Titan Trading helped me learn how to trade without risk! </font></p>
 						</div>
 						<div class="col-md-12">
