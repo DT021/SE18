@@ -9,19 +9,19 @@
     <meta name="author" content="">
 	<!-- PAGE settings -->
     <link rel="icon" href="/static/home2/titanhead_logo_trans.png">
-    <link rel="stylesheet" href="/static/home2/css/titan-trading.css">  
+    <link rel="stylesheet" href="/static/home2/css/titan-trading.css">
     <title>Meet the Titans!</title>
 
     <!-- Bootstrap core CSS -->
     <link href="/static/aboutus/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-		<link rel="stylesheet" href="/static/createleague/css/wireframe.css"> 
+		<link rel="stylesheet" href="/static/createleague/css/wireframe.css">
     <!-- Custom styles for this template -->
     <link href="/static/aboutus/css/round-about.css" rel="stylesheet">
 
   </head>
 
   <body background = "/static/home2/city3.jpg" style = "background-repeat:no-repeat; background-size:cover; background-attachment: fixed;">
-
+  <div class="background-shade">
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
         <div class="container">
@@ -46,7 +46,7 @@
                 </div>
               </li>
               <li class="nav-item dropdown">
-                  <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">UserID</a>
+                  <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">{{request.user.username}}</a>
                   <div class="dropdown-menu">
                     <a class="dropdown-item" href="/profile">Profile</a>
                     <a class="dropdown-item" href="/settings">Settings</a>
@@ -111,7 +111,7 @@
           <img class="rounded-circle img-fluid d-block mx-auto" src="/static/aboutus/img/brooks.jpg" alt="">
           <h3 style="color:#fff">Brooks Tawil
           </h3>
-          <p style="color:#fff">Brooks Tawil is the Rush Chair for professional and exclusive Co-ed fraternity Theta Tau. His intelligence and expertise in trading was motivation for Titan Trading's creation. </p>
+          <p style="color:#fff">Brooks Tawil is a passionate engineering student who is looking to bring his software skills to Wall Street.</p>
         </div>
         <div class="col-lg-4 col-sm-6 text-center mb-4">
           <img class="rounded-circle img-fluid d-block mx-auto" src="static/aboutus/img/kristian.jpg" alt="">
@@ -152,6 +152,7 @@
     </div>
     <!-- /.container -->
   </footer>
+</div>
 
     <!-- Bootstrap core JavaScript -->
     <script src="/static/aboutus/vendor/jquery/jquery.min.js"></script>

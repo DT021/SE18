@@ -251,4 +251,7 @@ def joinleague(request):
 def anonuser(request):
 	template = loader.get_template('anonuser.html')
 	return HttpResponse(template.render({},request))
+def settings(request):
+	template = loader.get_template('settings.html')
+	return HttpResponse(template.render({},request))
 # Create your views here.

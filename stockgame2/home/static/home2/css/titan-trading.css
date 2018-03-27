@@ -1,3 +1,8 @@
 body {
     font-family: Merriweather,'Helvetica Neue',Arial,sans-serif !important;
 }
+
+.background-shade {
+    background-color: rgba(42, 137, 196, 0.80);
+    padding-top: 20px;
+}

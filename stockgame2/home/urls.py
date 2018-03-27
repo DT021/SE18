@@ -35,6 +35,6 @@ urlpatterns = [
 	#path('accounts/login/', auth_views.LoginView.as_view(template_name='rlogin.html')),
 	path('universal', views.universal, name='universal'),
 	path('joinleague', views.joinleague, name='joinleague'),
-        path('anonuser', views.anonuser, name='anonuser')
-        
+	path('anonuser', views.anonuser, name='anonuser'),
+	path('settings', views.settings, name='settings')
 	]
