@@ -12,7 +12,12 @@ from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import render, redirect
 import datetime
 import psycopg2
+from django.contrib.auth import logout
 
+def logout_view(request):
+	logout(request)
+	# Redirect to a success page.
+	return HttpResponseRedirect('/accounts/login')
 def newLeague(request):
 	current_user = request.user
 	if (request.method == 'POST' and current_user.is_authenticated):
@@ -195,14 +200,14 @@ def dashboard(request):
 	cur = conn.cursor()
 	cur.execute('SELECT * from "home_player" WHERE "userID_id" = %s', [current_user.id])
 	x = cur.fetchall()
-	context = {
-	'league0': x[0],
-	'league1': x[1]
-	}
+	# context = {
+	# 'league0': x[0],
+	# 'league1': x[1]
+	# }
 
 	players = Player.objects.filter(userID=request.user)
 	print(players)
-	return render(request, 'dashboard.html', {'players': players}, context)
+	return render(request, 'dashboard.html', {'players': players})
 	# template = loader.get_template('dashboard.html')
 	# return HttpResponse(template.render({},request))
 

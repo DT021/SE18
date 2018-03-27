@@ -9,12 +9,12 @@
     <meta name="author" content="">
 	<!-- PAGE settings -->
     <link rel="icon" href="/static/home2/titanhead_logo_trans.png">
-    <link rel="stylesheet" href="/static/home2/css/titan-trading.css">  
+    <link rel="stylesheet" href="/static/home2/css/titan-trading.css">
     <title>Meet the Titans!</title>
 
     <!-- Bootstrap core CSS -->
     <link href="/static/aboutus/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-		<link rel="stylesheet" href="/static/createleague/css/wireframe.css"> 
+		<link rel="stylesheet" href="/static/createleague/css/wireframe.css">
     <!-- Custom styles for this template -->
     <link href="/static/aboutus/css/round-about.css" rel="stylesheet">
 
@@ -46,7 +46,7 @@
                 </div>
               </li>
               <li class="nav-item dropdown">
-                  <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">UserID</a>
+                  <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">{{request.user.username}}</a>
                   <div class="dropdown-menu">
                     <a class="dropdown-item" href="/profile">Profile</a>
                     <a class="dropdown-item" href="/settings">Settings</a>

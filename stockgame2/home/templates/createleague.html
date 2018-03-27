@@ -32,25 +32,29 @@
             <li class="nav-item">
               <a class="nav-link" href="/home">Home</a>
             </li>
-            <li class="nav-item">
-              <a class="nav-link" href="/dashboard">Dashboard</a>
-            </li>
-            <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">About Titan</a>
+            {% if request.user.is_authenticated%}
+          <li class="nav-item">
+            <a class="nav-link" href="/dashboard">Dashboard</a>
+          </li>
+		  {% endif %}
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">About Titan</a>
+            <div class="dropdown-menu">
+              <a class="dropdown-item" href="/aboutus">About Us</a>
+              <a class="dropdown-item" href="/mission">Our Mission</a>
+              <a class="dropdown-item" href="/faq">FAQ</a>
+            </div>
+          </li>
+		  {% if request.user.is_authenticated%}
+          <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">{{request.user.username}}</a>
               <div class="dropdown-menu">
-                <a class="dropdown-item" href="/aboutus">About Us</a>
-                <a class="dropdown-item" href="/mission">Our Mission</a>
-                <a class="dropdown-item" href="/faq">FAQ</a>
+                <a class="dropdown-item" href="/profile">Profile</a>
+                <a class="dropdown-item" href="/settings">Settings</a>
+                <a class="dropdown-item" href="/logout">Log Out</a>
               </div>
             </li>
-            <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">{{request.user.username}}</a>
-                <div class="dropdown-menu">
-                  <a class="dropdown-item" href="/profile">Profile</a>
-                  <a class="dropdown-item" href="/settings">Settings</a>
-                  <a class="dropdown-item" href="/">Log Out</a>
-                </div>
-              </li>
+			{% endif %}
           </ul>
         </div>
       </div>
