@@ -77,7 +77,7 @@ def submitSignup(request):
 		return render(request, 'signup.html', {'form': form})
 
 def submitBuy(request):
-	if request.method == 'POST':
+	if request.method == 'POST' and False:
 		form = BuyForm(request.POST)
 		if form.is_valid():
 			current_user = request.user
@@ -105,7 +105,7 @@ def submitBuy(request):
 			 return redirect("/dashboard")
 			#return render(request, 'buypage.html', {'form': form})
 	else:
-		form = BuyForm()
+		#form = BuyForm()
 		return redirect("/dashboard")
 		#return render(request, 'buypage.html', {'form': form})
 
@@ -195,7 +195,7 @@ def home(request):
 	template = loader.get_template('home.html')
 	return HttpResponse(template.render({},request))
 def dashboard(request):
-	
+
 	current_user = request.user
 	if (current_user.is_authenticated):
 		conn = psycopg2.connect(dbname="gyesfxht", user="gyesfxht", password="VwftaOkFDwF2LoGElDUxJ7i4kjJyALvy", host="stampy.db.elephantsql.com", port="5432")
