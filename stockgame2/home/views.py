@@ -105,7 +105,7 @@ def submitBuy(request):
 		#return render(request, 'buypage.html', {'form': form})
 
 def submitSell(request):
-	if request.method == 'POST':
+	"""if request.method == 'POST':
 		form = SellForm(request.POST)
 		return redirect("/dashboard")
 		if form.is_valid():
@@ -129,9 +129,9 @@ def submitSell(request):
 		else:
 			#return render(request, 'sellform.html', {'form': form})
 			return redirect("/dashboard")
-	else:
-		form = SellForm()
-		return redirect("/dashboard")
+	else:"""
+		#form = SellForm()
+	return redirect("/dashboard")
 		#return render(request, 'sellform.html', {'form': form})
 # def submitLogin(request):
 	# if request.method == 'POST':
