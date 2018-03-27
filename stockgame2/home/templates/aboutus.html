@@ -56,7 +56,11 @@
   								<a class="dropdown-item" href="/logout_view">Log Out</a>
   							</div>
   						</li>
-  						{% endif %}
+              {% else %}
+              <li class="nav-item">
+                <a class="nav-link" href="/accounts/login">Login</a>
+              </li>
+            {% endif %}
   				</ul>
   			</div>
   		</div>
