@@ -87,7 +87,7 @@ def submitBuy(request):
 			new_asset = Asset(ticker = ticker, playerID = current_user.player, leagueID = "tmpLeagueID", shares = shares, buyingPrice = buyingPrice)
 			new_asset.save()
 			tmpPrice = 0
-			new_transaction = Transaction(leagueID = "tmpLeagueID", playerID = current_user.playerID, price = tmpPrice, ticker = ticker, shares = share, isBuy = True) 
+			new_transaction = Transaction(leagueID = "tmpLeagueID", playerID = current_user.playerID, price = tmpPrice, ticker = ticker, shares = share, isBuy = True)
 			new_transaction.save()
 			return redirect('/home')
 			# pwd = form.cleaned_data.get('password')
@@ -158,7 +158,7 @@ def submitSell(request):
 	# else:
 		# form = LoginForm()
 		# return render(request, 'login.html', {'form': form})
-	
+
 
 def get_user(request):
 	 # if this is a POST request we need to process the form data
@@ -195,21 +195,26 @@ def home(request):
 	template = loader.get_template('home.html')
 	return HttpResponse(template.render({},request))
 def dashboard(request):
+	
 	current_user = request.user
-	conn = psycopg2.connect(dbname="gyesfxht", user="gyesfxht", password="VwftaOkFDwF2LoGElDUxJ7i4kjJyALvy", host="stampy.db.elephantsql.com", port="5432")
-	cur = conn.cursor()
-	cur.execute('SELECT * from "home_player" WHERE "userID_id" = %s', [current_user.id])
-	x = cur.fetchall()
-	# context = {
-	# 'league0': x[0],
-	# 'league1': x[1]
-	# }
+	if (current_user.is_authenticated):
+		conn = psycopg2.connect(dbname="gyesfxht", user="gyesfxht", password="VwftaOkFDwF2LoGElDUxJ7i4kjJyALvy", host="stampy.db.elephantsql.com", port="5432")
+		cur = conn.cursor()
+		cur.execute('SELECT * from "home_player" WHERE "userID_id" = %s', [current_user.id])
+		x = cur.fetchall()
+		# context = {
+		# 'league0': x[0],
+		# 'league1': x[1]
+		# }
 
-	players = Player.objects.filter(userID=request.user)
-	print(players)
-	return render(request, 'dashboard.html', {'players': players})
-	# template = loader.get_template('dashboard.html')
-	# return HttpResponse(template.render({},request))
+		players = Player.objects.filter(userID=request.user)
+		print(players)
+		return render(request, 'dashboard.html', {'players': players})
+		# template = loader.get_template('dashboard.html')
+		# return HttpResponse(template.render({},request))
+	else:
+		template = loader.get_template('anonuser.html')
+		return HttpResponse(template.render({},request))
 
 def createleague(request):
 	template = loader.get_template('createleague.html')
