@@ -21,4 +21,10 @@ class LoginTestCase(TestCase):
 		login = self.c.login(username='test',password='testtest')
 		self.assertTrue(login)
 		
+		
+	def test_searchUser(self):
+		"""user was created and exists"""
+		user1 = User.objects.get(username='test')
+		self.assertEqual(user1,self.user)     #this should work 
+		
 # Create your tests here.
