@@ -1,9 +1,10 @@
 from django.test import TestCase, Client
-from .models import League
-
+from django.contrib.auth import authenticate
+from .models import League, User
+import datetime
 class LeagueTestCase(TestCase):
 	def setUp(self):
-		League.objects.create(name="testLeague", isUniversal=False,numPlayers=15,beginDate=datetime.now,endDate = datetime.now()+datetime.timedelta(days=1),startingBalance = 25.36,adminID = 3, isCrypto = True, joinPassword = "pwd")
+		League.objects.create(name="testLeague", isUniversal=False,numPlayers=15,beginDate=datetime.datetime.now(),endDate = datetime.datetime.now()+datetime.timedelta(days=1),startingBalance = 25.36,adminID = 3, isCrypto = True, joinPassword = "pwd")
 
 	def test_LeagueCreated(self):
 		"""Leagues are correctly identified"""
@@ -32,8 +33,13 @@ class LoginTestCase(TestCase):
 class ViewsTestCase(TestCase):
 	def setUp(self):
 		""""add log in here so we can load other views"""
-	
+	def test_homeLoad(self):
+		resp = self.client.get('/')
+		self.assertEqual(resp.status_code,200)   #if page loads successful return 200
 	def test_signupLoad(self):
 		resp = self.client.get('/signup')
 		self.assertEqual(resp.status_code,200)   #if page loads successful return 200
+	def test_loginLoad(self):
+		resp = self.client.get('/accounts/login')
+		print(resp.status_code)   #this returns a 301 which is perfectly okay but gotta think of a better way to test for success for views than just check for 200
 # Create your tests here.
