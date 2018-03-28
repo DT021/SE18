@@ -1,4 +1,4 @@
-from django.test import TestCase
+from django.test import TestCase, Client
 from .models import League
 
 class LeagueTestCase(TestCase):
@@ -9,4 +9,16 @@ class LeagueTestCase(TestCase):
 		"""Leagues are correctly identified"""
 		league1 = League.objects.get(name="testLeague")
 		self.assertEqual(league1.isUniversal, False)
+
+class LoginTestCase(TestCase):
+	def setUp(self):
+		"""User is logged in"""
+		self.user = User.objects.create(username='test', password = 'testtest',email = 'testtest@test.com')
+		
+	def test_UserLogIn(self):
+		self.c = Client()
+		self.user = authenticate(username='test',password='testtest')
+		login = self.c.login(username='test',password='testtest')
+		self.assertTrue(login)
+		
 # Create your tests here.

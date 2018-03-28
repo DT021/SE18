@@ -85,6 +85,9 @@ DATABASES = {
         'PASSWORD': 'VwftaOkFDwF2LoGElDUxJ7i4kjJyALvy',
         'HOST': 'stampy.db.elephantsql.com',
         'PORT': '5432',
+		'TEST': {
+			'name': 'project_test',
+		},
     }
 }
 
