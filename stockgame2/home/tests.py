@@ -9,6 +9,8 @@ class LeagueTestCase(TestCase):
 		"""Leagues are correctly identified"""
 		league1 = League.objects.get(name="testLeague")
 		self.assertEqual(league1.isUniversal, False)
+	
+		
 
 class LoginTestCase(TestCase):
 	def setUp(self):
@@ -26,5 +28,12 @@ class LoginTestCase(TestCase):
 		"""user was created and exists"""
 		user1 = User.objects.get(username='test')
 		self.assertEqual(user1,self.user)     #this should work 
-		
+
+class ViewsTestCase(TestCase):
+	def setUp(self):
+		""""add log in here so we can load other views"""
+	
+	def test_signupLoad(self):
+		resp = self.client.get('/signup')
+		self.assertEqual(resp.status_code,200)   #if page loads successful return 200
 # Create your tests here.
