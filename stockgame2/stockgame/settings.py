@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+	'pinax.badges',
 ]
 
 MIDDLEWARE = [
@@ -83,11 +84,12 @@ DATABASES = {
         'NAME': 'gyesfxht',
         'USER': 'gyesfxht',
         'PASSWORD': 'VwftaOkFDwF2LoGElDUxJ7i4kjJyALvy',
-        'HOST': 'stampy.db.elephantsql.com',
+        #'HOST': 'stampy.db.elephantsql.com',
+		'HOST': 'localhost',
         'PORT': '5432',
 		'TEST': {
 			'name': 'project_test',
-		},
+			},
     }
 }
 
@@ -122,6 +124,8 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
+
+
 
 
 # Static files (CSS, JavaScript, Images)
