@@ -2,6 +2,7 @@ from django.db import models
 from django.conf import settings
 from datetime import datetime  
 from django.contrib.auth.models import User as auth_User
+import uuid
 
 # Create your models here.
 
@@ -9,6 +10,7 @@ class User(models.Model):
 	username = models.CharField(max_length=20)
 	password = models.CharField(max_length=20)
 	email = models.CharField(max_length=40)
+	points = models.IntegerField(default = 0)
 
 
 class League(models.Model):
@@ -28,11 +30,12 @@ class Player(models.Model):
 	buyingPower = models.DecimalField(decimal_places=2,max_digits=25)
 	percentChange = models.DecimalField(decimal_places=2,max_digits=25)
 	totalWorth = models.DecimalField(decimal_places=2,max_digits=25)
+	playerID = models.UUIDField(default=uuid.uuid4)
 
 
 class Transaction(models.Model):
 	leagueID = models.ForeignKey(League, on_delete=models.CASCADE)
-	playerID = models.IntegerField()
+	playerID = models.UUIDField()
 	price = models.DecimalField(decimal_places=2,max_digits=25)
 	ticker = models.CharField(max_length=5)
 	shares = models.IntegerField()
@@ -40,7 +43,7 @@ class Transaction(models.Model):
 
 class Asset(models.Model):
 	ticker = models.CharField(max_length=5)
-	playerID = models.IntegerField()
+	playerID = models.UUIDField()
 	leagueID = models.ForeignKey(League, on_delete=models.CASCADE)
 	shares = models.IntegerField()
 	buyingPrice = models.DecimalField(decimal_places=2,max_digits=25)

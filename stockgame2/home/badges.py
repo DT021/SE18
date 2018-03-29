@@ -1,8 +1,8 @@
 from pinax.badges.base import Badge, BadgeAwarded
-	from pinax.badges.registry import badges
-
-	class PointsBadge(Badge):
-		slug = "points"
+from pinax.badges.registry import badges
+from .models import Transaction
+	class SalesBadge(Badge):
+		slug = "sales"
 		levels = [
 			"Bronze",
 			"Silver",
@@ -14,13 +14,16 @@ from pinax.badges.base import Badge, BadgeAwarded
 		multiple = False
 	# MAKE NEW THING IN PLAYER TRACKING SELLS
 		def award(self, **state):
-			user = state["user"]
-			points = user.get_profile().points
-			if points > 10:
+			player = state["player"]
+			sales = Transaction.objects.filter(leagueID=player.leagueID, isBuy=False,playerID=player.playerID).count()
+			if sales > 10:
+				player.userID.points = player.userID.points + 5	
 				return BadgeAwarded(level=3)
-			elif points > 5:
+			elif sales > 5:
+				player.userID.points = player.userID.points + 3
 				return BadgeAwarded(level=2)
-			elif points > 3:
+			elif sales > 3:
+				player.userID.points = player.userID.points + 1
 				return BadgeAwarded(level=1)
 
 
