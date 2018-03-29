@@ -1,12 +1,12 @@
 from django.test import TestCase, Client
 from django.contrib.auth import authenticate
-from .models import League, User
+from .models import League
 import datetime
-
+from django.contrib.auth.models import User
 class ViewsTestCase(TestCase):
 	def setUp(self):
 		"""User is logged in"""
-		self.user = User.objects.create(username='test2', password = 'testtest2',email = 'testtest2@test.com')
+		self.user = User.objects.create_user(username='test2', password = 'testtest2',email = 'testtest2@test.com')
 		self.c = Client()
 		self.user = authenticate(username='test2',password='testtest2')
 		login = self.c.login(username='test2',password='testtest2')
@@ -23,34 +23,34 @@ class ViewsTestCase(TestCase):
 	def test_signupLoad(self):
 		resp = self.client.get('/signup')
 		self.assertEqual(resp.status_code,200)   #if page loads successful return 200
-	def test_signupLoad(self):
+	def test_dashLoad(self):
 		resp = self.client.get('/dashboard')
 		self.assertEqual(resp.status_code,200)   #if page loads successful return 200
-	def test_signupLoad(self):
+	def test_leagueLoad(self):
 		resp = self.client.get('/league1')
 		self.assertEqual(resp.status_code,200)   #if page loads successful return 200
-	def test_signupLoad(self):
+	def test_buyLoad(self):
 		resp = self.client.get('/buypage')
 		self.assertEqual(resp.status_code,200)   #if page loads successful return 200
-	def test_signupLoad(self):
+	def test_sellLoad(self):
 		resp = self.client.get('/sellform')
 		self.assertEqual(resp.status_code,200)   #if page loads successful return 200
-	def test_signupLoad(self):
+	def test_missionLoad(self):
 		resp = self.client.get('/mission')
 		self.assertEqual(resp.status_code,200)   #if page loads successful return 200
-	def test_signupLoad(self):
+	def test_faqLoad(self):
 		resp = self.client.get('/faq')
 		self.assertEqual(resp.status_code,200)   #if page loads successful return 200
-	def test_signupLoad(self):
+	def test_profileLoad(self):
 		resp = self.client.get('/profile')
 		self.assertEqual(resp.status_code,200)   #if page loads successful return 200
-	def test_signupLoad(self):
+	def test_createLoad(self):
 		resp = self.client.get('/createleague')
 		self.assertEqual(resp.status_code,200)   #if page loads successful return 200
-	def test_signupLoad(self):
+	def test_joinLoad(self):
 		resp = self.client.get('/joinleague')
 		self.assertEqual(resp.status_code,200)   #if page loads successful return 200
-	def test_signupLoad(self):
+	def test_homeLoad(self):
 		resp = self.client.get('')
 		self.assertEqual(resp.status_code,200)   #if page loads successful return 200
 # Create your tests here.
