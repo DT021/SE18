@@ -83,8 +83,8 @@ DATABASES = {
         'NAME': 'gyesfxht',
         'USER': 'gyesfxht',
         'PASSWORD': 'VwftaOkFDwF2LoGElDUxJ7i4kjJyALvy',
-        #'HOST': 'stampy.db.elephantsql.com',
-		'HOST':'localhost',
+        'HOST': 'stampy.db.elephantsql.com',
+		#'HOST':'localhost',
         'PORT': '5432',
 		'TEST': {
 			'name': 'project_test',
