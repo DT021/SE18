@@ -19,6 +19,7 @@ def logout_view(request):
 	# Redirect to a success page.
 	return HttpResponseRedirect('/accounts/login')
 def newLeague(request):
+	date_inpast = False
 	current_user = request.user
 	if (request.method == 'POST' and current_user.is_authenticated):
 		form = LeagueForm(request.POST)
@@ -28,13 +29,18 @@ def newLeague(request):
 			startbal = form.cleaned_data.get('startBalance')
 			ltype = form.cleaned_data.get('leagueType')
 			enddate = form.cleaned_data.get('endDate')
+			date_out = datetime.datetime(*[int(v) for v in enddate.replace('T', '-').replace(':', '-').split('-')])
+			#form.clean_endDate()
+			# if date_out < datetime.datetime.now():
+				# date_inpast == True
+				# return render(request, 'createleague.html', {'form': form,'date_inpast': date_inpast})
 			print(enddate)
 			#date_in = u'enddate' # replace this string with whatever method or function collects your data
 			# date_processing = enddate.replace('T', '-').replace(':', '-').split('-')
 			# print(date_processing)
 			# date_processing = [int(v) for v in date_processing]
 			# date_out = datetime.datetime(*date_processing)
-			date_out = datetime.datetime(*[int(v) for v in enddate.replace('T', '-').replace(':', '-').split('-')])
+			
 			b = False
 			if ltype=="crypto":
 				b = True
@@ -90,24 +96,14 @@ def submitBuy(request):
 			new_transaction = Transaction(leagueID = "tmpLeagueID", playerID = current_user.playerID, price = tmpPrice, ticker = ticker, shares = share, isBuy = True)
 			new_transaction.save()
 			return redirect('/home')
-			# pwd = form.cleaned_data.get('password')
-			# c_pwd = form.cleaned_data['conf_pwd']
-			# if pwd!=c_pwd:
-				# form.add_error('conf_pwd', "Password does not match")
-				# return render(request, 'signup.html', {'form': form})
-			# email = form.cleaned_data['email']
-			# user = User(username=username, password=pwd, email=email, leagueID0 = 0, leagueID1 = 0, leagueID2 = 0, leagueID3 = 0)
-			# user.save()
-			# user = User.objects.create_user(username,pwd,email)
-			# user.save()
-			# return HttpResponseRedirect('/home')
+			
 		else:
-			 return redirect("/dashboard")
-			#return render(request, 'buypage.html', {'form': form})
+			 #return redirect("/dashboard")
+			return render(request, 'buypage.html', {'form': form})
 	else:
-		#form = BuyForm()
-		return redirect("/dashboard")
-		#return render(request, 'buypage.html', {'form': form})
+		form = BuyForm()
+		#return redirect("/dashboard")
+		return render(request, 'buypage.html', {'form': form})
 
 def submitSell(request):
 	"""if request.method == 'POST':
@@ -217,6 +213,7 @@ def dashboard(request):
 		return HttpResponse(template.render({},request))
 
 def createleague(request):
+	date_inpast = False
 	template = loader.get_template('createleague.html')
 	return HttpResponse(template.render({},request))
 def faq(request):

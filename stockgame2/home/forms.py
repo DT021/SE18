@@ -1,5 +1,6 @@
 from django import forms
-from datetime import datetime
+from django.shortcuts import render
+import datetime
 from django.core.exceptions import ValidationError
 from django.core.validators import EmailValidator
 from django.utils.translation import gettext_lazy as _
@@ -20,7 +21,6 @@ class SignUpForm(UserCreationForm):
 class BuyForm(forms.Form):
 	ticker = forms.CharField(max_length=20)
 	shares = forms.DecimalField(decimal_places=0, max_digits=40)
-	isBuy = forms.BooleanField()
 	buyingPrice = forms.DecimalField(decimal_places = 2, max_digits=40)
 
 class LeagueForm(forms.Form):
@@ -29,11 +29,14 @@ class LeagueForm(forms.Form):
 	startBalance = forms.DecimalField(decimal_places=2,max_digits=40)
 	leagueType = forms.CharField(max_length=10)
 	joinpwd = forms.CharField(max_length=20)
-	# def clean_date(self):
-		# endDate = self.cleaned_data['endDate']
-		# if date < datetime.now():
-			# raise forms.ValidationError("The date cannot be in the past!")
-		# return endDate
+	def clean_endDate(self):
+		enddate = self.cleaned_data['endDate']
+		date_out = datetime.datetime(*[int(v) for v in enddate.replace('T', '-').replace(':', '-').split('-')])
+		if date_out < datetime.datetime.now():
+			raise ValidationError(_("The date cannot be in the past!"))
+			date_inpast = True
+			#return render(request, 'createleague.html', {'form': form})
+		return date_out
 
 
 class LoginForm(forms.Form):
