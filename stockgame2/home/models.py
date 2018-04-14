@@ -5,10 +5,10 @@ from django.contrib.auth.models import User as auth_User
 
 # Create your models here.
 
-class User(models.Model):
-	username = models.CharField(max_length=20)
-	password = models.CharField(max_length=20)
-	email = models.CharField(max_length=40)
+# class User(models.Model):
+	# username = models.CharField(max_length=20)
+	# password = models.CharField(max_length=20)
+	# email = models.CharField(max_length=40)
 
 
 class League(models.Model):

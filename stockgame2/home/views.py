@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.template import loader
 from django.http import HttpResponse
-from home.models import User, Player, League,Transaction, Asset
+from home.models import Player, League,Transaction, Asset
 from django.contrib.auth.models import User as auth_User
 from home.forms import SignUpForm, LeagueForm, BuyForm
 from django.http import HttpResponseRedirect
