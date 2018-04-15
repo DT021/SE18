@@ -174,7 +174,7 @@ def dashboard(request):
 		# }
 
 		players = Player.objects.filter(userID=request.user)
-		print(players)
+		#print(players)
 		return render(request, 'dashboard.html', {'players': players})
 		# template = loader.get_template('dashboard.html')
 		# return HttpResponse(template.render({},request))
@@ -194,7 +194,11 @@ def universal(request):
 	return HttpResponse(template.render({},request))
 def leagues(request,league_id):
 	league = League.objects.get(pk=league_id)
-	return render(request, 'individualleague.html', {'league': league})
+	players = Player.objects.filter(leagueID = league)
+	for p in players:
+		if p.userID.id == league.adminID:
+			admin = p.userID # admin is auth_user object
+	return render(request, 'individualleague.html', {'league': league, 'admin': admin})
 def league1(request):	# (request, league_id)
 	template = loader.get_template('individualleague.html')
 	return HttpResponse(template.render({},request))
