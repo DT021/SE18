@@ -168,10 +168,10 @@
             </div>
             <div class="col-lg-7" style="padding-left:0;height:270px">
                <ol style="list-style-type:none;margin:0;padding:0;font-size:1em;text-align:center;border-bottom:1px solid rgba(118,118,118,0.1);color:#767676;">
-                <li style="text-align:left">User Name:</li>
-                <li>Buying Power: $134,526</li>
+                <li style="text-align:left">{{request.user.username}}:</li>
+                <li>Buying Power: ${{currPlayer.buyingPower}}</li>
                 <li>Rank: 1</li>
-                <li>Total Worth: $422,598</li>
+                <li>Total Worth: ${{currPlayer.totalWorth}}</li>
               </ol>
               <ol style="list-style-type:none;margin:0;padding:0;font-size:1em;text-align:center;border-bottom:1px solid rgba(118,118,118,0.1);color:#767676;">
                 <li style="text-align:left">League Settings:</li>

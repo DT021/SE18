@@ -198,7 +198,9 @@ def leagues(request,league_id):
 	for p in players:
 		if p.userID.id == league.adminID:
 			admin = p.userID # admin is auth_user object
-	return render(request, 'individualleague.html', {'league': league, 'admin': admin})
+		if p.userID.id == request.user.id:
+			currPlayer = p
+	return render(request, 'individualleague.html', {'league': league, 'admin': admin, 'currPlayer':currPlayer})
 def league1(request):	# (request, league_id)
 	template = loader.get_template('individualleague.html')
 	return HttpResponse(template.render({},request))
