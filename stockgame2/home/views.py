@@ -14,6 +14,7 @@ import datetime
 import psycopg2
 from django.contrib.auth import logout
 from home.financepi import getPriceFromAPI
+from rtstock.stock import Stock
 
 def logout_view(request):
 	logout(request)
@@ -87,7 +88,7 @@ def submitBuy(request):
 	shares = form.cleaned_data.get('shares')
 	isCrypto = form.cleaned_data.get('isCrypto')
 	#buyingPrice = form.cleaned_data.get('buyingPrice')
-	buyingPrice = getPriceFromAPI(ticker, isCrypto) #allow crypto in future
+	buyingPrice = Stock(ticker).get_latest_price() #allow crypto in future
 	player = Player.objects.get(id=3)
 	tempPid = 1
 	tempLid = League.objects.get(name="k1")

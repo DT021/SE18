@@ -9,7 +9,7 @@ def getPriceFromAPI(symbol, isCrypto):
 
     # sets url based on if cryptocurrency or not
     if isCrypto == False:
-        funct = 'TIME_SERIES_INTRADAY'
+        funct = 'TIME_SERIES_INTRADAY&interval=1min'
     else: #is cryptocurrency
         funct = 'DIGITAL_CURRENCY_INTRADAY'
 
@@ -44,4 +44,4 @@ def getPriceFromAPI(symbol, isCrypto):
 
     return openPrice
 
-print(getPriceFromAPI('BTlllllC', True))
+print(getPriceFromAPI('GOOGL', False))
