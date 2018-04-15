@@ -13,6 +13,7 @@ from django.shortcuts import render, redirect
 import datetime
 import psycopg2
 from django.contrib.auth import logout
+from home.financepi import getPriceFromAPI
 
 def logout_view(request):
 	logout(request)
@@ -77,19 +78,26 @@ def submitSignup(request):
 		return render(request, 'signup.html', {'form': form})
 
 def submitBuy(request):
-	if request.method == 'POST' and False:
-		form = BuyForm(request.POST)
-		if form.is_valid():
-			current_user = request.user
-			ticker = form.cleaned_data.get('ticker')
-			shares = form.cleaned_data.get('shares')
-			buyingPrice = form.cleaned_data.get('buyingPrice')
-			new_asset = Asset(ticker = ticker, playerID = current_user.player, leagueID = "tmpLeagueID", shares = shares, buyingPrice = buyingPrice)
-			new_asset.save()
-			tmpPrice = 0
-			new_transaction = Transaction(leagueID = "tmpLeagueID", playerID = current_user.playerID, price = tmpPrice, ticker = ticker, shares = share, isBuy = True)
-			new_transaction.save()
-			return redirect('/home')
+
+	form = BuyForm(request.POST)
+
+	form.is_valid()	
+	current_user = request.user
+	ticker = form.cleaned_data.get('ticker')
+	shares = form.cleaned_data.get('shares')
+	isCrypto = form.cleaned_data.get('isCrypto')
+	#buyingPrice = form.cleaned_data.get('buyingPrice')
+	buyingPrice = getPriceFromAPI(ticker, isCrypto) #allow crypto in future
+	player = Player.objects.get(id=3)
+	tempPid = 1
+	tempLid = League.objects.get(name="k1")
+	new_asset = Asset(ticker = ticker, playerID = tempPid, leagueID = tempLid, shares = shares, buyingPrice = buyingPrice)
+	new_asset.save()
+	tmpPrice = buyingPrice*shares
+	new_transaction = Transaction(leagueID = tempLid, playerID = tempPid, price = tmpPrice, ticker = ticker, shares = shares, isBuy = True)
+	player.buyingPower = player.buyingPower-tmpPrice
+	new_transaction.save()
+	return redirect('/home')
 			# pwd = form.cleaned_data.get('password')
 			# c_pwd = form.cleaned_data['conf_pwd']
 			# if pwd!=c_pwd:
@@ -101,13 +109,7 @@ def submitBuy(request):
 			# user = User.objects.create_user(username,pwd,email)
 			# user.save()
 			# return HttpResponseRedirect('/home')
-		else:
-			 return redirect("/dashboard")
-			#return render(request, 'buypage.html', {'form': form})
-	else:
-		#form = BuyForm()
-		return redirect("/dashboard")
-		#return render(request, 'buypage.html', {'form': form})
+
 
 def submitSell(request):
 	"""if request.method == 'POST':

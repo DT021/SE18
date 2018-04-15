@@ -102,13 +102,13 @@
 
             <div class="custom-control custom-checkbox">
               {{ form.isBuy.errors }}
-              <input name = "isBuy" type="checkbox" class="custom-control-input" value="off" id="isLimit"> <label class="custom-control-label" for="isLimit">Limit Order</label> 
+              <input name = "isCrypto" type="checkbox" class="custom-control-input" value="off" id="isCrypto"> <label class="custom-control-label" for="isCrypto">Crypto Order</label> 
               </div>
 
             <div class="mb-3"> <label for="limit">Limit Price</label>
               <div class="input-group"> <span class="input-group-text">$</span>
               {{ form.buyingPrice.errors }}
-              <input name = "buyingPrice" type="number" min="0" step="0.01" data-number-to-fixed="2" data-number-stepfactor="100" class="form-control currency text-right" placeholder="0.00" required="" id="limit"> 
+              <input name = "buyingPrice" type="number" min="0" step="0.01" data-number-to-fixed="2" data-number-stepfactor="100" class="form-control currency text-right" placeholder="0.00"  id="limit"> 
               </div>
 
               <div class="invalid-feedback"> Please enter a limit price. </div>
