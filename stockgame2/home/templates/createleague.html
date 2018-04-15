@@ -145,10 +145,6 @@
             {{ form.endDate.errors }}
 			<input name="endDate" type="datetime-local" class="form-control" id="cc-cvv" placeholder="MM/DD/YYYY" required=""> <small class="text-secondary">League End Date</small>
             <div class="invalid-feedback"> End Date required </div>
-			{% if date_inpast == True %}
-			<div class="row">Please enter a future date</div>
-			<small class="text-secondary">League End Date</small>
-			{% endif %}
           </div>
         </div>
         <hr class="mb-4">

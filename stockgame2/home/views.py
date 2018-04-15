@@ -30,16 +30,6 @@ def newLeague(request):
 			ltype = form.cleaned_data.get('leagueType')
 			enddate = form.cleaned_data.get('endDate')
 			date_out = datetime.datetime(*[int(v) for v in enddate.replace('T', '-').replace(':', '-').split('-')])
-			#form.clean_endDate()
-			# if date_out < datetime.datetime.now():
-				# date_inpast == True
-				# return render(request, 'createleague.html', {'form': form,'date_inpast': date_inpast})
-			print(enddate)
-			#date_in = u'enddate' # replace this string with whatever method or function collects your data
-			# date_processing = enddate.replace('T', '-').replace(':', '-').split('-')
-			# print(date_processing)
-			# date_processing = [int(v) for v in date_processing]
-			# date_out = datetime.datetime(*date_processing)
 			
 			b = False
 			if ltype=="crypto":
@@ -134,26 +124,6 @@ def submitSell(request):
 		#form = SellForm()
 	return redirect("/dashboard")
 		#return render(request, 'sellform.html', {'form': form})
-# def submitLogin(request):
-	# if request.method == 'POST':
-		# form = LoginForm(request.POST)
-		# if form.is_valid():
-			# username = form.cleaned_data['username']
-			# pwd = form.cleaned_data['password']
-			# try:
-				# user = User.objects.get(username=username)
-				# if user.password != pwd:
-					# form.add_error('password', "Incorrect password")
-					# return render(request, 'login.html', {'form': form})
-			# except User.DoesNotExist:
-				# form.add_error('username', "Username does not exist")
-				# return render(request, 'login.html', {'form': form})
-			# return HttpResponseRedirect('/home')
-		# else:
-			# return render(request, 'login.html', {'form': form})
-	# else:
-		# form = LoginForm()
-		# return render(request, 'login.html', {'form': form})
 
 
 def get_user(request):
@@ -222,6 +192,9 @@ def faq(request):
 def universal(request):
 	template = loader.get_template('universalleague.html')
 	return HttpResponse(template.render({},request))
+def leagues(request,league_id):
+	league = League.objects.get(pk=league_id)
+	return render(request, 'individualleague.html', {'league': league})
 def league1(request):	# (request, league_id)
 	template = loader.get_template('individualleague.html')
 	return HttpResponse(template.render({},request))
