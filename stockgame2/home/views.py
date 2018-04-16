@@ -88,7 +88,7 @@ def submitBuy(request):
 	shares = form.cleaned_data.get('shares')
 	isCrypto = form.cleaned_data.get('isCrypto')
 	#buyingPrice = form.cleaned_data.get('buyingPrice')
-	buyingPrice = Stock(ticker).get_latest_price() #allow crypto in future
+	buyingPrice = getPriceFromAPI(ticker,isCrypto) #allow crypto in future
 	player = Player.objects.get(id=3)
 	tempPid = 1
 	tempLid = League.objects.get(name="k1")
