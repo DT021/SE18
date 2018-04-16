@@ -49,12 +49,16 @@ def joinLeague(request):
 	if request.method == 'POST':
 		form = JoinLeagueForm(request.POST)
 		if form.is_valid():
-			try:
-				password = form.cleaned_data.get('password')
-				username = form.cleaned_data.get('username')
-				league = League.objects.get(name=username)
-			except:
-				return HttpResponseRedirect('/joinLeague')
+			password = form.cleaned_data.get('password')
+			username = form.cleaned_data.get('username')
+			league = League.objects.get(name=username)
+			print(league)
+			# try:
+				# password = form.cleaned_data.get('password')
+				# username = form.cleaned_data.get('username')
+				# league = League.objects.get(name=username)
+			# except:
+				# return HttpResponseRedirect('/joinLeague')
 			if league.joinPassword == password:
 				players = Player.objects.filter(leagueID = league)
 				for p in players:

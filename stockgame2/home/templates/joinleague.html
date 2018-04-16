@@ -96,7 +96,7 @@
 							<p>Please login to see this page.</p>
 							{% endif %}
 						{% endif %}
-						<form action="joinLeague" role="form" method="post" class="l-form">
+						<form action="/joinLeague" role="form" method="post" class="l-form">
                             {% csrf_token %}
                             {{ form.non_field_errors }}
 	                    	<div class="form-group" style="padding-top:5%">
