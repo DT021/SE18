@@ -59,13 +59,19 @@ def joinLeague(request):
 				# league = League.objects.get(name=username)
 			# except:
 				# return HttpResponseRedirect('/joinLeague')
-			if league.joinPassword == password:
-				players = Player.objects.filter(leagueID = league)
-				for p in players:
-					if p.userID == current_user:
-						return HttpResponseRedirect('/joinLeague')
-				newPlayer = Player(leagueID=league,userID=current_user, buyingPower = league.startingBalance,percentChange=0,totalWorth=0)
-				newPlayer.save()
+			#if league.joinPassword == password:
+			players = Player.objects.filter(leagueID = league)
+			league.numPlayers = 0
+			for p in players:
+				league.numPlayers+=1
+			for p in players:
+				if p.userID == current_user:
+					league.save()
+					return HttpResponseRedirect('/joinLeague')
+			newPlayer = Player(leagueID=league,userID=current_user, buyingPower = league.startingBalance,percentChange=0,totalWorth=0)
+			league.numPlayers+=1
+			league.save()
+			newPlayer.save()
 			return HttpResponseRedirect('/dashboard')
 		else:
 			return render(request, 'joinleague.html', {'form': form})
