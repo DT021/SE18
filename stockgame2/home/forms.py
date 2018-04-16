@@ -43,12 +43,11 @@ class JoinLeagueForm(forms.Form):
 	password = forms.CharField(max_length=20)
 	def clean_username(self):
 		try:
-			username = self.cleaned_data.get['username']
+			username = self.cleaned_data.get('username')
 			league = League.objects.get(name=username)
 		except:
 			raise ValidationError(_("League does not exist!"))
 		return username
-	
 		
 
 class LoginForm(forms.Form):

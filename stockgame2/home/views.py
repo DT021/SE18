@@ -52,7 +52,7 @@ def joinLeague(request):
 			password = form.cleaned_data.get('password')
 			username = form.cleaned_data.get('username')
 			league = League.objects.get(name=username)
-			print(league)
+			#print(league)
 			# try:
 				# password = form.cleaned_data.get('password')
 				# username = form.cleaned_data.get('username')
