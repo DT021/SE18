@@ -87,7 +87,7 @@
       </h1>
 	  <div class = "row ">
 		{% for L in players%}
-			<button class=" btn mx-3"><a href="/league1">{{ L.leagueID.name }}</a></button>
+			<button class=" btn mx-3"><a href="/leagues/{{L.leagueID.id}}/">{{ L.leagueID.name }}</a></button>
 		{% endfor %}
 		</div>
       <div class="row">

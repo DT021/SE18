@@ -49,25 +49,33 @@
                         <li class="nav-item">
                             <a class="nav-link" href="/home">Home</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/dashboard">Dashboard</a>
-                        </li>
+                        {% if request.user.is_authenticated%}
+						<li class="nav-item">
+							<a class="nav-link" href="/dashboard">Dashboard</a>
+						</li>
+				{% endif %}
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">About Titan</a>
-                            <div class="dropdown-menu">
-                                <a class="dropdown-item" href="/aboutus">About Us</a>
-                                <a class="dropdown-item" href="/mission">Our Mission</a>
-                                <a class="dropdown-item" href="/faq">FAQ</a>
-                            </div>
-                        </li>
-                        <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="/login" role="button" aria-haspopup="true" aria-expanded="false">Login</a>
-                                <div class="dropdown-menu">
-                                    <a class="dropdown-item" href="/profile">Profile</a>
-                                    <a class="dropdown-item" href="/settings">Settings</a>
-                                    <a class="dropdown-item" href="/">Log Out</a>
-                                </div>
-                            </li>
+            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">About Titan</a>
+            <div class="dropdown-menu">
+              <a class="dropdown-item" href="/aboutus">About Us</a>
+              <a class="dropdown-item" href="/mission">Our Mission</a>
+              <a class="dropdown-item" href="/faq">FAQ</a>
+            </div>
+          </li>
+                        {% if request.user.is_authenticated%}
+						<li class="nav-item dropdown">
+							<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">{{request.user.username}}</a>
+							<div class="dropdown-menu">
+								<a class="dropdown-item" href="/profile">Profile</a>
+								<a class="dropdown-item" href="/settings">Settings</a>
+								<a class="dropdown-item" href="/logout_view">Log Out</a>
+							</div>
+						</li>
+						{% else %}
+						<li class="nav-item">
+							<a class="nav-link" href="/accounts/login">Login</a>
+						</li>
+						{% endif %}
                     </ul>
                 </div>
             </div>
@@ -183,7 +191,8 @@
         <script src="/static/assets/bootstrap/js/bootstrap.min.js"></script>
         <!--<script src="/static/assets/js/jquery.backstretch.min.js"></script>-->
         <script src="/static/assets/js/scripts.js"></script>
-        
+        <script src="/static/home2/vendor/jquery/jquery.min.js"></script>
+		<script src="/static/home2/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
         <!--[if lt IE 10]>
             <script src="assets/js/placeholder.js"></script>
         <![endif]-->

@@ -46,14 +46,14 @@
                 <div class="dropdown-menu">
                   <a class="dropdown-item" href="/profile">Profile</a>
                   <a class="dropdown-item" href="/settings">Settings</a>
-                  <a class="dropdown-item" href="/">Log Out</a>
+                  <a class="dropdown-item" href="/logout_view">Log Out</a>
                 </div>
               </li>
           </ul>
         </div>
       </div>
     </nav>
-	
+
   <div class="py-5 filter-light">
     <div class="container">
       <div class="row">
@@ -81,15 +81,36 @@
 
         </div>
         <div class="col-md-8 order-md-1">
+        
+          <!-- Modal -->
+          <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLabel">ERROR: Stock title is invalid</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  Did you mean to say 'GOOGL'?
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                  <button type="button" class="btn btn-primary" data-dismiss="modal">Yes</button>
+                </div>
+              </div>
+            </div>
+            </div>  
           <h4 class="mb-3"><b>Transaction Information</b></h4>
-          <form role="form" action="/submitBuy" method="post" class="r-form">
+          <form class="needs-validation" role="form" action="/submitBuy" method="post" class="r-form">
             {% csrf_token %}
             {{ form.non_field_errors }}
             <div class="mb-3"> 
               <h5 class = "mb-3"><b>Stock Ticker</b></h5>
               <label for = "ticker">{{ form.ticker.label_tag }}</label>
               {{ form.ticker.errors }}
-              <input name = "ticker" type="text" class="form-control"  placeholder="example: GOOG" required="" id="ticker">
+              <input name = "ticker" type="text" class="form-control"  placeholder="example: GOOGL" required="" id="ticker">
               <div class="invalid-feedback"> Please enter a valid ticker symbol. </div>
             </div>
 
@@ -114,9 +135,10 @@
               <div class="invalid-feedback"> Please enter a limit price. </div>
 
               <hr class="mb-4"> 
-              <button class="btn btn-lg btn-block btn-success" type="submit">Confirm purchase</a></button>
+              <button class="btn btn-lg btn-block btn-success" type="submit"><a href="/dashboard">Confirm purchase</a></button>
             </div>
           </form>
+          <br>
         </div>
       </div>
     </div>
@@ -147,7 +169,7 @@
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" crossorigin="anonymous" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-    <script src="assets/js/validation.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/validate.js/0.12.0/validate.min.js"></script>
   </div>
 </body>
 

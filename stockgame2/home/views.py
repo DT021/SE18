@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.template import loader
 from django.http import HttpResponse
-from home.models import User, Player, League,Transaction, Asset
+from home.models import Player, League,Transaction, Asset
 from django.contrib.auth.models import User as auth_User
 from home.forms import SignUpForm, LeagueForm, BuyForm
 from django.http import HttpResponseRedirect
@@ -21,6 +21,7 @@ def logout_view(request):
 	# Redirect to a success page.
 	return HttpResponseRedirect('/accounts/login')
 def newLeague(request):
+	date_inpast = False
 	current_user = request.user
 	if (request.method == 'POST' and current_user.is_authenticated):
 		form = LeagueForm(request.POST)
@@ -30,13 +31,8 @@ def newLeague(request):
 			startbal = form.cleaned_data.get('startBalance')
 			ltype = form.cleaned_data.get('leagueType')
 			enddate = form.cleaned_data.get('endDate')
-			print(enddate)
-			#date_in = u'enddate' # replace this string with whatever method or function collects your data
-			# date_processing = enddate.replace('T', '-').replace(':', '-').split('-')
-			# print(date_processing)
-			# date_processing = [int(v) for v in date_processing]
-			# date_out = datetime.datetime(*date_processing)
 			date_out = datetime.datetime(*[int(v) for v in enddate.replace('T', '-').replace(':', '-').split('-')])
+			
 			b = False
 			if ltype=="crypto":
 				b = True
@@ -85,33 +81,35 @@ def submitBuy(request):
 	form.is_valid()	
 	current_user = request.user
 	ticker = form.cleaned_data.get('ticker')
-	shares = form.cleaned_data.get('shares')
-	isCrypto = form.cleaned_data.get('isCrypto')
-	#buyingPrice = form.cleaned_data.get('buyingPrice')
-	buyingPrice = getPriceFromAPI(ticker,isCrypto) #allow crypto in future
-	player = Player.objects.get(id=3)
-	tempPid = 1
-	tempLid = League.objects.get(name="k1")
-	tmpPrice = buyingPrice*shares
-	if tmpPrice > player.buyingPower:
-		return redirect('\home')
-	new_asset = Asset(ticker = ticker, playerID = tempPid, leagueID = tempLid, shares = shares, buyingPrice = buyingPrice)
-	new_asset.save()
-	new_transaction = Transaction(leagueID = tempLid, playerID = tempPid, price = tmpPrice, ticker = ticker, shares = shares, isBuy = True)
-	player.buyingPower = player.buyingPower-tmpPrice
-	new_transaction.save()
-	return redirect('/home')
-			# pwd = form.cleaned_data.get('password')
-			# c_pwd = form.cleaned_data['conf_pwd']
-			# if pwd!=c_pwd:
-				# form.add_error('conf_pwd', "Password does not match")
-				# return render(request, 'signup.html', {'form': form})
-			# email = form.cleaned_data['email']
-			# user = User(username=username, password=pwd, email=email, leagueID0 = 0, leagueID1 = 0, leagueID2 = 0, leagueID3 = 0)
-			# user.save()
-			# user = User.objects.create_user(username,pwd,email)
-			# user.save()
-			# return HttpResponseRedirect('/home')
+	if(ticker == 'GOOG'):
+		return redirect('/processInvalid')
+	else:
+		shares = form.cleaned_data.get('shares')
+		isCrypto = form.cleaned_data.get('isCrypto')
+		#buyingPrice = form.cleaned_data.get('buyingPrice')
+		buyingPrice = Stock(ticker).get_latest_price() #allow crypto in future
+		player = Player.objects.get(id=3)
+		tempPid = 1
+		tempLid = League.objects.get(name="k1")
+		new_asset = Asset(ticker = ticker, playerID = tempPid, leagueID = tempLid, shares = shares, buyingPrice = buyingPrice)
+		new_asset.save()
+		tmpPrice = buyingPrice*shares
+		new_transaction = Transaction(leagueID = tempLid, playerID = tempPid, price = tmpPrice, ticker = ticker, shares = shares, isBuy = True)
+		player.buyingPower = player.buyingPower-tmpPrice
+		new_transaction.save()
+		return redirect('/receipt')
+
+					# pwd = form.cleaned_data.get('password')
+					# c_pwd = form.cleaned_data['conf_pwd']
+					# if pwd!=c_pwd:
+						# form.add_error('conf_pwd', "Password does not match")
+						# return render(request, 'signup.html', {'form': form})
+					# email = form.cleaned_data['email']
+					# user = User(username=username, password=pwd, email=email, leagueID0 = 0, leagueID1 = 0, leagueID2 = 0, leagueID3 = 0)
+					# user.save()
+					# user = User.objects.create_user(username,pwd,email)
+					# user.save()
+					# return HttpResponseRedirect('/home')
 
 
 def submitSell(request):
@@ -143,26 +141,6 @@ def submitSell(request):
 		#form = SellForm()
 	return redirect("/dashboard")
 		#return render(request, 'sellform.html', {'form': form})
-# def submitLogin(request):
-	# if request.method == 'POST':
-		# form = LoginForm(request.POST)
-		# if form.is_valid():
-			# username = form.cleaned_data['username']
-			# pwd = form.cleaned_data['password']
-			# try:
-				# user = User.objects.get(username=username)
-				# if user.password != pwd:
-					# form.add_error('password', "Incorrect password")
-					# return render(request, 'login.html', {'form': form})
-			# except User.DoesNotExist:
-				# form.add_error('username', "Username does not exist")
-				# return render(request, 'login.html', {'form': form})
-			# return HttpResponseRedirect('/home')
-		# else:
-			# return render(request, 'login.html', {'form': form})
-	# else:
-		# form = LoginForm()
-		# return render(request, 'login.html', {'form': form})
 
 
 def get_user(request):
@@ -213,7 +191,7 @@ def dashboard(request):
 		# }
 
 		players = Player.objects.filter(userID=request.user)
-		print(players)
+		#print(players)
 		return render(request, 'dashboard.html', {'players': players})
 		# template = loader.get_template('dashboard.html')
 		# return HttpResponse(template.render({},request))
@@ -222,6 +200,7 @@ def dashboard(request):
 		return HttpResponse(template.render({},request))
 
 def createleague(request):
+	date_inpast = False
 	template = loader.get_template('createleague.html')
 	return HttpResponse(template.render({},request))
 def faq(request):
@@ -230,6 +209,15 @@ def faq(request):
 def universal(request):
 	template = loader.get_template('universalleague.html')
 	return HttpResponse(template.render({},request))
+def leagues(request,league_id):
+	league = League.objects.get(pk=league_id)
+	players = Player.objects.filter(leagueID = league)
+	for p in players:
+		if p.userID.id == league.adminID:
+			admin = p.userID # admin is auth_user object
+		if p.userID.id == request.user.id:
+			currPlayer = p
+	return render(request, 'individualleague.html', {'league': league, 'admin': admin, 'currPlayer':currPlayer})
 def league1(request):	# (request, league_id)
 	template = loader.get_template('individualleague.html')
 	return HttpResponse(template.render({},request))
@@ -263,5 +251,11 @@ def anonuser(request):
 	return HttpResponse(template.render({},request))
 def settings(request):
 	template = loader.get_template('settings.html')
+	return HttpResponse(template.render({},request))
+def receipt(request):
+	template = loader.get_template('receipt.html')
+	return HttpResponse(template.render({},request))
+def processInvalid(request):
+	template = loader.get_template('processInvalid.html')
 	return HttpResponse(template.render({},request))
 # Create your views here.

@@ -22,6 +22,7 @@ urlpatterns = [
 	path('dashboard', views.dashboard, name='dashboard'),
 	path('createleague', views.createleague, name='createleague'),
 	path('universal', views.universal, name='universal'),
+	path('leagues/<int:league_id>/', views.leagues, name='leagues'),
 	path('league1', views.league1, name='league1'),
 	path('league2', views.league2, name='league2'),
 	path('league3', views.league3, name='league3'),
@@ -36,5 +37,7 @@ urlpatterns = [
 	path('universal', views.universal, name='universal'),
 	path('joinleague', views.joinleague, name='joinleague'),
 	path('anonuser', views.anonuser, name='anonuser'),
-	path('settings', views.settings, name='settings')
+	path('settings', views.settings, name='settings'),
+	path('receipt', views.receipt, name='receipt'),
+	path('processInvalid', views.processInvalid, name='processInvalid')
 	]

@@ -9,7 +9,7 @@
     <meta name="author" content="">
 	<!-- PAGE settings -->
 	<link rel="icon" href="/static/home2/titanhead_logo_trans.png">
-    <title>Individual League</title>
+    <title>{{league.name}}</title>
 
     <!-- Bootstrap core CSS -->
     <link href="/static/dashboard/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -61,7 +61,7 @@
                 <div class="dropdown-menu">
                   <a class="dropdown-item" href="/profile">Profile</a>
                   <a class="dropdown-item" href="/settings">Settings</a>
-                  <a class="dropdown-item" href="/">Log Out</a>
+                  <a class="dropdown-item" href="/logout_view">Log Out</a>
                 </div>
               </li>
           </ul>
@@ -73,7 +73,7 @@
     <div class="container">
 
       <!-- Page Heading -->
-      <h1 class="my-4">Individual League
+      <h1 class="my-4">{{league.name}}
       </h1>
       <div class="row">
         <div class="col-lg-6 portfolio-item">
@@ -168,17 +168,21 @@
             </div>
             <div class="col-lg-7" style="padding-left:0;height:270px">
                <ol style="list-style-type:none;margin:0;padding:0;font-size:1em;text-align:center;border-bottom:1px solid rgba(118,118,118,0.1);color:#767676;">
-                <li style="text-align:left">User Name:</li>
-                <li>Buying Power: $134,526</li>
+                <li style="text-align:left">{{request.user.username}}:</li>
+                <li>Buying Power: ${{currPlayer.buyingPower}}</li>
                 <li>Rank: 1</li>
-                <li>Total Worth: $422,598</li>
+                <li>Total Worth: ${{currPlayer.totalWorth}}</li>
               </ol>
               <ol style="list-style-type:none;margin:0;padding:0;font-size:1em;text-align:center;border-bottom:1px solid rgba(118,118,118,0.1);color:#767676;">
                 <li style="text-align:left">League Settings:</li>
-                <li>End Date: May 11 2018</li>
-                <li>League Admin: {{request.user.username}}</li>
-                <li>Starting Balance: $30,000</li>
+                <li>End Date: {{league.endDate}}</li>
+                <li>League Admin: {{admin.username}}</li>
+                <li>Starting Balance: ${{league.startingBalance}}</li>
+				{% if league.isCrypto %}
                 <li>Type: Crypto</li> 
+				{% else %}
+				<li>Type: Stock Market</li>
+				{% endif %}
               </ol>
               <div style="overflow-y:scroll;padding:.5em;text-align:left;white-space:normal;color:#0a0a0a;flex:1;height:100px">
               <ol>

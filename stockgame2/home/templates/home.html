@@ -53,7 +53,7 @@
               <div class="dropdown-menu">
                 <a class="dropdown-item" href="/profile">Profile</a>
                 <a class="dropdown-item" href="/settings">Settings</a>
-                <a class="dropdown-item" href="/">Log Out</a>
+                <a class="dropdown-item" href="/logout_view">Log Out</a>
               </div>
             </li>
             {% else %}
@@ -223,7 +223,7 @@
 	{% if request.user.is_authenticated%}
 	<a href="/dashboard">
 	{% else %}
-	<a href="/createleague">
+	<a href="/signup">
 	{% endif %}
 	<div class = "my-3">
 	<button class="btn btn-lg btn-block btn-success" type="submit" style="background-color:#0abab5">Play Now!</button>
