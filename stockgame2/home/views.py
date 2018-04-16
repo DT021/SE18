@@ -87,13 +87,15 @@ def submitBuy(request):
 		shares = form.cleaned_data.get('shares')
 		isCrypto = form.cleaned_data.get('isCrypto')
 		#buyingPrice = form.cleaned_data.get('buyingPrice')
-		buyingPrice = Stock(ticker).get_latest_price() #allow crypto in future
+		buyingPrice = getPriceFromAPI(ticker,isCrypto) #allow crypto in future
 		player = Player.objects.get(id=3)
 		tempPid = 1
 		tempLid = League.objects.get(name="k1")
+		tmpPrice = buyingPrice*shares
+		if tmpPrice > player.buyingPower:
+			return redirect('/home')
 		new_asset = Asset(ticker = ticker, playerID = tempPid, leagueID = tempLid, shares = shares, buyingPrice = buyingPrice)
 		new_asset.save()
-		tmpPrice = buyingPrice*shares
 		new_transaction = Transaction(leagueID = tempLid, playerID = tempPid, price = tmpPrice, ticker = ticker, shares = shares, isBuy = True)
 		player.buyingPower = player.buyingPower-tmpPrice
 		new_transaction.save()
