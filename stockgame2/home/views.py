@@ -3,7 +3,7 @@ from django.template import loader
 from django.http import HttpResponse
 from home.models import Player, League,Transaction, Asset
 from django.contrib.auth.models import User as auth_User
-from home.forms import SignUpForm, LeagueForm, BuyForm
+from home.forms import SignUpForm, LeagueForm, BuyForm, JoinLeagueForm
 from django.http import HttpResponseRedirect
 from django.core.mail import send_mail
 from django.core.validators import validate_email
@@ -44,7 +44,30 @@ def newLeague(request):
 	else:
 		form = SignUpForm()
 		return render(request, 'createleague.html', {'form': form})
-
+def joinLeague(request):
+	current_user = request.user
+	if request.method == 'POST':
+		form = JoinLeagueForm(request.POST)
+		if form.is_valid():
+			try:
+				password = form.cleaned_data.get('password')
+				username = form.cleaned_data.get('username')
+				league = League.objects.get(name=username)
+			except:
+				return HttpResponseRedirect('/joinLeague')
+			if league.joinPassword == password:
+				players = Player.objects.filter(leagueID = league)
+				for p in players:
+					if p.userID == current_user:
+						return HttpResponseRedirect('/joinLeague')
+				newPlayer = Player(leagueID=league,userID=current_user, buyingPower = league.startingBalance,percentChange=0,totalWorth=0)
+				newPlayer.save()
+			return HttpResponseRedirect('/dashboard')
+		else:
+			return render(request, 'joinleague.html', {'form': form})
+	else:
+		form = SignUpForm()
+		return render(request, 'joinleague.html', {'form': form})
 def submitSignup(request):
 	if request.method == 'POST':
 		form = SignUpForm(request.POST)

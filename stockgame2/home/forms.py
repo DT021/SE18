@@ -7,7 +7,7 @@ from django.utils.translation import gettext_lazy as _
 from django.core import validators
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User as auth_User
-from home.models import Asset
+from home.models import Player, League, Asset
 
 class SignUpForm(UserCreationForm):
 	# username = forms.CharField(label='Your name', max_length=20)
@@ -37,7 +37,19 @@ class LeagueForm(forms.Form):
 			date_inpast = True
 			#return render(request, 'createleague.html', {'form': form})
 		return date_out
-
+		
+class JoinLeagueForm(forms.Form):
+	username = forms.CharField(max_length=50)
+	password = forms.CharField(max_length=20)
+#	def clean_username(self):
+#		try:
+#			username = self.cleaned_data.get['username']
+#			league = League.objects.get(name=username)
+#		except:
+#			raise ValidationError(_("League does not exist!"))
+#	league = League.objects.get(name=username)
+#	if league.joinPassword == password:
+		
 
 class LoginForm(forms.Form):
 	username = forms.CharField(label='Your name', max_length=20)
