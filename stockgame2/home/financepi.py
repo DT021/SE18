@@ -20,8 +20,7 @@ def getPriceFromAPI(symbol, isCrypto):
             'apikey='+APIKEY)
 
     response = requests.get(url)
-    binary = response.content
-    jsonData = json.loads(binary) #gets JSON data
+    jsonData = json.loads(response.content.decode('utf-8')) #gets JSON data
 
     # Check if any errors, return -1
     if ('Error Message' in jsonData):
