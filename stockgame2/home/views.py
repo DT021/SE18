@@ -161,23 +161,18 @@ def home(request):
 	template = loader.get_template('home.html')
 	return HttpResponse(template.render({},request))
 def dashboard(request):
-
 	current_user = request.user
 	if (current_user.is_authenticated):
-		conn = psycopg2.connect(dbname="gyesfxht", user="gyesfxht", password="VwftaOkFDwF2LoGElDUxJ7i4kjJyALvy", host="stampy.db.elephantsql.com", port="5432")
-		cur = conn.cursor()
-		cur.execute('SELECT * from "home_player" WHERE "userID_id" = %s', [current_user.id])
-		x = cur.fetchall()
-		# context = {
-		# 'league0': x[0],
-		# 'league1': x[1]
-		# }
-
 		players = Player.objects.filter(userID=request.user)
-		#print(players)
-		return render(request, 'dashboard.html', {'players': players})
-		# template = loader.get_template('dashboard.html')
-		# return HttpResponse(template.render({},request))
+		i = 1
+		admin = list()
+		for p in players:
+			people = Player.objects.filter(leagueID = p.leagueID)
+			for l in people:
+				if l.userID.id == p.leagueID.adminID:
+					admin.append(l.userID.username)
+			i = i + 1
+		return render(request, 'dashboard.html', {'players': players, 'admin':admin})
 	else:
 		template = loader.get_template('anonuser.html')
 		return HttpResponse(template.render({},request))
