@@ -26,6 +26,7 @@ class BuyForm(forms.Form):
 class SellForm(forms.Form):
 	ticker = forms.CharField(max_length=20)
 	shares = forms.DecimalField(decimal_places=0, max_digits=40)
+	selltype = forms.CharField(max_length=20)
 	limitPrice = forms.DecimalField(decimal_places = 2, max_digits=40)
 	stopPrice = forms.DecimalField(decimal_places = 2, max_digits=40)
 
