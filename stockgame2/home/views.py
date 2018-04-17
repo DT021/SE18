@@ -74,8 +74,9 @@ def submitSignup(request):
 		form = SignUpForm()
 		return render(request, 'signup.html', {'form': form})
 
-def submitBuy(request):
-
+def submitBuy(request,league_id,player_id):
+	league = League.objects.get(pk=league_id)
+	player = Player.objects.get(pk=player_id)
 	form = BuyForm(request.POST)
 
 	form.is_valid()	
@@ -85,21 +86,23 @@ def submitBuy(request):
 		return redirect('/processInvalid')
 	else:
 		shares = form.cleaned_data.get('shares')
-		isCrypto = form.cleaned_data.get('isCrypto')
+		#isCrypto = form.cleaned_data.get('isCrypto')
+		isCrypto = False
 		#buyingPrice = form.cleaned_data.get('buyingPrice')
 		buyingPrice = getPriceFromAPI(ticker,isCrypto) #allow crypto in future
-		player = Player.objects.get(id=3)
-		tempPid = 1
-		tempLid = League.objects.get(name="k1")
+		#player = Player.objects.get(id=3)
+		#tempPid = 1
+		#tempLid = League.objects.get(name="k1")
 		tmpPrice = buyingPrice*shares
 		if tmpPrice > player.buyingPower:
 			return redirect('/home')
-		new_asset = Asset(ticker = ticker, playerID = tempPid, leagueID = tempLid, shares = shares, buyingPrice = buyingPrice)
+		new_asset = Asset(ticker = ticker, playerID = player.id, leagueID = league, shares = shares, buyingPrice = buyingPrice)
 		new_asset.save()
-		new_transaction = Transaction(leagueID = tempLid, playerID = tempPid, price = tmpPrice, ticker = ticker, shares = shares, isBuy = True)
+		new_transaction = Transaction(leagueID = league, playerID = player.id, price = tmpPrice, ticker = ticker, shares = shares, isBuy = True)
 		player.buyingPower = player.buyingPower-tmpPrice
 		new_transaction.save()
-		return redirect('/receipt')
+		url = '/receipt/'+str(new_transaction.id)+'/'
+		return redirect(url)
 
 					# pwd = form.cleaned_data.get('password')
 					# c_pwd = form.cleaned_data['conf_pwd']
@@ -113,10 +116,11 @@ def submitBuy(request):
 					# user.save()
 					# return HttpResponseRedirect('/home')
 
-def latestTransactionReceipt(request):
-	lastTransaction = Transaction.objects.latest()
-	leagueID = lastTransaction.leagueID
-	playerID = lastTransaction.playerID
+def transactionReceipt(request,transaction_id):
+	#lastTransaction = Transaction.objects.latest()
+	lastTransaction = Transaction.objects.get(pk=transaction_id)
+	#leagueID = lastTransaction.leagueID
+	#playerID = lastTransaction.playerID
 	price = lastTransaction.price
 	ticker = lastTransaction.ticker
 	shares = lastTransaction.shares
@@ -235,9 +239,10 @@ def league2(request):
 	return HttpResponse("This is the league2 page.")
 def league3(request):
 	return HttpResponse("This is the league3 page.")
-def buypage(request):
-	template = loader.get_template('buypage.html')
-	return HttpResponse(template.render({},request))
+def buypage(request,league_id,player_id):
+	league = League.objects.get(pk=league_id)
+	player = Player.objects.get(pk=player_id)
+	return render(request, 'buypage.html', {'league': league,'player':player})
 def sellform(request):
 	template = loader.get_template('sellform.html')
 	return HttpResponse(template.render({},request))
