@@ -1,15 +1,17 @@
 from django.db import models
 from django.conf import settings
-from datetime import datetime  
+from datetime import datetime
 from django.contrib.auth.models import User as auth_User
+from django.contrib.postgres.fields import ArrayField
 
 # Create your models here.
 
-# class User(models.Model):
-	# username = models.CharField(max_length=20)
-	# password = models.CharField(max_length=20)
-	# email = models.CharField(max_length=40)
-
+class Profile(models.Model):
+	user = models.OneToOneField(auth_User, on_delete=models.CASCADE)
+	trophies = ArrayField(models.IntegerField(), size = 8)
+	statement = models.CharField(max_length=250)
+	name = models.CharField(max_length=40)
+	birthday = models.DateTimeField()
 
 class League(models.Model):
 	name = models.CharField(max_length=50)
@@ -21,7 +23,7 @@ class League(models.Model):
 	adminID = models.IntegerField()
 	isCrypto = models.BooleanField()
 	joinPassword = models.CharField(max_length=20)
-	
+
 class Player(models.Model):
 	leagueID = models.ForeignKey(League, on_delete=models.CASCADE)
 	userID = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
