@@ -113,6 +113,15 @@ def submitBuy(request):
 					# user.save()
 					# return HttpResponseRedirect('/home')
 
+def latestTransactionReceipt(request):
+	lastTransaction = Transaction.objects.latest()
+	leagueID = lastTransaction.leagueID
+	playerID = lastTransaction.playerID
+	price = lastTransaction.price
+	ticker = lastTransaction.ticker
+	shares = lastTransaction.shares
+	return render(request, 'receipt.html', {'price': price, 'ticker': ticker, 'shares': shares})
+
 
 def submitSell(request):
 	"""if request.method == 'POST':
@@ -143,7 +152,6 @@ def submitSell(request):
 		#form = SellForm()
 	return redirect("/dashboard")
 		#return render(request, 'sellform.html', {'form': form})
-
 
 def get_user(request):
 	 # if this is a POST request we need to process the form data
