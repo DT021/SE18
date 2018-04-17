@@ -23,6 +23,12 @@ class BuyForm(forms.Form):
 	shares = forms.DecimalField(decimal_places=0, max_digits=40)
 	buyingPrice = forms.DecimalField(decimal_places = 2, max_digits=40)
 
+class SellForm(forms.Form):
+	ticker = forms.CharField(max_length=20)
+	shares = forms.DecimalField(decimal_places=0, max_digits=40)
+	limitPrice = forms.DecimalField(decimal_places = 2, max_digits=40)
+	stopPrice = forms.DecimalField(decimal_places = 2, max_digits=40)
+
 class LeagueForm(forms.Form):
 	lname = forms.CharField(max_length=50)
 	endDate = forms.CharField(max_length=20)
@@ -42,4 +48,3 @@ class LeagueForm(forms.Form):
 class LoginForm(forms.Form):
 	username = forms.CharField(label='Your name', max_length=20)
 	password = forms.CharField(max_length=20)
-

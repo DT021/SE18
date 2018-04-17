@@ -3,7 +3,7 @@ from django.template import loader
 from django.http import HttpResponse
 from home.models import Player, League,Transaction, Asset
 from django.contrib.auth.models import User as auth_User
-from home.forms import SignUpForm, LeagueForm, BuyForm
+from home.forms import SignUpForm, LeagueForm, BuyForm, SellForm
 from django.http import HttpResponseRedirect
 from django.core.mail import send_mail
 from django.core.validators import validate_email
@@ -13,6 +13,7 @@ from django.shortcuts import render, redirect
 import datetime
 import psycopg2
 from django.contrib.auth import logout
+from home.financepi import getPriceFromAPI
 
 def logout_view(request):
 	logout(request)
@@ -30,7 +31,7 @@ def newLeague(request):
 			ltype = form.cleaned_data.get('leagueType')
 			enddate = form.cleaned_data.get('endDate')
 			date_out = datetime.datetime(*[int(v) for v in enddate.replace('T', '-').replace(':', '-').split('-')])
-			
+
 			b = False
 			if ltype=="crypto":
 				b = True
@@ -86,7 +87,7 @@ def submitBuy(request):
 			new_transaction = Transaction(leagueID = "tmpLeagueID", playerID = current_user.playerID, price = tmpPrice, ticker = ticker, shares = share, isBuy = True)
 			new_transaction.save()
 			return redirect('/home')
-			
+
 		else:
 			 #return redirect("/dashboard")
 			return render(request, 'buypage.html', {'form': form})
@@ -96,33 +97,51 @@ def submitBuy(request):
 		return render(request, 'buypage.html', {'form': form})
 
 def submitSell(request):
-	"""if request.method == 'POST':
+	if request.method == 'POST':
 		form = SellForm(request.POST)
-		return redirect("/dashboard")
-		if form.is_valid():
-			form.save()
+		if (form.is_valid() and current_user.is_authenticated):
 			ticker = form.cleaned_data.get('ticker')
-			num_shares = form.cleaned_data.get('shares')
-			user = authenticate(ticker=ticker, shares=num_shares)
-			auth_login(request, user)
+			shares = form.cleaned_data.get('shares')
+			limitPrice = form.cleaned_data.get('limitPrice')
+			stopPrice = form.cleaned_data.get('stopPrice')
+
+			# query for current num of shares of ticker
+			conn = psycopg2.connect(dbname="gyesfxht", user="gyesfxht", password="VwftaOkFDwF2LoGElDUxJ7i4kjJyALvy", host="stampy.db.elephantsql.com", port="5432")
+			cur = conn.cursor()
+			cur.execute('SELECT * from "home_asset" WHERE "playerID" = %s AND "ticker"=%s', [current_user.playerID, ticker])
+			x = cur.fetchone()
+
+			if not x:
+				#error no
+				print("ERROR: No such query element. \n")
+				return render(request, 'dashboard.html', {'form': form})
+
+			currshares = x[3] # gets num shares
+			if shares > currshares:
+				# error asked for too many shares back
+				print("ERROR: Too many shares to sell.\n")
+				return render(request, 'dashboard.html', {'form': form})
+
+			sharesleft = int(currshares) - int(shares)
+			cur.execute( 'UPDATE * from "home_asset" WHERE "playerID" = %s AND "ticker"=%s SET "share"=%d', [current_user.playerID, ticker, sharesleft])
+			conn.commit() # commits the updates
+
+			marketPrice = getPriceFromAPI(ticker, False) #default not crypto
+			tmpPrice = int(shares)*marketPrice
+			new_transaction = Transaction(leagueID = x[5], playerID = current_user.playerID, price = tmpPrice, ticker = ticker, shares = share, isBuy = False)
+			new_transaction.save()
 			return redirect('/home')
-			# pwd = form.cleaned_data.get('password')
-			# c_pwd = form.cleaned_data['conf_pwd']
-			# if pwd!=c_pwd:
-				# form.add_error('conf_pwd', "Password does not match")
-				# return render(request, 'signup.html', {'form': form})
-			# email = form.cleaned_data['email']
-			# user = User(username=username, password=pwd, email=email, leagueID0 = 0, leagueID1 = 0, leagueID2 = 0, leagueID3 = 0)
-			# user.save()
-			# user = User.objects.create_user(username,pwd,email)
-			# user.save()
-			# return HttpResponseRedirect('/home')
+
 		else:
-			#return render(request, 'sellform.html', {'form': form})
-			return redirect("/dashboard")
-	else:"""
+			#return redirect("/dashboard")
+			print("ERROR: Not authenticated or Form not validated")
+			return render(request, 'sellform.html', {'form': form})
+	else:
+		print("ERROR: request.method != FALSE")
+		form = SellForm()
+		#return redirect("/dashboard")
+		return render(request, 'sellform.html', {'form': form})
 		#form = SellForm()
-	return redirect("/dashboard")
 		#return render(request, 'sellform.html', {'form': form})
 
 
