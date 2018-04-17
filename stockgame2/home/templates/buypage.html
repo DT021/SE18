@@ -82,7 +82,7 @@
         </div>
         <div class="col-md-8 order-md-1">
           <h4 class="mb-3"><b>Transaction Information</b></h4>
-          <form class="needs-validation" role="form" action="/submitBuy" method="post" class="r-form">
+          <form class="needs-validation" role="form" action="/buy/{{league.id}}/{{player.id}}/" method="post" class="r-form">
             {% csrf_token %}
             {{ form.non_field_errors }}
             <div class="mb-3"> 
@@ -134,6 +134,7 @@
 						var input = document.getElementById('numshares');
 						var input2 = document.getElementById('ticker');
 							alert('You are buying ' + numshares.value + 'shares of the asset ' + ticker.value)
+						</script>
                       </div>
                     </div>
 
