@@ -101,16 +101,16 @@
 							</div>
 						<div class="col-md-12 photolist">
 							<div class="row">
-								{% if request.user.profile.trophies[0]==1%}
+								{% if request.user.profile.trophies.0 == 1 %}
 								<div class="col-sm-3 col-xs-3"><img src= "/static/home2/titanhead_logo.png" class="" alt=""> </div>
 								{% endif %}
-								{% if request.user.profile.trophies[1]==1%}
+								{% if request.user.profile.trophies.1 == 1 %}
 								<div class="col-sm-3 col-xs-3"><img src="/static/home2/titanhead_logo.png" class="" alt=""> </div>
 								{% endif %}
-								{% if request.user.profile.trophies[2]==1%}
+								{% if request.user.profile.trophies.2 == 1 %}
 								<div class="col-sm-3 col-xs-3"><img src="/static/home2/titanhead_logo.png" class="" alt=""> </div>
 								{% endif %}
-								{% if request.user.profile.trophies[3]==1%}
+								{% if request.user.profile.trophies.3 == 1 %}
 								<div class="col-sm-3 col-xs-3"><img src="/static/home2/titanhead_logo.png" class="" alt=""> </div>
 								{% endif %}
 							</div>
