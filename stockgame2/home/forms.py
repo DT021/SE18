@@ -43,17 +43,12 @@ class JoinLeagueForm(forms.Form):
 	password = forms.CharField(max_length=20)
 	def clean_username(self):
 		try:
-			password = self.cleaned_data.get('username')
+			password = self.cleaned_data.get('password')
 			username = self.cleaned_data.get('username')
 			league = League.objects.get(name=username)
 		except:
 			raise ValidationError(_("League does not exist!"))
-			return username
-		#if league.joinPassword == password:
-				#players = Player.objects.filter(leagueID = league)
-				#for p in players:
-					#if p.userID == current_user:
-						#raise ValidationError(_("User already in league!"))
+		
 		return username
 	def clean_password(self):
 		username = self.cleaned_data.get('username')
@@ -61,7 +56,7 @@ class JoinLeagueForm(forms.Form):
 		try:
 			league = League.objects.get(name=username)
 		except:
-			return password
+			raise ValidationError(_("League does not exist!"))
 		if league.joinPassword == password:
 			return password
 		else:
