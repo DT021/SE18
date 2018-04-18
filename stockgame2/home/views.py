@@ -233,7 +233,8 @@ def leagues(request,league_id):
 			admin = p.userID # admin is auth_user object
 		if p.userID.id == request.user.id:
 			currPlayer = p
-	return render(request, 'individualleague.html', {'league': league, 'admin': admin, 'currPlayer':currPlayer})
+	players.order_by('-totalWorth')
+	return render(request, 'individualleague.html', {'league': league, 'admin': admin, 'players':players,'currPlayer':currPlayer})
 def league1(request):	# (request, league_id)
 	template = loader.get_template('individualleague.html')
 	return HttpResponse(template.render({},request))
@@ -259,7 +260,7 @@ def profile(request):
 def mission(request):
 	template = loader.get_template('mission.html')
 	return HttpResponse(template.render({},request))
-def joinleague(request):
+def joinLeague(request):
 	template = loader.get_template('joinleague.html')
 	return HttpResponse(template.render({},request))
 def anonuser(request):

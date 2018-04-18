@@ -84,12 +84,19 @@
              <!-- /.col-lg-8 -->
       <div class="col-lg-4" style="background-color:#fff;border-radius:.25rem">
         <table style="width:100%;text-align:center">
-          <tr>
+		  <tr>
             <th>Rank</th>
             <th>UserName</th> 
             <th>Total Assets</th>
           </tr>
-          <tr>
+		  {% for p in players %}
+		  <tr>
+            <td>{{forloop.counter}}</td>
+            <td>{{p.userID.username}}</td> 
+            <td>{{p.totalWorth}}</td>
+          </tr>
+		  {% endfor %}
+          <!--<tr>
             <td>1</td>
             <td>IvanMarsic</td> 
             <td>$422,598</td>
@@ -139,7 +146,7 @@
             <td>KristianWu</td> 
             <td>$12,618</td>
           </tr>
-
+		-->
         </table>
         <div class="card-footer" style="background-color:#fff;text-align:center">
           <div class="container" style="margin:auto;padding-top:4%">
@@ -187,7 +194,12 @@
               <div style="overflow-y:scroll;padding:.5em;text-align:left;white-space:normal;color:#0a0a0a;flex:1;height:100px">
               <ol>
                 <h3>Members List:</h3>
-                <li>IvanMarsic</li>
+				{% for p in players %}
+
+				<li>{{p.userID.username}}</li> 
+           
+				{% endfor %}
+                <!--<li>IvanMarsic</li>
                 <li>StevenAdler</li>
                 <li>Safa</li>
                 <li>Avanish</li>
@@ -196,7 +208,7 @@
                 <li>Kristene</li>
                 <li>DavidZhang</li>
                 <li>Lurski</li>
-                <li>KristianWu</li>
+                <li>KristianWu</li>-->
               </ol>
               </div>
           </div>
