@@ -1,4 +1,6 @@
 import re
+import requests
+import json
 import tweepy
 from tweepy import OAuthHandler
 from textblob import TextBlob
@@ -88,7 +90,23 @@ class TwitterClient(object):
             # print error (if any)
             print("Error : " + str(e))
 
-def getTickerSentiment(ticker):
+
+def get_news_sentiment(description):
+    '''
+    Utility function to classify sentiment of passed tweet
+    using textblob's sentiment method
+    '''
+    # create TextBlob object of passed tweet text
+    analysis = TextBlob(description)
+    # set sentiment
+    if analysis.sentiment.polarity > 0:
+        return 'positive'
+    elif analysis.sentiment.polarity == 0:
+        return 'neutral'
+    else:
+        return 'negative'
+
+def getTwitterSentiments(ticker):
     api = TwitterClient()
     # calling function to get tweets
     tweets = api.get_tweets(query = 'Donald Trump', count = 200)
@@ -111,4 +129,42 @@ def getTickerSentiment(ticker):
 
     return posPercent, negPercent, neutPercent, len(tweets)
 
-getTickerSentiment('GOOGL')
+
+def getNewsSentiments(ticker):
+
+    # Authentication
+    APIkey = '42b2610b2d1a421fbc3e5551202e2094'
+    url = ('https://newsapi.org/v2/everything?'
+        'apiKey=' + APIkey +
+        '&q=' + ticker+
+        '&language=en')
+    print(url)
+
+    response = requests.get(url)
+    binary = response.content
+    jsonData = json.loads(binary) #gets JSON data
+
+    # Check if any errors, return -1
+    if ('Error Message' in jsonData):
+        return -1
+
+    arts = []
+    numAll = len(jsonData[articles])
+    for a in jsonData['articles']:
+        print(a['title'] + ": " + a['description'])
+        parsedArts = {}
+        parsedArts['description'] = a['description']
+        parsedArts['title'] = a['title']
+        parsedArts['sentiment'] = get_news_sentiment(parsedArts['description'])
+        print(parsedArts['sentiment'])
+        arts.append(parsedArts)
+
+    pnews = [a for a in arts if a['sentiment'] == 'positive']
+    nnews = [a for a in arts if a['sentiment'] == 'negative']
+    perPos = len(pnews)/numAll
+    perNeg = len(nnews)/numAll
+    perNeut = 1 - perPos - perNeg
+
+    return perPos, perNeg, perNeut, numAll
+
+getNewsSentiments('BTC')
