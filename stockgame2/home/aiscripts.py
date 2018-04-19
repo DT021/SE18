@@ -134,11 +134,11 @@ def getNewsSentiments(ticker):
 
     # Authentication
     APIkey = '42b2610b2d1a421fbc3e5551202e2094'
+
     url = ('https://newsapi.org/v2/everything?'
         'apiKey=' + APIkey +
         '&q=' + ticker+
         '&language=en')
-    print(url)
 
     response = requests.get(url)
     binary = response.content
@@ -148,15 +148,31 @@ def getNewsSentiments(ticker):
     if ('Error Message' in jsonData):
         return -1
 
+    totalResults = jsonData['totalResults']
+
+    if (totalResults == 0):
+        return -1
+
+    pageSize = 100;
+    numPages = min(100,int(totalResults/pageSize))
+    allArticles = []
+    for i in range(1,numPages):
+        url = ('https://newsapi.org/v2/everything?'
+            'apiKey=' + APIkey +
+            '&q=' + ticker+
+            '&language=en'+
+            '&pageSize='+str(pageSize)+
+            '&page='+str(i))
+        for a in jsonData['articles']:
+            allArticles.append(a)
+
     arts = []
-    numAll = len(jsonData[articles])
-    for a in jsonData['articles']:
-        print(a['title'] + ": " + a['description'])
+    numAll = len(allArticles)
+    for a in allArticles:
         parsedArts = {}
         parsedArts['description'] = a['description']
         parsedArts['title'] = a['title']
         parsedArts['sentiment'] = get_news_sentiment(parsedArts['description'])
-        print(parsedArts['sentiment'])
         arts.append(parsedArts)
 
     pnews = [a for a in arts if a['sentiment'] == 'positive']
@@ -167,4 +183,4 @@ def getNewsSentiments(ticker):
 
     return perPos, perNeg, perNeut, numAll
 
-getNewsSentiments('BTC')
+#print(getNewsSentiments('Google'))
