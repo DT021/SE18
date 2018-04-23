@@ -44,4 +44,3 @@ def getPriceFromAPI(symbol, isCrypto):
 
     return openPrice
 
-print(getPriceFromAPI('GOOGL', False))

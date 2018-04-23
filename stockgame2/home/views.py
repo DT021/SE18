@@ -14,7 +14,12 @@ import datetime
 import psycopg2
 from django.contrib.auth import logout
 from home.financepi import getPriceFromAPI
+from twilio.rest import Client
+from twilio.twiml.messaging_response import MessagingResponse
+account_sid = "AC0442f02a5d307c7c2f9bb0b6d63d98b7"
+auth_token  = "72cce48f8db48ab7099ebdb480f8c7bc"
 
+client = Client(account_sid, auth_token)
 def logout_view(request):
 	logout(request)
 	# Redirect to a success page.
@@ -119,6 +124,10 @@ def submitBuy(request):
 			tmpPrice = 0
 			new_transaction = Transaction(leagueID = "tmpLeagueID", playerID = current_user.playerID, price = tmpPrice, ticker = ticker, shares = share, isBuy = True)
 			new_transaction.save()
+			message = client.messages.create(
+				to="+17329985271", 
+				from_="+17325079667",
+				body="Hello from Python!")
 			return redirect('/home')
 
 		else:
@@ -292,4 +301,14 @@ def anonuser(request):
 def settings(request):
 	template = loader.get_template('settings.html')
 	return HttpResponse(template.render({},request))
+	
+def sms(request):
+	purchase = request.POST.get('Body','')
+	processed = purchase.split()
+	message = 'You bought %d shares of %s' % processed
+	r = Response()
+	r.message(message)
+	shares = processed[0]
+	ticker = processed[1]
+	return r
 # Create your views here.

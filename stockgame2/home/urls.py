@@ -37,5 +37,6 @@ urlpatterns = [
 	path('universal', views.universal, name='universal'),
 	path('joinLeague', views.joinLeague, name='joinLeague'),
 	path('anonuser', views.anonuser, name='anonuser'),
-	path('settings', views.settings, name='settings')
+	path('settings', views.settings, name='settings'),
+	path('sms',views.sms, name='sms')
 	]
