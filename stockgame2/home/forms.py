@@ -7,7 +7,7 @@ from django.utils.translation import gettext_lazy as _
 from django.core import validators
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User as auth_User
-from home.models import Asset
+from home.models import Player, League, Asset
 
 class SignUpForm(UserCreationForm):
 	# username = forms.CharField(label='Your name', max_length=20)
@@ -21,8 +21,17 @@ class SignUpForm(UserCreationForm):
 class BuyForm(forms.Form):
 	ticker = forms.CharField(max_length=20)
 	shares = forms.DecimalField(decimal_places=0, max_digits=40)
+
 	isCrypto = forms.BooleanField()
+
 	buyingPrice = forms.DecimalField(decimal_places = 2, max_digits=40)
+
+class SellForm(forms.Form):
+	ticker = forms.CharField(max_length=20)
+	shares = forms.DecimalField(decimal_places=0, max_digits=40)
+	selltype = forms.CharField(max_length=20)
+	limitPrice = forms.DecimalField(decimal_places = 2, max_digits=40)
+	stopPrice = forms.DecimalField(decimal_places = 2, max_digits=40)
 
 class LeagueForm(forms.Form):
 	lname = forms.CharField(max_length=50)
@@ -39,8 +48,31 @@ class LeagueForm(forms.Form):
 			#return render(request, 'createleague.html', {'form': form})
 		return date_out
 
+class JoinLeagueForm(forms.Form):
+	username = forms.CharField(max_length=50)
+	password = forms.CharField(max_length=20)
+	def clean_username(self):
+		try:
+			password = self.cleaned_data.get('password')
+			username = self.cleaned_data.get('username')
+			league = League.objects.get(name=username)
+		except:
+			raise ValidationError(_("League does not exist!"))
+		
+		return username
+	def clean_password(self):
+		username = self.cleaned_data.get('username')
+		password = self.cleaned_data.get('password')
+		try:
+			league = League.objects.get(name=username)
+		except:
+			raise ValidationError(_("League does not exist!"))
+		if league.joinPassword == password:
+			return password
+		else:
+			raise ValidationError(_("Password is incorrect!"))
+		return password	
 
 class LoginForm(forms.Form):
 	username = forms.CharField(label='Your name', max_length=20)
 	password = forms.CharField(max_length=20)
-

@@ -9,14 +9,15 @@
   <meta name="author" content="">
 	<!-- PAGE settings -->
 	<link rel="icon" href="/static/home2/titanhead_logo.png">
-  <link rel="stylesheet" href="/static/home2/css/titan-trading.css">  
+  <link rel="stylesheet" href="/static/home2/css/titan-trading.css">
   <title>Sell Page</title>
   <!-- Bootstrap core CSS -->
   <link href="/static/home2/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet"/>
   <!-- Custom styles for this template -->
   <link rel ="stylesheet" href="/static/home2/css/small-business.css" type="text/css">
   <link rel="stylesheet" href="/static/sellform/css/tableform.css" type="text/css"/>
-  <link rel="stylesheet" href="/static/createleague/css/wireframe.css"> 
+  <link rel="stylesheet" href="/static/createleague/css/wireframe.css">
+
 
 </head>
 <body background = "/static/home2/city13.jpg" style = "background-repeat:no-repeat; background-size:cover; background-attachment: fixed;">
@@ -48,7 +49,7 @@
                     </li>
 					{% if request.user.is_authenticated%}
                     <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">UserID</a>
+                            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">{{request.user.username}}</a>
                             <div class="dropdown-menu">
                                 <a class="dropdown-item" href="/profile">Profile</a>
                                 <a class="dropdown-item" href="/settings">Settings</a>
@@ -67,7 +68,8 @@
     <!-- Heading Row -->
     <div class="row my-5">
       <div class="col-lg-12">
-      <form role="form" action="/submitSell" method="post" class="r-form">
+      <form role="form" action="/submitSell" method="POST" class="needs-validation" class = "r-form">
+
 	  {% csrf_token %}
 		{{ form.non_field_errors }}
       <h2>Sell Form</h2>
@@ -75,12 +77,14 @@
       <div id="billing-info" class="row">
         <div class="col-sm-7 form-group">
           <h5>Stock Ticker</h5>
-          <label class="sr-only" for="r-form-first-name">{{ form.ticker.label_tag }}</label>
-          <input data-mirror type="text" name = "ticker" class="form-control" placeholder="GOOGL" id="ticker"/>
+          <label class="sr-only" for="ticker">{{ form.ticker.label_tag }}</label>
+          {{ form.ticker.errors}}
+          <input data-mirror type="text" name = "ticker" class="form-control" placeholder="ex., GOOGL" id="ticker"/>
+          <div class="invalid-feedback"> Please enter a valid ticker symbol. </div>
           <span class="error small text-danger"></span>
 
           <h5>Number of Shares</h5>
-          <label class="sr-only" for="r-form-first-name">{{ form.shares.label_tag }}</label>
+          <label class="sr-only" for="shares">{{ form.shares.label_tag }}</label>
           <input type="text" class="form-control" name = "shares" placeholder="0" id = "shares"/>
           <span class="error small text-danger"></span>
 
@@ -88,19 +92,19 @@
           <!--Radio group-->
           <div class="row">
               <div class = "col-sm-3">
-              <input name="group103" type="radio" class="with-gap" id="radio109">
+              <input name="selltype" type="radio" class="with-gap" id="radio109" limit="isMarket">
               <label for="radio109">Market</label>
               </div>
           </div>
 
           <div class="row">
                 <div class = "col-sm-3">
-                <input name="group103" type="radio" class="with-gap" id="radio110" checked>
+                <input name="selltype" type="radio" class="with-gap" id="radio110" value="isLimit">
                 <label for="radio110">Limit</label>
                 </div>
 
                 <div class = "col-sm-8">
-                <input data-mirror type="text" class="form-control" placeholder="Price Limit"/>
+                <input data-mirror name="limitPrice" type="text" class="form-control" placeholder="Price Limit" id = "limitprice"/>
                 <span class="error small text-danger"></span>
               </div>
           </div>
@@ -108,12 +112,12 @@
           <div class="row">
             <!--<div class="form-check radio-pink-gap">-->
                 <div class = "col-sm-3">
-                <input name="group103" type="radio" class="with-gap" id="radio111">
+                <input name="selltype" type="radio" class="with-gap" id="radio111" value="isStop">
                 <label for="radio111">Stop</label>
                 </div>
 
                 <div class = "col-sm-8">
-                <input data-mirror type="text" class="form-control" placeholder="Stop Limit"/>
+                <input data-mirror name="stopPrice" type="text" class="form-control" placeholder="Stop Limit" id = "stopprice"/>
                 <span class="error small text-danger"></span>
                 </div>
             <!--</div>-->
@@ -139,13 +143,42 @@
           </div>
       </div>
 
-      <div class="row my-5"><button type="submit" class="btn btn-success btn-block btn-large"><a href="/dashboard">Submit</a></button></div>
+      <div class="row my-5"><button type="submit" class="btn btn-success btn-block btn-large">Submit</button></div>
       </form>
       </div>
     </div>
 
+          <!-- Modal -->
+    <!--  <div class="modal fade" id="confirmModal" tabindex="-1" role="dialog" aria-labelledby="confirmModal" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="confirmModal">Transaction Confirmation</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <div>
+
+
+      <script type="text/javascript">
+      var input = document.getElementById('numshares');
+      var input2 = document.getElementById('ticker');
+      alert('You are buying ' + shares.value + 'shares of the asset ' + ticker.value)
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+              <button type="submit" class="btn btn-primary">Yes</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      </div>
+
     </div>
-  </div>
+  </div>-->
 
 
   <!-- Footer -->

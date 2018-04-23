@@ -3,7 +3,7 @@ from django.template import loader
 from django.http import HttpResponse
 from home.models import Player, League,Transaction, Asset
 from django.contrib.auth.models import User as auth_User
-from home.forms import SignUpForm, LeagueForm, BuyForm
+from home.forms import SignUpForm, LeagueForm, BuyForm, JoinLeagueForm, SellForm
 from django.http import HttpResponseRedirect
 from django.core.mail import send_mail
 from django.core.validators import validate_email
@@ -14,7 +14,7 @@ import datetime
 import psycopg2
 from django.contrib.auth import logout
 from home.financepi import getPriceFromAPI
-from rtstock.stock import Stock
+
 
 def logout_view(request):
 	logout(request)
@@ -46,7 +46,40 @@ def newLeague(request):
 	else:
 		form = SignUpForm()
 		return render(request, 'createleague.html', {'form': form})
-
+def joinLeague(request):
+	current_user = request.user
+	if request.method == 'POST':
+		form = JoinLeagueForm(request.POST)
+		if form.is_valid():
+			password = form.cleaned_data.get('password')
+			username = form.cleaned_data.get('username')
+			league = League.objects.get(name=username)
+			#print(league)
+			# try:
+				# password = form.cleaned_data.get('password')
+				# username = form.cleaned_data.get('username')
+				# league = League.objects.get(name=username)
+			# except:
+				# return HttpResponseRedirect('/joinLeague')
+			#if league.joinPassword == password:
+			players = Player.objects.filter(leagueID = league)
+			league.numPlayers = 0
+			for p in players:
+				league.numPlayers+=1
+			for p in players:
+				if p.userID == current_user:
+					league.save()
+					return HttpResponseRedirect('/joinLeague')
+			newPlayer = Player(leagueID=league,userID=current_user, buyingPower = league.startingBalance,percentChange=0,totalWorth=0)
+			league.numPlayers+=1
+			league.save()
+			newPlayer.save()
+			return HttpResponseRedirect('/dashboard')
+		else:
+			return render(request, 'joinleague.html', {'form': form})
+	else:
+		form = SignUpForm()
+		return render(request, 'joinleague.html', {'form': form})
 def submitSignup(request):
 	if request.method == 'POST':
 		form = SignUpForm(request.POST)
@@ -101,6 +134,7 @@ def submitBuy(request,league_id,player_id):
 		new_transaction = Transaction(leagueID = league, playerID = player.id, price = tmpPrice, ticker = ticker, shares = shares, isBuy = True)
 		player.buyingPower = player.buyingPower-tmpPrice
 		new_transaction.save()
+
 		url = '/receipt/'+str(new_transaction.id)+'/'
 		return redirect(url)
 
@@ -127,35 +161,64 @@ def transactionReceipt(request,transaction_id):
 	return render(request, 'receipt.html', {'price': price, 'ticker': ticker, 'shares': shares})
 
 
+
+# MUST UPDATE PLAYER BUYING POWER
 def submitSell(request):
-	"""if request.method == 'POST':
+	current_user = request.user
+	if request.method == 'POST':
 		form = SellForm(request.POST)
-		return redirect("/dashboard")
-		if form.is_valid():
-			form.save()
+		if (form.is_valid() and current_user.is_authenticated):
 			ticker = form.cleaned_data.get('ticker')
-			num_shares = form.cleaned_data.get('shares')
-			user = authenticate(ticker=ticker, shares=num_shares)
-			auth_login(request, user)
-			return redirect('/home')
-			# pwd = form.cleaned_data.get('password')
-			# c_pwd = form.cleaned_data['conf_pwd']
-			# if pwd!=c_pwd:
-				# form.add_error('conf_pwd', "Password does not match")
-				# return render(request, 'signup.html', {'form': form})
-			# email = form.cleaned_data['email']
-			# user = User(username=username, password=pwd, email=email, leagueID0 = 0, leagueID1 = 0, leagueID2 = 0, leagueID3 = 0)
-			# user.save()
-			# user = User.objects.create_user(username,pwd,email)
-			# user.save()
-			# return HttpResponseRedirect('/home')
+			shares = form.cleaned_data.get('shares')
+			limitPrice = form.cleaned_data.get('limitPrice')
+			stopPrice = form.cleaned_data.get('stopPrice')
+
+			# query for current num of shares of ticker
+			conn = psycopg2.connect(dbname="gyesfxht", user="gyesfxht", password="VwftaOkFDwF2LoGElDUxJ7i4kjJyALvy", host="stampy.db.elephantsql.com", port="5432")
+			cur = conn.cursor()
+
+			tempPid = 1	# TMP PLAYER ID
+			tempLid = League.objects.get(name="k1") # TMP LEAGUE ID
+			cur.execute('SELECT * from "home_asset" WHERE "playerID" = %s AND "ticker"=%s', [tempPid, ticker])
+			x = cur.fetchone()
+
+			if not x:
+				#error no
+				print("ERROR: No such query element. \n")
+				return HttpResponseRedirect('/dashboard')
+
+			currshares = x[3] # gets num shares
+			if shares > currshares:
+				# error asked for too many shares back
+				print("ERROR: Too many shares to sell.\n")
+				return HttpResponseRedirect('/dashboard')
+
+			sharesleft = int(currshares) - int(shares)
+			cur.execute( 'UPDATE home_asset SET "shares"=%s WHERE "playerID" = %s AND "ticker"=%s ', [ sharesleft, tempPid, ticker])
+			conn.commit() # commits the updates
+
+			marketPrice = getPriceFromAPI(ticker, False) #default not crypto
+			tmpPrice = int(shares)*marketPrice
+			new_transaction = Transaction(leagueID = tempLid, playerID = tempPid, price = tmpPrice, ticker = ticker, shares = sharesleft, isBuy = False)
+			new_transaction.save()
+			return HttpResponseRedirect('/aboutus')
+
 		else:
-			#return render(request, 'sellform.html', {'form': form})
-			return redirect("/dashboard")
-	else:"""
-		#form = SellForm()
-	return redirect("/dashboard")
-		#return render(request, 'sellform.html', {'form': form})
+
+			print("ERROR: Not authenticated or Form not validated")
+			if (form.is_valid() == False and current_user.is_authenticated == False):
+				print("ERROR: BOTH ERRORS NOT AUTH AND FORM NOT VAL \n")
+			elif (form.is_valid() == False):
+				print("ERRORRRR: form not validated \n")
+			elif (current_user.is_authenticated == False):
+				print("ERRORRRR: user not authenticated \n")
+
+			return HttpResponseRedirect('/dashboard')
+	else:
+		print("ERROR: request.method != FALSE")
+		form = SellForm()
+		return HttpResponseRedirect('/dashboard')
+
 
 def get_user(request):
 	 # if this is a POST request we need to process the form data
@@ -192,23 +255,20 @@ def home(request):
 	template = loader.get_template('home.html')
 	return HttpResponse(template.render({},request))
 def dashboard(request):
-
 	current_user = request.user
 	if (current_user.is_authenticated):
-		conn = psycopg2.connect(dbname="gyesfxht", user="gyesfxht", password="VwftaOkFDwF2LoGElDUxJ7i4kjJyALvy", host="stampy.db.elephantsql.com", port="5432")
-		cur = conn.cursor()
-		cur.execute('SELECT * from "home_player" WHERE "userID_id" = %s', [current_user.id])
-		x = cur.fetchall()
-		# context = {
-		# 'league0': x[0],
-		# 'league1': x[1]
-		# }
-
 		players = Player.objects.filter(userID=request.user)
-		#print(players)
-		return render(request, 'dashboard.html', {'players': players})
-		# template = loader.get_template('dashboard.html')
-		# return HttpResponse(template.render({},request))
+
+		i = 1
+		admin = list()
+		for p in players:
+			people = Player.objects.filter(leagueID = p.leagueID)
+			for l in people:
+				if l.userID.id == p.leagueID.adminID:
+					admin.append(l.userID.username)
+			i = i + 1
+		return render(request, 'dashboard.html', {'players': players, 'admin':admin})
+
 	else:
 		template = loader.get_template('anonuser.html')
 		return HttpResponse(template.render({},request))
@@ -231,7 +291,10 @@ def leagues(request,league_id):
 			admin = p.userID # admin is auth_user object
 		if p.userID.id == request.user.id:
 			currPlayer = p
-	return render(request, 'individualleague.html', {'league': league, 'admin': admin, 'currPlayer':currPlayer})
+
+	players.order_by('-totalWorth')
+	return render(request, 'individualleague.html', {'league': league, 'admin': admin, 'players':players,'currPlayer':currPlayer})
+
 def league1(request):	# (request, league_id)
 	template = loader.get_template('individualleague.html')
 	return HttpResponse(template.render({},request))
@@ -258,7 +321,7 @@ def profile(request):
 def mission(request):
 	template = loader.get_template('mission.html')
 	return HttpResponse(template.render({},request))
-def joinleague(request):
+def joinLeague(request):
 	template = loader.get_template('joinleague.html')
 	return HttpResponse(template.render({},request))
 def anonuser(request):

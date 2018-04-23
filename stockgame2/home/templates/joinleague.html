@@ -96,7 +96,7 @@
 							<p>Please login to see this page.</p>
 							{% endif %}
 						{% endif %}
-						<form role="form" method="post" class="l-form">
+						<form action="/joinLeague" role="form" method="post" class="l-form">
                             {% csrf_token %}
                             {{ form.non_field_errors }}
 	                    	<div class="form-group" style="padding-top:5%">
@@ -109,8 +109,10 @@
                                 <label class="sr-only" for="l-form-password">{{ form.password.label_tag }}</label>
 	                        	<input type="password" name="password" placeholder="Join Password" class="l-form-password form-control" id="l-form-password">
 	                        </div>
-							<input type="hidden" name="next" value="{{ next }}" />
-				            <button type="submit" class="btn"><a href="/dashboard" style="color:#fff">Join!</a></button>
+							<!--<input type="hidden" name="next" value="{{ next }}" />-->
+				            <!--<button type="submit" class="btn"><a href="/dashboard" style="color:#fff">Join!</a></button>-->
+
+							<input class="btn btn-lg btn-block btn-success my-3" type="submit" value="Join League!" />
                         </form>
                 	</div>
                 </div>

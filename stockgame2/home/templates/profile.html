@@ -89,9 +89,10 @@
 					<br>
 					<div class="panel panel-default">
 						<div>
-							<h1 class="page-header small"><font size="5"><b>Personal Details</b></font></h1>
+							<h1 class="page-header small"><font size="5"><b>Personal Statement</b></font></h1>
 							<hr>
-							<p class="page-subtitle small"><font size="4">I am a novice investor!</font> </p>
+							<p class="page-subtitle small"><font size="4">{{request.user.profile.statement}}</font> </p>
+							<p class="page-subtitle small"><font size="4">Birthday: {{request.user.profile.birthday}}</font> </p>
 						</div>
 						<div>
 								<h1 class="page-header small"><font size="5"><b>Achievements</b></font></h1>
@@ -100,15 +101,23 @@
 							</div>
 						<div class="col-md-12 photolist">
 							<div class="row">
+								{% if request.user.profile.trophies.0 == 1 %}
 								<div class="col-sm-3 col-xs-3"><img src= "/static/home2/titanhead_logo.png" class="" alt=""> </div>
+								{% endif %}
+								{% if request.user.profile.trophies.1 == 1 %}
 								<div class="col-sm-3 col-xs-3"><img src="/static/home2/titanhead_logo.png" class="" alt=""> </div>
+								{% endif %}
+								{% if request.user.profile.trophies.2 == 1 %}
 								<div class="col-sm-3 col-xs-3"><img src="/static/home2/titanhead_logo.png" class="" alt=""> </div>
+								{% endif %}
+								{% if request.user.profile.trophies.3 == 1 %}
 								<div class="col-sm-3 col-xs-3"><img src="/static/home2/titanhead_logo.png" class="" alt=""> </div>
+								{% endif %}
 							</div>
 						</div>
 						<div class="clearfix"></div>
 					</div>
-					<div class="panel panel-default">
+			<!--	<div class="panel panel-default">
 						<div>
 							<h1 class="page-header small"><font size="5"><b>About Me</b></font></h1>
 							<hr>
@@ -124,7 +133,7 @@
 						</div>
 						<div class="clearfix"></div>
 					</div>
-				</div>
+				</div>-->
 			<!--	<div class="col-md-7 col-sm-12 pull-left posttimeline background-filler">
 					<br>
 					<div class="panel panel-default">

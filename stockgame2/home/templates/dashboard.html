@@ -86,19 +86,20 @@
       <h1 class="my-4 dashboard-title">League Dashboard
       </h1>
 	  <div class = "row ">
-		{% for L in players%}
-			<button class=" btn mx-3"><a href="/leagues/{{L.leagueID.id}}/">{{ L.leagueID.name }}</a></button>
-		{% endfor %}
 		</div>
       <div class="row">
+        {% for L in players%}
         <div class="col-lg-6 portfolio-item">
           <div class="card h-100">
             <div style="width:100%;text-align:center;">
-              <h2 style="font-size:1.6em;text-overflow:ellipsis;line-height:1.8rem;margin:0.1rem 0 0;overflow:hidden;z-index:1; position:relative;">Universal League</h2>
+              <h2 style="font-size:1.6em;text-overflow:ellipsis;line-height:1.8rem;margin:0.1rem 0 0;overflow:hidden;z-index:1; position:relative;">{{L.leagueID.name}}</h2>
 
               <ul style="margin:0;padding:0; list-style-type:none;border-bottom:1px solid rgba(118,118,118,0.1);color:#767676;">
+                {% if L.leagueID.isCrypto %}
               <li>Crypto · </li>
-              <li>Stock · </li>
+                {% else %}
+                 <li>Stock ·</li>
+                 {% endif %}
               <li>Timed</li>
               </ul>
             </div>
@@ -108,19 +109,24 @@
             </div>
             <div class="col-lg-7" style="padding-left:0;height:270px">
               <ul style="margin:0;padding:0;font-size:1em;text-align:center;border-bottom:1px solid rgba(118,118,118,0.1);color:#767676;">
-                <li>Admin: N/A</li>
+                {% for a in admin %}
+                  {% if forloop.counter == forloop.parentloop.counter %}
+                    <li>Admin: {{ a }}</li>
+                  {% else %}
+                  {% endif %}
+                {% endfor %}
               </ul>
               <ul style="margin:0;padding:0;font-size:1em;text-align:center;border-bottom:1px solid rgba(118,118,118,0.1);color:#767676;">
-                <li>Created: March 03 2018</li>
+                <li>Created: {{L.leagueID.beginDate}}</li>
               </ul>
               <ul style="margin:0;padding:0;font-size:1em;text-align:center;border-bottom:1px solid rgba(118,118,118,0.1);color:#767676;">
-                <li>Ends: December 02 2018</li>
+                <li>Ends: {{L.leagueID.endDate}}</li>
               </ul>
               <ol style="list-style-type:none;margin:0;padding:0;font-size:1em;text-align:center;border-bottom:1px solid rgba(118,118,118,0.1);color:#767676;">
                 <li style="text-align:left">Player Information:</li>
                 <li>Rank:102</li>
-                <li>Buying Power: $10,321</li>
-                <li>Total Assets: $32,197</li>
+                <li>Buying Power: {{L.buyingPower}}</li>
+                <li>Total Assets: {{L.totalWorth}}</li>
               </ol>
               <div style="overflow-y:scroll;padding:.5em;text-align:left;white-space:normal;color:#0a0a0a;flex:1;height:100px">
               <p>The universal league is a Titan Trading created league that all users are automatically a part of. Compete with all other Titan Trading users to find out who is the superior investor and how ready you are for real investment.</p>
@@ -129,14 +135,14 @@
           </div>
             <div class="container" style="width:100%; bottom:0; border-top:1px solid rgba(118,118,118,0.1);">
               <h4 class="card-title">
-                <a href="/universal">Universal League</a>
+                <a href="/leagues/{{L.leagueID.id}}">{{L.leagueID.name}}</a>
               </h4>
               <p class="card-text" style="color:#767676;">Click the link for more information about your Universal League.</p>
             </div>
           </div>
         </div>
-
-       <div class="col-lg-6 portfolio-item">
+        {% endfor %}
+       <!--<div class="col-lg-6 portfolio-item">
           <div class="card h-100">
             <div style="width:100%;text-align:center;">
               <h2 style="font-size:1.6em;text-overflow:ellipsis;line-height:1.8rem;margin:0.1rem 0 0;overflow:hidden;z-index:1; position:relative;">Class Of SE18 League</h2>
@@ -185,7 +191,7 @@
           <div class="card h-100">
            <a href="/createleague"><div class="btn btn-success" style="width:100%;height:80%"><i class="fa fa-plus-square" style="font-size:400%;margin:auto"></i><h1>Create a League!</h1>
           </div></a>
-          <a href="/joinleague"><div class="btn btn-secondary" style="width:100%;height:80%" ><i class="fa fa-group" style="font-size:400%;margin:auto;color:#fff"></i><h1 style="color:#fff">Join a League!</h1>
+          <a href="/joinLeague"><div class="btn btn-secondary" style="width:100%;height:80%" ><i class="fa fa-group" style="font-size:400%;margin:auto;color:#fff"></i><h1 style="color:#fff">Join a League!</h1>
           </div></a>
             <div class="card-body">
               <h4 class="card-title">
@@ -195,12 +201,13 @@
             </div>
           </div>
         </div>
+      -->
         <div class="col-lg-6 portfolio-item">
           <div class="card h-100">
 
           <a href="/createleague"><div class="btn btn-success" style="width:100%;height:80%" ><i class="fa fa-plus-square" style="font-size:400%;margin:auto"></i><h1>Create a League!</h1>
           </div></a>
-          <a href="/joinleague"><div class="btn btn-secondary" style="width:100%;height:80%" ><i class="fa fa-group" style="font-size:400%;margin:auto;color:#fff"></i><h1 style="color:#fff">Join a League!</h1></div></a>
+          <a href="/joinLeague"><div class="btn btn-secondary" style="width:100%;height:80%" ><i class="fa fa-group" style="font-size:400%;margin:auto;color:#fff"></i><h1 style="color:#fff">Join a League!</h1></div></a>
 
             <div class="card-body">
               <h4 class="card-title">
