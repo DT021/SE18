@@ -62,14 +62,14 @@ def joinLeague(request):
 			# except:
 				# return HttpResponseRedirect('/joinLeague')
 			#if league.joinPassword == password:
+			# #league.numPlayers = 0
+			# # for p in players:
+				# # league.numPlayers+=1
 			players = Player.objects.filter(leagueID = league)
-			#league.numPlayers = 0
-			# for p in players:
-				# league.numPlayers+=1
 			for p in players:
 				if p.userID == current_user:
-					league.save()
 					return HttpResponseRedirect('/joinLeague')
+			
 			newPlayer = Player(leagueID=league,userID=current_user, buyingPower = league.startingBalance,percentChange=0,totalWorth=0)
 			league.numPlayers+=1
 			league.save()
@@ -138,17 +138,7 @@ def submitBuy(request,league_id,player_id):
 		url = '/receipt/'+str(new_transaction.id)+'/'
 		return redirect(url)
 
-					# pwd = form.cleaned_data.get('password')
-					# c_pwd = form.cleaned_data['conf_pwd']
-					# if pwd!=c_pwd:
-						# form.add_error('conf_pwd', "Password does not match")
-						# return render(request, 'signup.html', {'form': form})
-					# email = form.cleaned_data['email']
-					# user = User(username=username, password=pwd, email=email, leagueID0 = 0, leagueID1 = 0, leagueID2 = 0, leagueID3 = 0)
-					# user.save()
-					# user = User.objects.create_user(username,pwd,email)
-					# user.save()
-					# return HttpResponseRedirect('/home')
+
 
 def transactionReceipt(request,transaction_id):
 	#lastTransaction = Transaction.objects.latest()
@@ -321,9 +311,9 @@ def profile(request):
 def mission(request):
 	template = loader.get_template('mission.html')
 	return HttpResponse(template.render({},request))
-def joinLeague(request):
-	template = loader.get_template('joinleague.html')
-	return HttpResponse(template.render({},request))
+# def joinLeague(request):
+	# template = loader.get_template('joinleague.html')
+	# return HttpResponse(template.render({},request))
 def anonuser(request):
 	template = loader.get_template('anonuser.html')
 	return HttpResponse(template.render({},request))
