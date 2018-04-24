@@ -14,7 +14,7 @@ import datetime
 import psycopg2
 from django.contrib.auth import logout
 from home.financepi import getPriceFromAPI
-
+import decimal
 
 def logout_view(request):
 	logout(request)

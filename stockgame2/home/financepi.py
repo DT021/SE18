@@ -1,6 +1,7 @@
 import requests
 import json
 from googlefinance.client import get_price_data, get_prices_data, get_prices_time_data
+import decimal
 # Utilizes Alpha Vantgae
 #API KEY = TRKCXDZJRBBO0REH
 
@@ -14,7 +15,7 @@ def getPriceFromAPI(symbol, isCrypto):
 	
 	df = get_price_data(param)
 	price = df['Open'][0]
-	return price
+	return decimal.Decimal(price)
 
 
 
