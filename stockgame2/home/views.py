@@ -206,6 +206,29 @@ def get_user(request):
 
 	return render(request, 'user.html', {'form': form})
 
+def sendinvite(request):
+	current_user = request.user
+	if(request.method == 'POST'):
+		if(current_user.is_authenticated):
+			#Make query for the league password
+			conn = psycopg2.connect(dbname="gyesfxht", user="gyesfxht", password="VwftaOkFDwF2LoGElDUxJ7i4kjJyALvy", host="stampy.db.elephantsql.com", port="5432")
+			cur = conn.cursor()
+			cur.execute()
+
+			x = cur.fetchone()
+
+			#username = 
+			league = League.objects.get(name=username)
+			password = league.joinPassword
+			send_mail(
+				'Titan Trading League Invitation',
+				'You have been invited to compete against your friends on Titan Trading, the leading fantasy stock trading application!\n To join just sign up for an account and press the \'Join League\' button on the dashboard. The league password is: ' + password + '\nWe look forward to seeing you join in on the fun!\nMay the odds be in your favor,\nThe Titan Trading Team'
+				'titantrading@gmail.com',
+				['to@example.com'],
+				fail_silently=False,
+			)
+
+
 def index(request):
 	template = loader.get_template('greet.html')
 	return HttpResponse(template.render({},request))
