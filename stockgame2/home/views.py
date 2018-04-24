@@ -19,7 +19,7 @@ from twilio.twiml.messaging_response import MessagingResponse
 from django.views.decorators.csrf import csrf_exempt
 import decimal
 account_sid = "AC0442f02a5d307c7c2f9bb0b6d63d98b7"
-auth_token  = "72cce48f8db48ab7099ebdb480f8c7bc"
+auth_token  = "x"
 
 
 client = Client(account_sid, auth_token)
