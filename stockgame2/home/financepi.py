@@ -14,7 +14,7 @@ def getPriceFromAPI(symbol, isCrypto):
 	}
 
 	df = get_price_data(param)
-	if !df.empty:
+	if not df.empty:
 		price = df['Open'][-1]
 		return decimal.Decimal(price)
 	param = {
@@ -25,7 +25,7 @@ def getPriceFromAPI(symbol, isCrypto):
 	}
 
 	df = get_price_data(param)
-	if !df.empty:
+	if not df.empty:
 		price = df['Open'][-1]
 		return decimal.Decimal(price)
 		
@@ -37,7 +37,7 @@ def getPriceFromAPI(symbol, isCrypto):
 	}
 
 	df = get_price_data(param)
-	if !df.empty:
+	if not df.empty:
 		price = df['Open'][-1]
 		return decimal.Decimal(price)
 		
@@ -49,7 +49,7 @@ def getPriceFromAPI(symbol, isCrypto):
 	}
 
 	df = get_price_data(param)
-	if !df.empty:
+	if not df.empty:
 		price = df['Open'][-1]
 		return decimal.Decimal(price)
 	return -1
