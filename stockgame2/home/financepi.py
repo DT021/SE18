@@ -7,14 +7,14 @@ import decimal
 
 def getPriceFromAPI(symbol, isCrypto):
 	param = {
-	'q': "AAPL", # Stock symbol (ex: "AAPL")
+	'q': symbol, # Stock symbol (ex: "AAPL")
 	'i': "86400", # Interval size in seconds ("86400" = 1 day intervals)
 	'x': "NASD", # Stock exchange symbol on which stock is traded (ex: "NASD")
-	'p': "1D" # Period (Ex: "1Y" = 1 year)
+	'p': "1Y" # Period (Ex: "1Y" = 1 year)
 	}
 	
 	df = get_price_data(param)
-	price = df['Open'][0]
+	price = df['Open'][-1]
 	return decimal.Decimal(price)
 
 
