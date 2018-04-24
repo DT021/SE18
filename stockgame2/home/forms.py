@@ -46,7 +46,7 @@ class LeagueForm(forms.Form):
 			raise ValidationError(_("The date cannot be in the past!"))
 			date_inpast = True
 			#return render(request, 'createleague.html', {'form': form})
-		return date_out
+		return enddate
 
 class JoinLeagueForm(forms.Form):
 	username = forms.CharField(max_length=50)
