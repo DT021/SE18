@@ -32,6 +32,7 @@ class Player(models.Model):
 	buyingPower = models.DecimalField(decimal_places=2,max_digits=25)
 	percentChange = models.DecimalField(decimal_places=2,max_digits=25)
 	totalWorth = models.DecimalField(decimal_places=2,max_digits=25)
+	isAI = models.BooleanField(False)
 
 
 class Transaction(models.Model):
