@@ -43,6 +43,9 @@ def getCryptoPriceFromAPI(symbol, isCrypto):
     if ('Error Message' in jsonData):
         return -1
 
+    if ('Information' in jsonData):
+        return -22
+
     # Dependent on JSON Format
     if isCrypto == False:
         timekey = 'Time Series (1min)'
