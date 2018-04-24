@@ -143,7 +143,7 @@ def submitBuy(request,league_id,player_id):
 		message = client.messages.create(
 			to="+17329985271", 
 			from_="+17325079667",
-			body="Hello from Python!")
+			body="You bought %d shares of %s at $%d!" % (shares,ticker,tmpPrice))
 		url = '/receipt/'+str(new_transaction.id)+'/'
 		return redirect(url)
 
