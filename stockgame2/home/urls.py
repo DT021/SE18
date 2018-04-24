@@ -39,7 +39,7 @@ urlpatterns = [
 	path('joinLeague', views.joinLeague, name='joinLeague'),
 	path('anonuser', views.anonuser, name='anonuser'),
 	path('settings', views.settings, name='settings'),
-	path('sms',views.sms, name='sms'),
+	path('sms/',views.sms, name='sms'),
 	path('receipt/<int:transaction_id>/', views.transactionReceipt, name='transactionReceipt'),
 	path('processInvalid', views.processInvalid, name='processInvalid')
 	]

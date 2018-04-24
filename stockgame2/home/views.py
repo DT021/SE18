@@ -16,6 +16,8 @@ from django.contrib.auth import logout
 from home.financepi import getPriceFromAPI
 from twilio.rest import Client
 from twilio.twiml.messaging_response import MessagingResponse
+from django.views.decorators.csrf import csrf_exempt
+import decimal
 account_sid = "AC0442f02a5d307c7c2f9bb0b6d63d98b7"
 auth_token  = "72cce48f8db48ab7099ebdb480f8c7bc"
 
@@ -140,10 +142,10 @@ def submitBuy(request,league_id,player_id):
 		new_transaction = Transaction(leagueID = league, playerID = player.id, price = tmpPrice, ticker = ticker, shares = shares, isBuy = True)
 		player.buyingPower = player.buyingPower-tmpPrice
 		new_transaction.save()
-		message = client.messages.create(
-			to="+17329985271", 
-			from_="+17325079667",
-			body="You bought %d shares of %s at $%d!" % (shares,ticker,tmpPrice))
+		# message = client.messages.create(
+		#	to="+17329985271", 
+		#	from_="+17325079667",
+		#	body="You bought %d shares of %s at $%d!" % (shares,ticker,tmpPrice))
 		url = '/receipt/'+str(new_transaction.id)+'/'
 		return redirect(url)
 
@@ -341,15 +343,7 @@ def settings(request):
 	return HttpResponse(template.render({},request))
 
 	
-def sms(request):
-	purchase = request.POST.get('Body','')
-	processed = purchase.split()
-	message = 'You bought %d shares of %s' % processed
-	r = Response()
-	r.message(message)
-	shares = processed[0]
-	ticker = processed[1]
-	return r
+
 # Create your views here.
 
 def receipt(request):
@@ -358,5 +352,27 @@ def receipt(request):
 def processInvalid(request):
 	template = loader.get_template('processInvalid.html')
 	return HttpResponse(template.render({},request))
-# Create your views here.
 
+@csrf_exempt
+def sms(request):
+	league = League.objects.get(pk=17)
+	player = Player.objects.get(pk=30)
+	purchase = request.POST.get('Body', '')
+	processed = purchase.split()
+	print(processed)
+	shares = processed[0]
+	ticker = processed[1]
+	
+	buyingPrice = getPriceFromAPI(ticker,False) #allow crypto in future
+	tmpPrice = buyingPrice*decimal.Decimal(shares)
+	message = '<Response><Message>You bought %s shares of %s for $%s</Message></Response>' % (shares,ticker, tmpPrice)
+	if tmpPrice > player.buyingPower:
+		return redirect('/home')
+	new_asset = Asset(ticker = ticker, playerID = player.id, leagueID = league, shares = shares, buyingPrice = buyingPrice)
+	new_asset.save()
+	new_transaction = Transaction(leagueID = league, playerID = player.id, price = tmpPrice, ticker = ticker, shares = shares, isBuy = True)
+	player.buyingPower = player.buyingPower-tmpPrice
+	new_transaction.save()
+	return HttpResponse(message, content_type='text/xml')
+	
+# DONT ADD A VIEW AFTER SMS
