@@ -56,6 +56,8 @@ class JoinLeagueForm(forms.Form):
 			password = self.cleaned_data.get('password')
 			username = self.cleaned_data.get('username')
 			league = League.objects.get(name=username)
+			if not league:
+				raise ValidationError(_("League does not exist!"))
 		except:
 			raise ValidationError(_("League does not exist!"))
 		

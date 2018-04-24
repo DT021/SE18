@@ -63,9 +63,9 @@ def joinLeague(request):
 				# return HttpResponseRedirect('/joinLeague')
 			#if league.joinPassword == password:
 			players = Player.objects.filter(leagueID = league)
-			league.numPlayers = 0
-			for p in players:
-				league.numPlayers+=1
+			#league.numPlayers = 0
+			# for p in players:
+				# league.numPlayers+=1
 			for p in players:
 				if p.userID == current_user:
 					league.save()
