@@ -70,7 +70,7 @@ def joinLeague(request):
 				if p.userID == current_user:
 					return HttpResponseRedirect('/joinLeague')
 			
-			newPlayer = Player(leagueID=league,userID=current_user, buyingPower = league.startingBalance,percentChange=0,totalWorth=0)
+			newPlayer = Player(leagueID=league,userID=current_user, buyingPower = league.startingBalance,percentChange=0,totalWorth=0,isAi=False)
 			league.numPlayers+=1
 			league.save()
 			newPlayer.save()
@@ -112,12 +112,12 @@ def submitBuy(request,league_id,player_id):
 	player = Player.objects.get(pk=player_id)
 	form = BuyForm(request.POST)
 
-	form.is_valid()	
-	current_user = request.user
-	ticker = form.cleaned_data.get('ticker')
-	if(ticker == 'GOOG'):
-		return redirect('/processInvalid')
-	else:
+	if form.is_valid():	
+		current_user = request.user
+		ticker = form.cleaned_data.get('ticker')
+	# if(ticker == 'GOOG'):
+		# return redirect('/processInvalid')
+	# else:
 		shares = form.cleaned_data.get('shares')
 		#isCrypto = form.cleaned_data.get('isCrypto')
 		isCrypto = False
@@ -137,7 +137,8 @@ def submitBuy(request,league_id,player_id):
 
 		url = '/receipt/'+str(new_transaction.id)+'/'
 		return redirect(url)
-
+	else:
+		return render(request, 'buypage.html', {'form': form})
 
 
 def transactionReceipt(request,transaction_id):
