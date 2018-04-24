@@ -57,4 +57,4 @@ def easyAI(isCrypto, buyingPower, currAssets, currAmts):
 
   return randBuyStock, randBuyNum, randSellStock, randNumToSell
 
-print(easyAI(True, 1000, ['abc', 'fgb', 'lmf'], [5, 20, 30]))
+print(easyAI(False, 1000000, ['abc', 'fgb', 'lmf'], [5, 20, 30]))

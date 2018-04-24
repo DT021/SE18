@@ -12,13 +12,14 @@ def getPriceFromAPI(symbol, isCrypto):
 	'x': "NASD", # Stock exchange symbol on which stock is traded (ex: "NASD")
 	'p': "1Y" # Period (Ex: "1Y" = 1 year)
 	}
-	
+
 	df = get_price_data(param)
+	if df.empty:
+		return -1
 	price = df['Open'][-1]
 	return decimal.Decimal(price)
 
-
-
+#print(getPriceFromAPI('GOOGL', False))
 
 def getCryptoPriceFromAPI(symbol, isCrypto):
     APIKEY = 'TRKCXDZJRBBO0REH'
@@ -62,4 +63,3 @@ def getCryptoPriceFromAPI(symbol, isCrypto):
     openPrice = recentPrices[whichprice]
 
     return openPrice
-
