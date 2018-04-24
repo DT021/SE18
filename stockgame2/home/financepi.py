@@ -1,10 +1,25 @@
 import requests
 import json
-
+from googlefinance.client import get_price_data, get_prices_data, get_prices_time_data
 # Utilizes Alpha Vantgae
 #API KEY = TRKCXDZJRBBO0REH
 
 def getPriceFromAPI(symbol, isCrypto):
+	param = {
+	'q': "AAPL", # Stock symbol (ex: "AAPL")
+	'i': "86400", # Interval size in seconds ("86400" = 1 day intervals)
+	'x': "NASD", # Stock exchange symbol on which stock is traded (ex: "NASD")
+	'p': "1D" # Period (Ex: "1Y" = 1 year)
+	}
+	
+	df = get_price_data(param)
+	price = df['Open'][0]
+	return price
+
+
+
+
+def getCryptoPriceFromAPI(symbol, isCrypto):
     APIKEY = 'TRKCXDZJRBBO0REH'
 
     # sets url based on if cryptocurrency or not
@@ -20,10 +35,8 @@ def getPriceFromAPI(symbol, isCrypto):
             'apikey='+APIKEY)
 
     response = requests.get(url)
-
     binary = response.content
     jsonData = json.loads(binary) #gets JSON data
-
 
     # Check if any errors, return -1
     if ('Error Message' in jsonData):
@@ -45,7 +58,4 @@ def getPriceFromAPI(symbol, isCrypto):
     openPrice = recentPrices[whichprice]
 
     return openPrice
-
-
-#print(getPriceFromAPI('GOOGL', False))
 
