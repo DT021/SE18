@@ -28,7 +28,8 @@ urlpatterns = [
 	path('league3', views.league3, name='league3'),
 	path('profile', views.profile, name='profile'),
 	path('faq', views.faq, name='faq'),
-	path('buypage', views.buypage, name='buypage'),
+	path('buypage/<int:league_id>/<int:player_id>/', views.buypage, name='buypage'),
+	path('buy/<int:league_id>/<int:player_id>/',views.submitBuy,name='submitBuy'),
 	path('sellform', views.sellform, name='sellform'),
 	path('profile', views.profile, name='profile'),
 	path('mission', views.mission, name="mission"),
@@ -38,5 +39,8 @@ urlpatterns = [
 	path('joinLeague', views.joinLeague, name='joinLeague'),
 	path('anonuser', views.anonuser, name='anonuser'),
 	path('settings', views.settings, name='settings'),
-	path('sms',views.sms, name='sms')
+	path('sms',views.sms, name='sms'),
+	path('receipt/<int:transaction_id>/', views.transactionReceipt, name='transactionReceipt'),
+	path('processInvalid', views.processInvalid, name='processInvalid')
 	]
+

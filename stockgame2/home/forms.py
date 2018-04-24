@@ -21,6 +21,9 @@ class SignUpForm(UserCreationForm):
 class BuyForm(forms.Form):
 	ticker = forms.CharField(max_length=20)
 	shares = forms.DecimalField(decimal_places=0, max_digits=40)
+
+	isCrypto = forms.BooleanField()
+
 	buyingPrice = forms.DecimalField(decimal_places = 2, max_digits=40)
 
 class SellForm(forms.Form):
@@ -43,8 +46,8 @@ class LeagueForm(forms.Form):
 			raise ValidationError(_("The date cannot be in the past!"))
 			date_inpast = True
 			#return render(request, 'createleague.html', {'form': form})
-		return date_out
-		
+		return enddate
+
 class JoinLeagueForm(forms.Form):
 	username = forms.CharField(max_length=50)
 	password = forms.CharField(max_length=20)
@@ -69,7 +72,7 @@ class JoinLeagueForm(forms.Form):
 		else:
 			raise ValidationError(_("Password is incorrect!"))
 		return password	
-	
+
 class LoginForm(forms.Form):
 	username = forms.CharField(label='Your name', max_length=20)
 	password = forms.CharField(max_length=20)
