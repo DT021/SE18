@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- PAGE settings -->
+  <link rel="icon" href="/static/home2/titanhead_logo_trans.png">
+  <title>Buy Stock</title>
+  <!-- CSS dependencies -->
+  <link rel="stylesheet" href="/static/createleague/css/font-awesome.min.css" type="text/css">
+  <link rel="stylesheet" href="/static/home2/css/titan-trading.css">  
+
+  <link rel="stylesheet" href="/static/createleague/css/wireframe.css"> 
+  <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:400,100,300,500">
+  
+  </head>
+
+<body class="bg-dark " style=" text-align: left; background-image: url('/static/home2/city2.jpg'); background-repeat:no-repeat; background-size:cover; background-attachment: fixed;">
+  <!-- Navigation -->
+  
+  <br><br>
+
+
+  <div class="container" id="print-content" style="background-color: rgba(211,211,211,0.9);border-radius: 1rem">
+    <div class="row">
+      <div class="text-center col-md-12 my-3">
+        <img src="/static/home2/titanhead_logo_trans.png" class="mx-auto" height="65">
+        <h2><b>Stock Receipt</b></h2>
+        <p class="lead">Receipt for transaction</p>
+      </div>
+    </div>
+
+    <div class="row">
+      <table class="table table-hover text-center">
+        <thead>
+          <tr>
+            <th scope="col">Item</th>
+            <th scope="col">Value</th>
+            </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row">Ticker</th>
+            <td>${{ticker}}</td>
+          </tr>
+          <tr>
+            <th scope="row">Price</th>
+            <td>${{price}}</td>
+          </tr>
+          <tr>
+            <th scope="row">Shares</th>  
+            <td>${{shares}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="row">
+      <button class="col-sm-12 btn btn-primary btn-lg" id="dashboardButton"><a href="/dashboard">Return to Dashboard</a></button>
+    </div>
+    <br>
+    <div class="row">
+      <button class="col-sm-12 btn btn-primary btn-lg" id="pdfButton">Download receipt as PDF</button>
+    </div>
+    <br>
+
+  </div>
+
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.2/jspdf.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" crossorigin="anonymous" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+  <script>
+    function checkTime(i) {
+      if (i < 10) {
+        i = "0" + i;
+      }
+      return i;
+    }
+
+    var doc = new jsPDF();
+    var specialElementHandlers = {
+        '#editor': function (element, renderer) {
+            return true;
+        }
+    };
+
+    $('#pdfButton').click(function () {
+        doc.fromHTML($('#print-content').html(), 15, 15, {
+            'width': 170,
+                'elementHandlers': specialElementHandlers
+        });
+        var today = new Date();
+        var dd = today.getDate();
+        var mm = today.getMonth()+1; //January is 0!
+        var yyyy = today.getFullYear();
+        var h = today.getHours();
+        var m = today.getMinutes();
+        var s = today.getSeconds();
+        
+        m = checkTime(m);
+        s = checkTime(s);
+        dd = checkTime(dd);
+        mm = checkTime(mm);
+
+        today = mm + '/' + dd + '/' + yyyy;
+        
+        var filename = mm + '/' + dd + '/' + yyyy + '_' + h + ':' + m + ':' + s + '_buy.pdf';
+        doc.save(filename);
+    });
+  </script>
+  
+</body>
+
+</html>

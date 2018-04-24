@@ -14,6 +14,7 @@ import datetime
 import psycopg2
 from django.contrib.auth import logout
 from home.financepi import getPriceFromAPI
+import decimal
 
 def logout_view(request):
 	logout(request)
@@ -31,7 +32,7 @@ def newLeague(request):
 			ltype = form.cleaned_data.get('leagueType')
 			enddate = form.cleaned_data.get('endDate')
 			date_out = datetime.datetime(*[int(v) for v in enddate.replace('T', '-').replace(':', '-').split('-')])
-
+			
 			b = False
 			if ltype=="crypto":
 				b = True
@@ -106,28 +107,59 @@ def submitSignup(request):
 		form = SignUpForm()
 		return render(request, 'signup.html', {'form': form})
 
-def submitBuy(request):
-	if request.method == 'POST' and False:
-		form = BuyForm(request.POST)
-		if form.is_valid():
-			current_user = request.user
-			ticker = form.cleaned_data.get('ticker')
-			shares = form.cleaned_data.get('shares')
-			buyingPrice = form.cleaned_data.get('buyingPrice')
-			new_asset = Asset(ticker = ticker, playerID = current_user.player, leagueID = "tmpLeagueID", shares = shares, buyingPrice = buyingPrice)
-			new_asset.save()
-			tmpPrice = 0
-			new_transaction = Transaction(leagueID = "tmpLeagueID", playerID = current_user.playerID, price = tmpPrice, ticker = ticker, shares = share, isBuy = True)
-			new_transaction.save()
-			return redirect('/home')
+def submitBuy(request,league_id,player_id):
+	league = League.objects.get(pk=league_id)
+	player = Player.objects.get(pk=player_id)
+	form = BuyForm(request.POST)
 
-		else:
-			 #return redirect("/dashboard")
-			return render(request, 'buypage.html', {'form': form})
+	form.is_valid()	
+	current_user = request.user
+	ticker = form.cleaned_data.get('ticker')
+	if(ticker == 'GOOG'):
+		return redirect('/processInvalid')
 	else:
-		form = BuyForm()
-		#return redirect("/dashboard")
-		return render(request, 'buypage.html', {'form': form})
+		shares = form.cleaned_data.get('shares')
+		#isCrypto = form.cleaned_data.get('isCrypto')
+		isCrypto = False
+		#buyingPrice = form.cleaned_data.get('buyingPrice')
+		buyingPrice = getPriceFromAPI(ticker,isCrypto) #allow crypto in future
+		#player = Player.objects.get(id=3)
+		#tempPid = 1
+		#tempLid = League.objects.get(name="k1")
+		tmpPrice = buyingPrice*shares
+		if tmpPrice > player.buyingPower:
+			return redirect('/home')
+		new_asset = Asset(ticker = ticker, playerID = player.id, leagueID = league, shares = shares, buyingPrice = buyingPrice)
+		new_asset.save()
+		new_transaction = Transaction(leagueID = league, playerID = player.id, price = tmpPrice, ticker = ticker, shares = shares, isBuy = True)
+		player.buyingPower = player.buyingPower-tmpPrice
+		new_transaction.save()
+
+		url = '/receipt/'+str(new_transaction.id)+'/'
+		return redirect(url)
+
+					# pwd = form.cleaned_data.get('password')
+					# c_pwd = form.cleaned_data['conf_pwd']
+					# if pwd!=c_pwd:
+						# form.add_error('conf_pwd', "Password does not match")
+						# return render(request, 'signup.html', {'form': form})
+					# email = form.cleaned_data['email']
+					# user = User(username=username, password=pwd, email=email, leagueID0 = 0, leagueID1 = 0, leagueID2 = 0, leagueID3 = 0)
+					# user.save()
+					# user = User.objects.create_user(username,pwd,email)
+					# user.save()
+					# return HttpResponseRedirect('/home')
+
+def transactionReceipt(request,transaction_id):
+	#lastTransaction = Transaction.objects.latest()
+	lastTransaction = Transaction.objects.get(pk=transaction_id)
+	#leagueID = lastTransaction.leagueID
+	#playerID = lastTransaction.playerID
+	price = lastTransaction.price
+	ticker = lastTransaction.ticker
+	shares = lastTransaction.shares
+	return render(request, 'receipt.html', {'price': price, 'ticker': ticker, 'shares': shares})
+
 
 
 # MUST UPDATE PLAYER BUYING POWER
@@ -172,6 +204,7 @@ def submitSell(request):
 			return HttpResponseRedirect('/aboutus')
 
 		else:
+
 			print("ERROR: Not authenticated or Form not validated")
 			if (form.is_valid() == False and current_user.is_authenticated == False):
 				print("ERROR: BOTH ERRORS NOT AUTH AND FORM NOT VAL \n")
@@ -225,6 +258,7 @@ def dashboard(request):
 	current_user = request.user
 	if (current_user.is_authenticated):
 		players = Player.objects.filter(userID=request.user)
+
 		i = 1
 		admin = list()
 		for p in players:
@@ -234,6 +268,7 @@ def dashboard(request):
 					admin.append(l.userID.username)
 			i = i + 1
 		return render(request, 'dashboard.html', {'players': players, 'admin':admin})
+
 	else:
 		template = loader.get_template('anonuser.html')
 		return HttpResponse(template.render({},request))
@@ -256,8 +291,10 @@ def leagues(request,league_id):
 			admin = p.userID # admin is auth_user object
 		if p.userID.id == request.user.id:
 			currPlayer = p
+
 	players.order_by('-totalWorth')
 	return render(request, 'individualleague.html', {'league': league, 'admin': admin, 'players':players,'currPlayer':currPlayer})
+
 def league1(request):	# (request, league_id)
 	template = loader.get_template('individualleague.html')
 	return HttpResponse(template.render({},request))
@@ -265,9 +302,10 @@ def league2(request):
 	return HttpResponse("This is the league2 page.")
 def league3(request):
 	return HttpResponse("This is the league3 page.")
-def buypage(request):
-	template = loader.get_template('buypage.html')
-	return HttpResponse(template.render({},request))
+def buypage(request,league_id,player_id):
+	league = League.objects.get(pk=league_id)
+	player = Player.objects.get(pk=player_id)
+	return render(request, 'buypage.html', {'league': league,'player':player})
 def sellform(request):
 	template = loader.get_template('sellform.html')
 	return HttpResponse(template.render({},request))
@@ -291,5 +329,11 @@ def anonuser(request):
 	return HttpResponse(template.render({},request))
 def settings(request):
 	template = loader.get_template('settings.html')
+	return HttpResponse(template.render({},request))
+def receipt(request):
+	template = loader.get_template('receipt.html')
+	return HttpResponse(template.render({},request))
+def processInvalid(request):
+	template = loader.get_template('processInvalid.html')
 	return HttpResponse(template.render({},request))
 # Create your views here.
