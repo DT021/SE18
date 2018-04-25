@@ -229,6 +229,15 @@
           </div></a>
           </div>
         </div>
+		
+		{% for a in pAssets%}
+		<div class="col-lg-6 portfolio-item">
+          <div class="card h-100">
+          <a href="/sell/{{league.id}}/{{currPlayer.id}}/{{a.id}}/"><div class="btn btn-success" style="width:100%;height:40%" ><h1>Sell {{ a.ticker }} - {{a.shares}} shares</h1>
+          </div></a>
+          </div>
+        </div>
+		{% endfor %}
       <!-- /.row -->
 
     </div>

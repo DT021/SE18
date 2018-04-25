@@ -154,7 +154,7 @@ def transactionReceipt(request,transaction_id):
 
 
 # MUST UPDATE PLAYER BUYING POWER
-def submitSell(request):
+def submitSell(request,league_id,player_id,asset_id):
 	current_user = request.user
 	if request.method == 'POST':
 		form = SellForm(request.POST)
@@ -163,7 +163,10 @@ def submitSell(request):
 			shares = form.cleaned_data.get('shares')
 			limitPrice = form.cleaned_data.get('limitPrice')
 			stopPrice = form.cleaned_data.get('stopPrice')
-
+			player = Player.objects.filter(pk=player_id)
+			league = League.objects.filter(pk=league_id)
+			asset = Asset.objects.filter(pk=asset_id)
+			
 			# query for current num of shares of ticker
 			conn = psycopg2.connect(dbname="gyesfxht", user="gyesfxht", password="VwftaOkFDwF2LoGElDUxJ7i4kjJyALvy", host="stampy.db.elephantsql.com", port="5432")
 			cur = conn.cursor()
@@ -282,9 +285,10 @@ def leagues(request,league_id):
 			admin = p.userID # admin is auth_user object
 		if p.userID.id == request.user.id:
 			currPlayer = p
-
+	pAssets = Asset.objects.filter(playerID = currPlayer.id)
+	print(pAssets)
 	players.order_by('-totalWorth')
-	return render(request, 'individualleague.html', {'league': league, 'admin': admin, 'players':players,'currPlayer':currPlayer})
+	return render(request, 'individualleague.html', {'league': league, 'admin': admin, 'players':players,'currPlayer':currPlayer,'pAssets':pAssets})
 
 def league1(request):	# (request, league_id)
 	template = loader.get_template('individualleague.html')
@@ -297,9 +301,11 @@ def buypage(request,league_id,player_id):
 	league = League.objects.get(pk=league_id)
 	player = Player.objects.get(pk=player_id)
 	return render(request, 'buypage.html', {'league': league,'player':player})
-def sellform(request):
-	template = loader.get_template('sellform.html')
-	return HttpResponse(template.render({},request))
+def sellform(request,league_id,player_id,asset_id):
+	league = League.objects.get(pk=league_id)
+	player = Player.objects.get(pk=player_id)
+	asset = Asset.objects.get(pk=asset_id)
+	return render(request, 'sellform.html', {'league': league,'player':player,'asset':asset})
 def profile(request):
 	current_user = request.user
 	if (current_user.is_authenticated):

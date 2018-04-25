@@ -35,6 +35,15 @@ class BuyForm(forms.Form):
 		elif buyingPrice <0:
 			raise ValidationError (_("Invalid input"))
 		return ticker
+	# def clean_shares(self):
+		# isCrypto = False
+		# ticker = self.cleaned_data['ticker']
+		# shares = self.cleaned_data['shares']
+		# buyingPrice = getPriceFromAPI(ticker,isCrypto)
+		# tmpPrice = buyingPrice*shares
+		# if tmpPrice > player.buyingPower:
+			# raise ValidationError (_("Current balance insufficient."))
+		# return shares
 
 class SellForm(forms.Form):
 	ticker = forms.CharField(max_length=20)
