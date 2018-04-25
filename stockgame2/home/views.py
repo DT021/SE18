@@ -131,7 +131,10 @@ def submitBuy(request,league_id,player_id):
 		#tempLid = League.objects.get(name="k1")
 		tmpPrice = buyingPrice*shares
 		if tmpPrice > player.buyingPower:
-			return redirect('/home')
+			storage = messages.get_messages(request)
+			messages.add_message(request, messages.ERROR, 'You do not have sufficient balance.')
+			storage.used = False
+			return render(request, 'buypage.html', {'form': form,'league':league,'player':player})
 		new_asset = Asset(ticker = ticker, playerID = player.id, leagueID = league, shares = shares, buyingPrice = buyingPrice)
 		new_asset.save()
 		player.totalWorth += tmpPrice
@@ -142,7 +145,7 @@ def submitBuy(request,league_id,player_id):
 		url = '/receipt/'+str(new_transaction.id)+'/'
 		return redirect(url)
 	else:
-		return render(request, 'buypage.html', {'form': form})
+		return render(request, 'buypage.html', {'form': form,'league':league,'player':player})
 
 
 def transactionReceipt(request,transaction_id):

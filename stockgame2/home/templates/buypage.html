@@ -82,6 +82,13 @@
         </div>
         <div class="col-md-8 order-md-1">
           <h4 class="mb-3"><b>Transaction Information</b></h4>
+		  {% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
           <form class="needs-validation" role="form" action="/buy/{{league.id}}/{{player.id}}/" method="post" class="r-form">
             {% csrf_token %}
             {{ form.non_field_errors }}
