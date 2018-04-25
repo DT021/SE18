@@ -1,9 +1,12 @@
 from django.shortcuts import render
 from django.template import loader
 from django.http import HttpResponse
+from django.core.exceptions import ValidationError
+from django.core import validators
 from home.models import Player, League,Transaction, Asset
 from django.contrib.auth.models import User as auth_User
 from home.forms import SignUpForm, LeagueForm, BuyForm, JoinLeagueForm, SellForm
+from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.core.mail import send_mail
 from django.core.validators import validate_email
@@ -131,6 +134,7 @@ def submitBuy(request,league_id,player_id):
 			return redirect('/home')
 		new_asset = Asset(ticker = ticker, playerID = player.id, leagueID = league, shares = shares, buyingPrice = buyingPrice)
 		new_asset.save()
+		player.totalWorth += tmpPrice
 		new_transaction = Transaction(leagueID = league, playerID = player.id, price = tmpPrice, ticker = ticker, shares = shares, isBuy = True)
 		player.buyingPower = player.buyingPower-tmpPrice
 		new_transaction.save()
@@ -159,59 +163,79 @@ def submitSell(request,league_id,player_id,asset_id):
 	if request.method == 'POST':
 		form = SellForm(request.POST)
 		if (form.is_valid() and current_user.is_authenticated):
-			ticker = form.cleaned_data.get('ticker')
+			#ticker = form.cleaned_data.get('ticker')
 			shares = form.cleaned_data.get('shares')
 			limitPrice = form.cleaned_data.get('limitPrice')
 			stopPrice = form.cleaned_data.get('stopPrice')
-			player = Player.objects.filter(pk=player_id)
-			league = League.objects.filter(pk=league_id)
-			asset = Asset.objects.filter(pk=asset_id)
-			
-			# query for current num of shares of ticker
-			conn = psycopg2.connect(dbname="gyesfxht", user="gyesfxht", password="VwftaOkFDwF2LoGElDUxJ7i4kjJyALvy", host="stampy.db.elephantsql.com", port="5432")
-			cur = conn.cursor()
+			player = Player.objects.get(pk=player_id)
+			league = League.objects.get(pk=league_id)
+			asset = Asset.objects.get(pk=asset_id)
+			currShares = asset.shares
+			if shares > currShares:
+				storage = messages.get_messages(request)
+				messages.add_message(request, messages.ERROR, 'You do not own this many shares.')
+				storage.used = False
+				#raise forms.ValidationError("You do not own this many shares.")
+				return render(request, 'sellform.html', {'form': form, 'league':league,'player':player,'asset':asset})
+			marketPrice = getPriceFromAPI(asset.ticker, False)
+			sellTotal = marketPrice*shares
+			player.buyingPower += sellTotal
+			player.totalWorth -= sellTotal
+			player.save()
+			asset.shares = currShares - shares
+			if asset.shares == 0:
+				asset.delete()
+			else:
+				asset.save()
+			url = '/leagues/'+str(league.id)+'/'
+			return redirect(url)
+			# # query for current num of shares of ticker
+			# conn = psycopg2.connect(dbname="gyesfxht", user="gyesfxht", password="VwftaOkFDwF2LoGElDUxJ7i4kjJyALvy", host="stampy.db.elephantsql.com", port="5432")
+			# cur = conn.cursor()
 
-			tempPid = 1	# TMP PLAYER ID
-			tempLid = League.objects.get(name="k1") # TMP LEAGUE ID
-			cur.execute('SELECT * from "home_asset" WHERE "playerID" = %s AND "ticker"=%s', [tempPid, ticker])
-			x = cur.fetchone()
+			# tempPid = 1	# TMP PLAYER ID
+			# tempLid = League.objects.get(name="k1") # TMP LEAGUE ID
+			# cur.execute('SELECT * from "home_asset" WHERE "playerID" = %s AND "ticker"=%s', [tempPid, ticker])
+			# x = cur.fetchone()
 
-			if not x:
-				#error no
-				print("ERROR: No such query element. \n")
-				return HttpResponseRedirect('/dashboard')
+			# if not x:
+				# #error no
+				# print("ERROR: No such query element. \n")
+				# return HttpResponseRedirect('/dashboard')
 
-			currshares = x[3] # gets num shares
-			if shares > currshares:
-				# error asked for too many shares back
-				print("ERROR: Too many shares to sell.\n")
-				return HttpResponseRedirect('/dashboard')
+			# currshares = x[3] # gets num shares
+			# if shares > currshares:
+				# # error asked for too many shares back
+				# print("ERROR: Too many shares to sell.\n")
+				# return HttpResponseRedirect('/dashboard')
 
-			sharesleft = int(currshares) - int(shares)
-			cur.execute( 'UPDATE home_asset SET "shares"=%s WHERE "playerID" = %s AND "ticker"=%s ', [ sharesleft, tempPid, ticker])
-			conn.commit() # commits the updates
+			# sharesleft = int(currshares) - int(shares)
+			# cur.execute( 'UPDATE home_asset SET "shares"=%s WHERE "playerID" = %s AND "ticker"=%s ', [ sharesleft, tempPid, ticker])
+			# conn.commit() # commits the updates
 
-			marketPrice = getPriceFromAPI(ticker, False) #default not crypto
-			tmpPrice = int(shares)*marketPrice
-			new_transaction = Transaction(leagueID = tempLid, playerID = tempPid, price = tmpPrice, ticker = ticker, shares = sharesleft, isBuy = False)
-			new_transaction.save()
-			return HttpResponseRedirect('/aboutus')
+			# marketPrice = getPriceFromAPI(ticker, False) #default not crypto
+			# tmpPrice = int(shares)*marketPrice
+			# new_transaction = Transaction(leagueID = tempLid, playerID = tempPid, price = tmpPrice, ticker = ticker, shares = sharesleft, isBuy = False)
+			# new_transaction.save()
+			# return HttpResponseRedirect('/aboutus')
 
 		else:
 
-			print("ERROR: Not authenticated or Form not validated")
-			if (form.is_valid() == False and current_user.is_authenticated == False):
-				print("ERROR: BOTH ERRORS NOT AUTH AND FORM NOT VAL \n")
-			elif (form.is_valid() == False):
-				print("ERRORRRR: form not validated \n")
-			elif (current_user.is_authenticated == False):
-				print("ERRORRRR: user not authenticated \n")
+			# print("ERROR: Not authenticated or Form not validated")
+			# if (form.is_valid() == False and current_user.is_authenticated == False):
+				# print("ERROR: BOTH ERRORS NOT AUTH AND FORM NOT VAL \n")
+			# elif (form.is_valid() == False):
+				# print("ERRORRRR: form not validated \n")
+			# elif (current_user.is_authenticated == False):
+				# print("ERRORRRR: user not authenticated \n")
 
-			return HttpResponseRedirect('/dashboard')
+			# return HttpResponseRedirect('/dashboard')
+			return render(request, 'sellform.html', {'form': form})
 	else:
-		print("ERROR: request.method != FALSE")
-		form = SellForm()
-		return HttpResponseRedirect('/dashboard')
+		# print("ERROR: request.method != FALSE")
+		# form = SellForm()
+		# return HttpResponseRedirect('/dashboard')
+		return render(request, 'buypage.html')
 
 
 def get_user(request):

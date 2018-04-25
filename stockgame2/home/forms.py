@@ -46,12 +46,17 @@ class BuyForm(forms.Form):
 		# return shares
 
 class SellForm(forms.Form):
-	ticker = forms.CharField(max_length=20)
+	#ticker = forms.CharField(max_length=20)
 	shares = forms.DecimalField(decimal_places=0, max_digits=40)
-	selltype = forms.CharField(max_length=20)
-	limitPrice = forms.DecimalField(decimal_places = 2, max_digits=40)
-	stopPrice = forms.DecimalField(decimal_places = 2, max_digits=40)
-
+	selltype = forms.CharField(max_length=20, required=False)
+	limitPrice = forms.DecimalField(decimal_places = 2, max_digits=40, required=False)
+	stopPrice = forms.DecimalField(decimal_places = 2, max_digits=40, required=False)
+	# def clean(self):
+		# asset = Asset.objects.get(pk=asset_id)
+		# if shares > asset.shares:
+			# raise ValidationError(_("You do not own this many shares."))
+			# return render(request, 'sellform.html', {'form': form})
+	
 class LeagueForm(forms.Form):
 	lname = forms.CharField(max_length=50)
 	endDate = forms.CharField(max_length=20)
