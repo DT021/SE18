@@ -303,7 +303,7 @@ def universal(request):
 	return HttpResponse(template.render({},request))
 def leagues(request,league_id):
 	league = League.objects.get(pk=league_id)
-	players = Player.objects.filter(leagueID = league)
+	players = Player.objects.filter(leagueID = league).order_by('-totalWorth')
 	for p in players:
 		if p.userID.id == league.adminID:
 			admin = p.userID # admin is auth_user object
@@ -311,7 +311,7 @@ def leagues(request,league_id):
 			currPlayer = p
 	pAssets = Asset.objects.filter(playerID = currPlayer.id)
 	print(pAssets)
-	players.order_by('-totalWorth')
+	#players.order_by('-totalWorth')
 	return render(request, 'individualleague.html', {'league': league, 'admin': admin, 'players':players,'currPlayer':currPlayer,'pAssets':pAssets})
 
 def league1(request):	# (request, league_id)
