@@ -13,7 +13,7 @@ def getLastMonth(item):
 	i = 0
 	data = np.zeros(shape=(df.shape[0],2))
 	while i<df.shape[0]:
-		x = np.array([i+1,df['Open'][i]])
+		x = np.array([i+1,df['Close'][i]])
 		#print(data)
 		#print(x)
 		data[i] = x
