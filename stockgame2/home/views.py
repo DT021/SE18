@@ -18,6 +18,8 @@ import psycopg2
 from django.contrib.auth import logout
 from home.financepi import getPriceFromAPI
 import decimal
+from django.views.decorators.csrf import csrf_exempt
+
 
 def logout_view(request):
 	logout(request)
@@ -394,9 +396,7 @@ def anonuser(request):
 def settings(request):
 	template = loader.get_template('settings.html')
 	return HttpResponse(template.render({},request))
-def shop(request):
-	template = loader.get_template('shop.html')
-	return HttpResponse(template.render({},request))
+
 # Create your views here.
 def receipt(request):
 	template = loader.get_template('receipt.html')
@@ -405,3 +405,12 @@ def processInvalid(request):
 	template = loader.get_template('processInvalid.html')
 	return HttpResponse(template.render({},request))
 # Create your views here.
+def shop(request,player_id):
+	player = Player.objects.get(pk=player_id)
+	return render(request, 'shop.html', {'player':player})
+@csrf_exempt
+def submitShop(request,player_id):
+	player = Player.objects.get(pk=player_id)
+	#player.TitanCoins = player.TitanCoins + request.titancoins
+	print(request.user.profile.TitanCoins)
+	return HttpResponseRedirect('/dashboard')
