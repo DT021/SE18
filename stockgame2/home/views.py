@@ -155,7 +155,6 @@ def submitBuy(request,league_id,player_id):
 		player.save()
 		new_transaction.save()
 		# update trophies array to count buys
-		user = Player.objects.get(pk=user_id)
 		current_user.profile.trophies[0] += 1
 		current_user.save()
 
@@ -204,9 +203,8 @@ def submitSell(request,league_id,player_id,asset_id):
 			player.cumWorth = player.buyingPower + player.totalWorth
 			player.save()
 			# update trophies array to count sells
-			user = Player.objects.get(pk=user_id)
-			user.profile.tophies[1] +=1
-			user.save()
+			current_user.profile.trophies[1] +=1
+			current_user.save()
 			asset.shares = currShares - shares
 			if asset.shares == 0:
 				asset.delete()
