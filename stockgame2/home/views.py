@@ -315,4 +315,7 @@ def anonuser(request):
 def settings(request):
 	template = loader.get_template('settings.html')
 	return HttpResponse(template.render({},request))
+def shop(request):
+	template = loader.get_template('shop.html')
+	return HttpResponse(template.render({},request))
 # Create your views here.
