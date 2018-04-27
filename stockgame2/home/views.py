@@ -5,7 +5,7 @@ from django.core.exceptions import ValidationError
 from django.core import validators
 from home.models import Player, League,Transaction, Asset
 from django.contrib.auth.models import User as auth_User
-from home.forms import SignUpForm, LeagueForm, BuyForm, JoinLeagueForm, SellForm
+from home.forms import SignUpForm, LeagueForm, BuyForm, JoinLeagueForm, SellForm, CreateAiForm
 from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.core.mail import send_mail
@@ -159,7 +159,20 @@ def transactionReceipt(request,transaction_id):
 	return render(request, 'receipt.html', {'price': price, 'ticker': ticker, 'shares': shares})
 
 
-
+def createai(request):
+	form = CreateAiForm(request.POST)
+	if(form.is_valid()):
+		leaguename = form.cleaned_data.get('leaguename')
+		league = League.objects.get(name=leaguename)
+		userid = auth_User.objects.filter(username = "easyai")
+		print(userid)
+		newPlayer = Player(leagueID=league,userID=userid.first(), buyingPower = league.startingBalance,percentChange=0,totalWorth=0,isAi=True)
+		league.numPlayers+=1
+		league.save()
+		newPlayer.save()
+		return render(request, 'individualleague.html')
+	else:
+		return render(request, 'home.html')
 # MUST UPDATE PLAYER BUYING POWER
 def submitSell(request,league_id,player_id,asset_id):
 	current_user = request.user
@@ -265,6 +278,9 @@ def index(request):
 	return HttpResponse(template.render({},request))
 def signup(request):
 	template = loader.get_template('signup.html')
+	return HttpResponse(template.render({},request))
+def createaipage(request):
+	template = loader.get_template('createaipage.html')
 	return HttpResponse(template.render({},request))
 def login(request):
 	template = loader.get_template('login.html')

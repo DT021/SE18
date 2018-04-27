@@ -56,7 +56,10 @@ class SellForm(forms.Form):
 		# if shares > asset.shares:
 			# raise ValidationError(_("You do not own this many shares."))
 			# return render(request, 'sellform.html', {'form': form})
-	
+class CreateAiForm(forms.Form):
+	ainame = forms.CharField(max_length=50)
+	leaguename = forms.CharField(max_length=50)
+		
 class LeagueForm(forms.Form):
 	lname = forms.CharField(max_length=50)
 	endDate = forms.CharField(max_length=20)
