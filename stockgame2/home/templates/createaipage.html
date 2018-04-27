@@ -91,7 +91,13 @@
 	                    	<div class="form-group" style="padding-top:5%">
 								<div style="background-color:#fff">{{ form.username.errors }}</div>
                                 <label class="sr-only" for="l-form-username">{{ form.username.label_tag }}</label>
-	                        	<input type="text" name="ainame" placeholder="AI Name" class="l-form-username form-control" id="l-form-username">
+                                <table style = "table-layout:fixed;width:100%">
+                                <tr>
+	                        	<td style = "color:#fff"><input type="radio" name="ainame" placeholder="Easy AI" class="l-form-username form-control" id="l-form-username" value = "easyai">Easy AI<t></td>
+                                <td style = "color:#fff"><input type="radio" name="ainame" placeholder="Easy AI" class="l-form-username form-control" id="l-form-username" value = "mediumai">Medium AI<t></td>
+                                <td style = "color:#fff"><input type="radio" name="ainame" placeholder="Easy AI" class="l-form-username form-control" id="l-form-username" value = "hardai">Hard AI<t></td>
+                                </tr>
+                                </table>
 	                        </div>
 	                        <div class="form-group">
                                 <div style="background-color:#fff">{{ form.password.errors }}</div>

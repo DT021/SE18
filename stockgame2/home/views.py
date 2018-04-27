@@ -162,9 +162,10 @@ def transactionReceipt(request,transaction_id):
 def createai(request):
 	form = CreateAiForm(request.POST)
 	if(form.is_valid()):
+		ainame = form.cleaned_data.get('ainame')
 		leaguename = form.cleaned_data.get('leaguename')
 		league = League.objects.get(name=leaguename)
-		userid = auth_User.objects.filter(username = "easyai")
+		userid = auth_User.objects.filter(username = ainame)
 		print(userid)
 		newPlayer = Player(leagueID=league,userID=userid.first(), buyingPower = league.startingBalance,percentChange=0,totalWorth=0,isAi=True)
 		league.numPlayers+=1
