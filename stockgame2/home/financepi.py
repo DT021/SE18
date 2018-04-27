@@ -121,4 +121,4 @@ def getPriceFromAPI_m(symbol, isCrypto):
 	if not df.empty:
 		return df
 	return -1
-#print(getPriceFromAPI('GOOGL', False))
+
