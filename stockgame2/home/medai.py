@@ -70,9 +70,9 @@ def runLinearReg(data):
 	    for i in range(42):
 	        avgLossPerIndex[i] = loss_perIndex[i]/10;
 
-	    print(avg_loss)
-	    print(w_value)
-	    print(b_value)
+	    #print(avg_loss)
+	    #print(w_value)
+	    #print(b_value)
 	return w_value, b_value,avg_loss
 
 
@@ -88,7 +88,29 @@ def runLinearReg(data):
 	  #  dataY.append(pair[1])
 
 	#plt.scatter(dataX, avgLossPerIndex);
-
-data = getLastMonth('GOOGL')
-print(data)
-print(runLinearReg(data))
+def getBuy():
+	list = getDow()
+	hi_score = -10000000
+	hi_item = 'blank'
+	for item in list:
+		data = getLastMonth(item)
+		[w,b,loss] = runLinearReg(data)
+		score = w*1000/loss
+		if score>hi_score:
+			hi_score = score
+			hi_item = item
+	#print([hi_item,hi_score])
+	return hi_item
+def getSell(list):
+	#list = getDow()
+	lo_score = 10000000
+	lo_item = 'blank'
+	for item in list:
+		data = getLastMonth(item)
+		[w,b,loss] = runLinearReg(data)
+		score = w*1000/loss
+		if score<hi_score:
+			lo_score = score
+			lo_item = item
+	#print([hi_item,hi_score])
+	return lo_item
