@@ -2,8 +2,10 @@ from listofstockscrypto import *
 from aiscripts import *
 from financepi import *
 from medai import *
+import math
+import random
 
-def getBuy_hard():
+def getBuy_hard(buyingPower):
 	list = getDow()
 	hi_score = -10000000
 	hi_item = 'blank'
@@ -32,13 +34,18 @@ def getBuy_hard():
 		if tot_score>hi_score:
 			hi_score = tot_score
 			hi_item = item
-	return hi_item
+	price = getPriceFromAPI(hi_item, False)
+	rangeNumToBuy = math.floor(abs(0.25*buyingPower/float(price)))
+	randBuyNum = random.randint(1, rangeNumToBuy)
+	return hi_item, randBuyNum
 	
-def getSell_hard(list):
+def getSell_hard(currAssets, currAmts):
 	#list = getDow()
 	lo_score = 1000000000
 	lo_item = 'blank'
-	for item in list:
+	index = 0
+	lo_index = 0
+	for item in currAssets:
 		pos, neg, neut, tnum = getTwitterSentiments(item)
 		if neg == 0:
 			neg = 1
@@ -63,5 +70,8 @@ def getSell_hard(list):
 		if tot_score<lo_score:
 			lo_score = tot_score
 			lo_item = item
-	return lo_item
+			lo_index = index
+		index+=1
+	randNumToSell = random.randint(1, currAmts[lo_index])
+	return lo_item, randNumToSell
 	
