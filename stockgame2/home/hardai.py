@@ -40,7 +40,8 @@ def getBuy_hard(buyingPower):
 	return hi_item, randBuyNum
 	
 def getSell_hard(currAssets, currAmts):
-	#list = getDow()
+	if not currAssets:
+		return 'none123', 0
 	lo_score = 1000000000
 	lo_item = 'blank'
 	index = 0
