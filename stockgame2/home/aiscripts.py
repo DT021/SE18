@@ -107,80 +107,85 @@ def get_news_sentiment(description):
         return 'negative'
 
 def getTwitterSentiments(ticker):
-    api = TwitterClient()
+	api = TwitterClient()
     # calling function to get tweets
-    tweets = api.get_tweets(query = 'Donald Trump', count = 200)
+	tweets = api.get_tweets(query = ticker, count = 200)
 
     # picking positive tweets from tweets
-    ptweets = [tweet for tweet in tweets if tweet['sentiment'] == 'positive']
+	ptweets = [tweet for tweet in tweets if tweet['sentiment'] == 'positive']
     # percentage of positive tweets
     ##print("Positive tweets percentage: {} %".format(100*len(ptweets)/len(tweets)))
-    ntweets = [tweet for tweet in tweets if tweet['sentiment'] == 'negative']
+	ntweets = [tweet for tweet in tweets if tweet['sentiment'] == 'negative']
     # percentage of negative tweets
     ##print("Negative tweets percentage: {} %".format(100*len(ntweets)/len(tweets)))
     # percentage of neutral tweets
     ##print("Neutral tweets percentage: {} %".format(100*(len(tweets) - len(ntweets) - len(ptweets))/len(tweets)))
 
     ##print("Total Number of Tweets: {}".format(len(tweets)))
+	if len(tweets) == 0:
+		return 0, 0, 0, 0
+	posPercent = len(ptweets)/len(tweets)
+	negPercent = len(ntweets)/len(tweets)
+	neutPercent = 1 - posPercent - negPercent
 
-    posPercent = len(ptweets)/len(tweets)
-    negPercent = len(ntweets)/len(tweets)
-    neutPercent = 1 - posPercent - negPercent
-
-    return posPercent, negPercent, neutPercent, len(tweets)
+	return posPercent, negPercent, neutPercent, len(tweets)
 
 
 def getNewsSentiments(ticker):
 
     # Authentication
-    APIkey = '42b2610b2d1a421fbc3e5551202e2094'
+	APIkey = '42b2610b2d1a421fbc3e5551202e2094'
 
-    url = ('https://newsapi.org/v2/everything?'
-        'apiKey=' + APIkey +
-        '&q=' + ticker+
-        '&language=en')
+	url = ('https://newsapi.org/v2/everything?'
+		'apiKey=' + APIkey +
+		'&q=' + ticker+
+		'&language=en')
 
-    response = requests.get(url)
-    binary = response.content
-    jsonData = json.loads(binary) #gets JSON data
+	response = requests.get(url)
+	binary = response.content
+	jsonData = json.loads(binary) #gets JSON data
 
     # Check if any errors, return -1
-    if ('Error Message' in jsonData):
-        return -1
+	if ('Error Message' in jsonData):
+		return -1
 
-    totalResults = jsonData['totalResults']
+	totalResults = jsonData['totalResults']
 
-    if (totalResults == 0):
-        return -1
+	if (totalResults == 0):
+		return -1
 
-    pageSize = 100;
-    numPages = min(100,int(totalResults/pageSize))
-    allArticles = []
-    for i in range(1,numPages):
-        url = ('https://newsapi.org/v2/everything?'
-            'apiKey=' + APIkey +
-            '&q=' + ticker+
-            '&language=en'+
-            '&pageSize='+str(pageSize)+
-            '&page='+str(i))
-        for a in jsonData['articles']:
-            allArticles.append(a)
+	pageSize = 100;
+	numPages = min(100,int(totalResults/pageSize))
+	allArticles = []
+	for i in range(1,numPages):
+		url = ('https://newsapi.org/v2/everything?'
+			'apiKey=' + APIkey +
+			'&q=' + ticker+
+			'&language=en'+
+			'&pageSize='+str(pageSize)+
+			'&page='+str(i))
+		for a in jsonData['articles']:
+			allArticles.append(a)
 
-    arts = []
-    numAll = len(allArticles)
-    for a in allArticles:
-        parsedArts = {}
-        parsedArts['description'] = a['description']
-        parsedArts['title'] = a['title']
-        parsedArts['sentiment'] = get_news_sentiment(parsedArts['description'])
-        arts.append(parsedArts)
+	arts = []
+	numAll = len(allArticles)
+	for a in allArticles:
+		parsedArts = {}
+		if not a['description']:
+			continue
+		parsedArts['description'] = a['description']
+		parsedArts['title'] = a['title']
+		parsedArts['sentiment'] = get_news_sentiment(parsedArts['description'])
+		arts.append(parsedArts)
 
-    pnews = [a for a in arts if a['sentiment'] == 'positive']
-    nnews = [a for a in arts if a['sentiment'] == 'negative']
-    perPos = len(pnews)/numAll
-    perNeg = len(nnews)/numAll
-    perNeut = 1 - perPos - perNeg
+	pnews = [a for a in arts if a['sentiment'] == 'positive']
+	nnews = [a for a in arts if a['sentiment'] == 'negative']
+	if numAll == 0:
+		return 0, 0, 0, 0
+	perPos = len(pnews)/numAll
+	perNeg = len(nnews)/numAll
+	perNeut = 1 - perPos - perNeg
 
-    return perPos, perNeg, perNeut, numAll
+	return perPos, perNeg, perNeut, numAll
 
 #print(getNewsSentiments('Google'))
