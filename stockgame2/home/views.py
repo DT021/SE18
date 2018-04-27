@@ -361,6 +361,9 @@ def awards(request):
 def receipt(request):
 	template = loader.get_template('receipt.html')
 	return HttpResponse(template.render({},request))
+def leaderboard(request):
+	template = loader.get_template('leaderboard.html')
+	return HttpResponse(template.render({},request))
 def processInvalid(request):
 	template = loader.get_template('processInvalid.html')
 	return HttpResponse(template.render({},request))
