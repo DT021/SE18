@@ -18,6 +18,7 @@ import psycopg2
 from django.contrib.auth import logout
 from home.financepi import getPriceFromAPI
 import decimal
+from pinax.badges.registry import badges
 
 def logout_view(request):
 	logout(request)
@@ -353,6 +354,9 @@ def anonuser(request):
 	return HttpResponse(template.render({},request))
 def settings(request):
 	template = loader.get_template('settings.html')
+	return HttpResponse(template.render({},request))
+def awards(request):
+	template = loader.get_template('awards.html')
 	return HttpResponse(template.render({},request))
 def receipt(request):
 	template = loader.get_template('receipt.html')

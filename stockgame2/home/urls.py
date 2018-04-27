@@ -41,6 +41,7 @@ urlpatterns = [
 	path('joinLeague', views.joinLeague, name='joinLeague'),
 	path('anonuser', views.anonuser, name='anonuser'),
 	path('settings', views.settings, name='settings'),
+	path('awards',views.awards, name='awards'),
 	path('receipt/<int:transaction_id>/', views.transactionReceipt, name='transactionReceipt'),
 	path('processInvalid', views.processInvalid, name='processInvalid')
 	]
