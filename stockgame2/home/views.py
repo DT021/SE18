@@ -5,7 +5,7 @@ from django.core.exceptions import ValidationError
 from django.core import validators
 from home.models import Player, League,Transaction, Asset, Profile
 from django.contrib.auth.models import User as auth_User
-from home.forms import SignUpForm, LeagueForm, BuyForm, JoinLeagueForm, SellForm
+from home.forms import SignUpForm, LeagueForm, BuyForm, JoinLeagueForm, SellForm, CreateAiForm
 from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.core.mail import send_mail
@@ -175,7 +175,21 @@ def transactionReceipt(request,transaction_id):
 	return render(request, 'receipt.html', {'price': price, 'ticker': ticker, 'shares': shares})
 
 
-
+def createai(request):
+	form = CreateAiForm(request.POST)
+	if(form.is_valid()):
+		ainame = form.cleaned_data.get('ainame')
+		leaguename = form.cleaned_data.get('leaguename')
+		league = League.objects.get(name=leaguename)
+		userid = auth_User.objects.filter(username = ainame)
+		print(userid)
+		newPlayer = Player(leagueID=league,userID=userid.first(), buyingPower = league.startingBalance,percentChange=0,totalWorth=0,isAi=True)
+		league.numPlayers+=1
+		league.save()
+		newPlayer.save()
+		return render(request, 'individualleague.html')
+	else:
+		return render(request, 'home.html')
 # MUST UPDATE PLAYER BUYING POWER
 def submitSell(request,league_id,player_id,asset_id):
 	current_user = request.user
@@ -280,11 +294,37 @@ def get_user(request):
 
 	return render(request, 'user.html', {'form': form})
 
+def sendinvite(request):
+	current_user = request.user
+	if(request.method == 'POST'):
+		if(current_user.is_authenticated):
+			#Make query for the league password
+			conn = psycopg2.connect(dbname="gyesfxht", user="gyesfxht", password="VwftaOkFDwF2LoGElDUxJ7i4kjJyALvy", host="stampy.db.elephantsql.com", port="5432")
+			cur = conn.cursor()
+			cur.execute()
+
+			x = cur.fetchone()
+
+			#username = 
+			league = League.objects.get(name=username)
+			password = league.joinPassword
+			send_mail(
+				'Titan Trading League Invitation',
+				'You have been invited to compete against your friends on Titan Trading, the leading fantasy stock trading application!\n To join just sign up for an account and press the \'Join League\' button on the dashboard. The league password is: ' + password + '\nWe look forward to seeing you join in on the fun!\nMay the odds be in your favor,\nThe Titan Trading Team'
+				'titantrading@gmail.com',
+				['to@example.com'],
+				fail_silently=False,
+			)
+
+
 def index(request):
 	template = loader.get_template('greet.html')
 	return HttpResponse(template.render({},request))
 def signup(request):
 	template = loader.get_template('signup.html')
+	return HttpResponse(template.render({},request))
+def createaipage(request):
+	template = loader.get_template('createaipage.html')
 	return HttpResponse(template.render({},request))
 def login(request):
 	template = loader.get_template('login.html')
