@@ -12,6 +12,7 @@ class Profile(models.Model):
 	statement = models.CharField(max_length=250)
 	name = models.CharField(max_length=40)
 	birthday = models.DateTimeField()
+	TitanCoins = models.IntegerField()
 
 
 class League(models.Model):

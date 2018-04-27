@@ -3,7 +3,7 @@ from django.template import loader
 from django.http import HttpResponse
 from django.core.exceptions import ValidationError
 from django.core import validators
-from home.models import Player, League,Transaction, Asset
+from home.models import Player, League,Transaction, Asset, Profile
 from django.contrib.auth.models import User as auth_User
 from home.forms import SignUpForm, LeagueForm, BuyForm, JoinLeagueForm, SellForm
 from django.contrib import messages
@@ -18,7 +18,7 @@ import psycopg2
 from django.contrib.auth import logout
 from home.financepi import getPriceFromAPI
 import decimal
-from pinax.badges.registry import badges
+from django.contrib.postgres.fields import ArrayField
 
 def logout_view(request):
 	logout(request)
@@ -156,8 +156,8 @@ def submitBuy(request,league_id,player_id):
 		new_transaction.save()
 		# update trophies array to count buys
 		user = Player.objects.get(pk=user_id)
-		user.profile.tophies.0 +=1
-		user.save()
+		current_user.profile.trophies[0] += 1
+		current_user.save()
 
 		url = '/receipt/'+str(new_transaction.id)+'/'
 		return redirect(url)
@@ -205,7 +205,7 @@ def submitSell(request,league_id,player_id,asset_id):
 			player.save()
 			# update trophies array to count sells
 			user = Player.objects.get(pk=user_id)
-			user.profile.tophies.1 +=1
+			user.profile.tophies[1] +=1
 			user.save()
 			asset.shares = currShares - shares
 			if asset.shares == 0:
