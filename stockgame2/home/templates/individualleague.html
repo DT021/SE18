@@ -182,8 +182,8 @@
                <ol style="list-style-type:none;margin:0;padding:0;font-size:1em;text-align:center;border-bottom:1px solid rgba(118,118,118,0.1);color:#767676;">
                 <li style="text-align:left">{{request.user.username}}:</li>
                 <li>Buying Power: ${{currPlayer.buyingPower}}</li>
-                <li>Rank: 1</li>
-                <li>Total Worth: ${{currPlayer.totalWorth}}</li>
+                <li>Rank: {{rank}}</li>
+                <li>Total Assets: ${{currPlayer.totalWorth}}</li>
               </ol>
               <ol style="list-style-type:none;margin:0;padding:0;font-size:1em;text-align:center;border-bottom:1px solid rgba(118,118,118,0.1);color:#767676;">
                 <li style="text-align:left">League Settings:</li>
@@ -221,19 +221,14 @@
         </div>
     </div>
 
-        <div class="col-lg-6 portfolio-item">
+        <div class="col-lg-12 portfolio-item">
           <div class="card h-100">
            <a href="/buypage/{{league.id}}/{{currPlayer.id}}/"><div class="btn btn-success" style="width:100%;height:40%"><i class="fa fa-plus-square" style="font-size:400%;margin:auto"></i><h1>BUY</h1>
           </div></a>
           </div>
         </div>
         
-        <div class="col-lg-6 portfolio-item">
-          <div class="card h-100">
-          <a href="/sellform"><div class="btn btn-success" style="width:100%;height:40%" ><i class="fa fa-plus-square" style="font-size:400%;margin:auto"></i><h1>SELL</h1>
-          </div></a>
-          </div>
-        </div>
+        
 		
 		{% for a in pAssets%}
 		<div class="col-lg-6 portfolio-item">
