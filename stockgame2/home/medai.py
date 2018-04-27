@@ -1,5 +1,4 @@
 import numpy as np
-import random
 import math
 from financepi import *
 import time
@@ -88,7 +87,7 @@ def runLinearReg(data):
 	  #  dataY.append(pair[1])
 
 	#plt.scatter(dataX, avgLossPerIndex);
-def getBuy():
+def getBuy_med():
 	list = getDow()
 	hi_score = -10000000
 	hi_item = 'blank'
@@ -101,7 +100,7 @@ def getBuy():
 			hi_item = item
 	#print([hi_item,hi_score])
 	return hi_item
-def getSell(list):
+def getSell_med(list):
 	#list = getDow()
 	lo_score = 10000000
 	lo_item = 'blank'
