@@ -3,36 +3,9 @@ from django.conf import settings
 from datetime import datetime  
 from django.contrib.auth.models import User as auth_User
 from django.contrib.postgres.fields import ArrayField
-from pinax.badges.base import Badge, BadgeAwarded
-from pinax.badges.registry import badges
 
 
 # Create your models here.
-class PointsBadge(Badge):
-		slug = "points"
-		levels = [
-			"Bronze",
-			"Silver",
-			"Gold",
-		]
-		events = [
-			"points_awarded",
-		]
-		multiple = False
-
-		def award(self, **state):
-			user = state["user"]
-			points = user.get_profile().points
-			if points > 10000:
-				return BadgeAwarded(level=3)
-			elif points > 7500:
-				return BadgeAwarded(level=2)
-			elif points > 5000:
-				return BadgeAwarded(level=1)
-
-
-			badges.register(PointsBadge)
-
 class Profile(models.Model):
 	user = models.OneToOneField(auth_User, on_delete=models.CASCADE)
 	trophies = ArrayField(models.IntegerField(), size = 8)
@@ -59,6 +32,7 @@ class Player(models.Model):
 	percentChange = models.DecimalField(decimal_places=2,max_digits=25)
 	totalWorth = models.DecimalField(decimal_places=2,max_digits=25)
 	isAi = models.BooleanField(False)
+	cumWorth = models.DecimalField(decimal_places=2,max_digits=35)
 
 
 class Transaction(models.Model):

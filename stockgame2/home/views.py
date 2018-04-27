@@ -42,7 +42,7 @@ def newLeague(request):
 				b = True
 			new_league = League(adminID = current_user.id,name=lname,numPlayers=1,joinPassword=joinpwd,startingBalance=startbal,isCrypto=b, endDate=date_out,isUniversal=False)
 			new_league.save()
-			newPlayer = Player(leagueID=new_league,userID=current_user, buyingPower = startbal,percentChange=0,totalWorth=0)
+			newPlayer = Player(leagueID=new_league,userID=current_user, buyingPower = startbal,percentChange=0,totalWorth=0, cumWorth = startbal)
 			newPlayer.save()
 			return HttpResponseRedirect('/dashboard')
 		else:
@@ -74,7 +74,7 @@ def joinLeague(request):
 				if p.userID == current_user:
 					return HttpResponseRedirect('/joinLeague')
 			
-			newPlayer = Player(leagueID=league,userID=current_user, buyingPower = league.startingBalance,percentChange=0,totalWorth=0,isAi=False)
+			newPlayer = Player(leagueID=league,userID=current_user, buyingPower = league.startingBalance,percentChange=0,totalWorth=0,isAi=False, cumWorth = league.startingBalance)
 			league.numPlayers+=1
 			league.save()
 			newPlayer.save()
@@ -136,11 +136,23 @@ def submitBuy(request,league_id,player_id):
 			messages.add_message(request, messages.ERROR, 'You do not have sufficient balance.')
 			storage.used = False
 			return render(request, 'buypage.html', {'form': form,'league':league,'player':player})
-		new_asset = Asset(ticker = ticker, playerID = player.id, leagueID = league, shares = shares, buyingPrice = buyingPrice)
+		pAssets = Asset.objects.filter(leagueID = league,playerID = player.id)
+		assetExists = False
+		for i in pAssets:
+			if i.ticker == ticker:
+				assetExists = True
+				new_asset = i
+		if assetExists == False:
+			new_asset = Asset(ticker = ticker, playerID = player.id, leagueID = league, shares = shares, buyingPrice = buyingPrice)
+		else:
+			new_asset.shares += shares
+			new_asset.buyingPrice = buyingPrice
 		new_asset.save()
 		player.totalWorth += tmpPrice
 		new_transaction = Transaction(leagueID = league, playerID = player.id, price = tmpPrice, ticker = ticker, shares = shares, isBuy = True)
-		player.buyingPower = player.buyingPower-tmpPrice
+		player.buyingPower -= tmpPrice
+		player.cumWorth = player.totalWorth + player.buyingPower
+		player.save()
 		new_transaction.save()
 
 		url = '/receipt/'+str(new_transaction.id)+'/'
@@ -185,6 +197,7 @@ def submitSell(request,league_id,player_id,asset_id):
 			sellTotal = marketPrice*shares
 			player.buyingPower += sellTotal
 			player.totalWorth -= sellTotal
+			player.cumWorth = player.buyingPower + player.totalWorth
 			player.save()
 			asset.shares = currShares - shares
 			if asset.shares == 0:
@@ -307,7 +320,7 @@ def universal(request):
 	return HttpResponse(template.render({},request))
 def leagues(request,league_id):
 	league = League.objects.get(pk=league_id)
-	players = Player.objects.filter(leagueID = league).order_by('-totalWorth')
+	players = Player.objects.filter(leagueID = league).order_by('-cumWorth')
 	for p in players:
 		if p.userID.id == league.adminID:
 			admin = p.userID # admin is auth_user object
