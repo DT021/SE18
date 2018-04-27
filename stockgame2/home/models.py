@@ -25,6 +25,7 @@ class League(models.Model):
 	adminID = models.IntegerField()
 	isCrypto = models.BooleanField()
 	joinPassword = models.CharField(max_length=20)
+	hasEnded = models.BooleanField()
 	
 class Player(models.Model):
 	leagueID = models.ForeignKey(League, on_delete=models.CASCADE)

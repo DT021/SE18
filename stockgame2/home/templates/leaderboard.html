@@ -70,14 +70,20 @@
 	<div class="container" style = "padding-top:100px;">
 		<!-- Jumbotron Header -->
       <header class="jumbotron my-4" style = "background-color: rgb(255,255,255); opacity: 0.9;">
-        <h1 class="display-3">You Won in this League!</h1>
+        <h1 class="display-3">Your rank is: {{rank}}</h1>
+    {% if rank == 1 %}
         <p class="lead">Congratulations! You've won in a private league! Check your achievements page for more rewards!</p>
+    {% else if rank < 4 %}
+    	<p class="lead">Congratulations! You've placed top 3! Check your achievements page for more rewards!</p>
+    {% else %}
+        <p class="lead">Thank you for playing! Check your achievements page for more rewards!</p>
+    {% endif %}
         <a href="/awards" class="btn btn-primary btn-lg">Achievements</a>
       </header>
 		<!-- <div class="container-table100" style = "background-color: rgb(255,255,255); opacity: 0.8;"> -->
 			<!-- <div class="wrap-table100"> -->
 				
-				<div class="table100 ver3 js-pscroll">
+				<!--<div class="table100 ver3 js-pscroll">
 					<div class="table100-head">
 						<table>
 							<thead>
@@ -90,12 +96,24 @@
 								</tr>
 							</thead>
 						</table>
-					</div>
+					</div>-->
 
 					<div class="table100-body js-pscroll">
 						<table>
 							<tbody>
-								<tr class="row100 body">
+								<tr>
+            						<th>Rank</th>
+            						<th>UserName</th> 
+            						<th>Total Assets</th>
+          						</tr>
+		  					{% for p in players %}
+          						<tr>
+            						<td>{{forloop.counter}}</td>
+            						<td>{{p.userID.username}}</td> 
+            						<td>{{p.totalWorth}}</td>
+          						</tr>
+		  					{% endfor %}
+								<!--<tr class="row100 body">
 									<td class="cell100 column1">ivanmarsic</td>
 									<td class="cell100 column2">No</td>
 									<td class="cell100 column3">$</td>
@@ -175,7 +193,7 @@
 									<td class="cell100 column5">20</td>
 								</tr>
 
-								<!--<tr class="row100 body">
+								<tr class="row100 body">
 									<td class="cell100 column1">Virtual Cycle</td>
 									<td class="cell100 column2">Gym</td>
 									<td class="cell100 column3">8:00 AM - 9:00 AM</td>

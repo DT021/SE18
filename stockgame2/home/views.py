@@ -326,12 +326,33 @@ def universal(request):
 	return HttpResponse(template.render({},request))
 def leagues(request,league_id):
 	league = League.objects.get(pk=league_id)
+	endDate = league.endDate
+	presentDate = datetime.now()
 	players = Player.objects.filter(leagueID = league).order_by('-cumWorth')
+	count = 0 
+	rank = 0
+	numAIbeat = 0
 	for p in players:
+		count++
 		if p.userID.id == league.adminID:
 			admin = p.userID # admin is auth_user object
 		if p.userID.id == request.user.id:
 			currPlayer = p
+			rank = count
+		if p.isAi and count > 0: # AI placing worse than user
+			numAIbeat++
+	if (endDate < presentDate): # league has ended, redirect to leaderboard.html
+		if !(league.hasEnded): # need to handle trophies
+			league.hasEnded = True
+			current_user.profile.trophies[3] += 1 # increment for game played
+			if rank < 4: # top 3 = win
+				current_user.profile.trophies[2] += 1 # increment for win
+			current_user.profile.trophies[4] = current_user.profile.trophies[4] + numAIbeat 
+			if currPlayer.userID.id == request.user.id: # this user is admin
+				if current_user.profile.trophies[5] < count: # new record for # ppl managed
+					current_user.profile.trophies[5] = count
+			current_user.save()
+		return render(request, 'leaderboard.html', {'league': league, 'admin': admin, 'players':players,'currPlayer':currPlayer, 'rank':rank})
 	pAssets = Asset.objects.filter(playerID = currPlayer.id)
 	print(pAssets)
 	#players.order_by('-totalWorth')
@@ -380,7 +401,7 @@ def awards(request):
 def receipt(request):
 	template = loader.get_template('receipt.html')
 	return HttpResponse(template.render({},request))
-def leaderboard(request):
+def leaderboard(request, league_id):
 	template = loader.get_template('leaderboard.html')
 	return HttpResponse(template.render({},request))
 def processInvalid(request):

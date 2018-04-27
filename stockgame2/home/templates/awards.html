@@ -105,7 +105,7 @@
             <img class="card-img-top" src="/static/home2/Metis.jpg" alt="">
             <div class="card-body">
               <h4 class="card-title">METIS</h4>
-			  <em class="card-text"><b>Made {{request.user.profile.trophies.0}} sells!</b></em>
+			  <em class="card-text"><b>Made {{request.user.profile.trophies.1}} sells!</b></em>
               <p class="card-text"> Metis is the Titan of wisdom, prudence, and deep thought. Making those smart sells means you are making prudent decisions.</p>
             </div>
             <div class="card-footer">
@@ -122,15 +122,22 @@
 
         <div class="col-lg-3 col-md-6 mb-4">
           <div class="card">
+            {% if request.user.profile.trophies.2 > 0 %}
             <img class="card-img-top" src="/static/home2/cronus.jpg" alt="">
             <div class="card-body">
               <h4 class="card-title">CRONUS</h4>
-			  <em class="card-text"><b>Placed in top 3!</b></em>
+			  <em class="card-text"><b>Placed in top 3 {{request.user.profile.trophies.2}} times!</b></em>
               <p class="card-text">Like Cronus overthrew Uranus, you've topped your league!</p>
             </div>
             <div class="card-footer">
               <a href="#" class="btn btn-primary">Find Out More!</a>
             </div>
+            {% else %}
+             <img class="card-img-top" src="/static/home2/lock.png" alt="">
+            <div class="card-body">
+              <p class="card-text">Keep trading to unlock this achievement!</p>
+            </div>
+      {% endif %}
           </div>
         </div>
 
@@ -138,13 +145,19 @@
           <div class="card">
             <img class="card-img-top" src="/static/home2/hyperion.jpg" alt="">
             <div class="card-body">
-              <h4 class="card-title">HYPERION</h4>
-			  <em class="card-text"><b>Beat the AI!</b></em>
-              <p class="card-text">Hyperion is the Titan of the sun and moon, and represents watchfulness and wisdom. You have reached this level by beating one of our complex AI players.</p>
+              <h4 class="card-title">OCEANUS</h4>
+			  <em class="card-text"><b>Played {{request.user.profile.trophies.3}} games!</b></em>
+              <p class="card-text">Oceanus, so fertile that his overproduction of aqueous elements of nature causing floods, would marvel at your countless game playing!</p>
             </div>
             <div class="card-footer">
               <a href="#" class="btn btn-primary">Find Out More!</a>
             </div>
+            {% else %}
+             <img class="card-img-top" src="/static/home2/lock.png" alt="">
+            <div class="card-body">
+              <p class="card-text">Keep trading to unlock this achievement!</p>
+            </div>
+      {% endif %}
           </div>
         </div>
 		
@@ -153,12 +166,18 @@
             <img class="card-img-top" src="/static/home2/hyperion.jpg" alt="">
             <div class="card-body">
               <h4 class="card-title">HYPERION</h4>
-			  <em class="card-text"><b>Beat the AI!</b></em>
+			  <em class="card-text"><b>Beat the AI {{request.user.profile.trophies.4}} times!</b></em>
               <p class="card-text">Hyperion is the Titan of the sun and moon, and represents watchfulness and wisdom. You have reached this level by beating one of our complex AI players.</p>
             </div>
             <div class="card-footer">
               <a href="#" class="btn btn-primary">Find Out More!</a>
             </div>
+            {% else %}
+             <img class="card-img-top" src="/static/home2/lock.png" alt="">
+            <div class="card-body">
+              <p class="card-text">Keep trading to unlock this achievement!</p>
+            </div>
+      {% endif %}
           </div>
         </div>
 		
@@ -167,12 +186,18 @@
             <img class="card-img-top" src="/static/home2/hyperion.jpg" alt="">
             <div class="card-body">
               <h4 class="card-title">HYPERION</h4>
-			  <em class="card-text"><b>Beat the AI!</b></em>
-              <p class="card-text">Hyperion is the Titan of the sun and moon, and represents watchfulness and wisdom. You have reached this level by beating one of our complex AI players.</p>
+			  <em class="card-text"><b>You've commanded a league with {{request.user.profile.trophies.5}} people!</b></em>
+              <p class="card-text">Some titan that somehow relates to league managing</p>
             </div>
             <div class="card-footer">
               <a href="#" class="btn btn-primary">Find Out More!</a>
             </div>
+            {% else %}
+             <img class="card-img-top" src="/static/home2/lock.png" alt="">
+            <div class="card-body">
+              <p class="card-text">Keep trading to unlock this achievement!</p>
+            </div>
+      {% endif %}
           </div>
         </div>
 
