@@ -154,6 +154,10 @@ def submitBuy(request,league_id,player_id):
 		player.cumWorth = player.totalWorth + player.buyingPower
 		player.save()
 		new_transaction.save()
+		# update trophies array to count buys
+		user = Player.objects.get(pk=user_id)
+		user.profile.tophies.0 +=1
+		user.save()
 
 		url = '/receipt/'+str(new_transaction.id)+'/'
 		return redirect(url)
@@ -199,6 +203,10 @@ def submitSell(request,league_id,player_id,asset_id):
 			player.totalWorth -= sellTotal
 			player.cumWorth = player.buyingPower + player.totalWorth
 			player.save()
+			# update trophies array to count sells
+			user = Player.objects.get(pk=user_id)
+			user.profile.tophies.1 +=1
+			user.save()
 			asset.shares = currShares - shares
 			if asset.shares == 0:
 				asset.delete()

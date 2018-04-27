@@ -80,28 +80,40 @@
 
         <div class="col-lg-3 col-md-6 mb-4">
           <div class="card">
+          	{% if request.user.profile.trophies.0 > 0 %}
             <img class="card-img-top" src="/static/home2/atlas.jpg" alt="">
             <div class="card-body">
               <h4 class="card-title">ATLAS</h4>
-			  <em class="card-text"><b>Made 5 buys!</b></em>
+			  <em class="card-text"><b>Made {{request.user.profile.trophies.0}} buys!</b></em>
               <p class="card-text">Just like Atlas led the Titans in battle, you've been working hard to expand your portfolio! Keep trading and you'll soon be on top of the world! (Pun intended)</p>
             </div>
             <div class="card-footer">
               <a href="#" class="btn btn-primary">Find Out More!</a>
+            </div>
+            {% else %}
+             <img class="card-img-top" src="/static/home2/lock.png" alt="">
+            <div class="card-body">
+              <p class="card-text">Keep trading to unlock this achievement!</p>
             </div>
           </div>
         </div>
 		
 		<div class="col-lg-3 col-md-6 mb-4">
           <div class="card">
+          	{% if request.user.profile.trophies.1 > 0 %}
             <img class="card-img-top" src="/static/home2/Metis.jpg" alt="">
             <div class="card-body">
               <h4 class="card-title">METIS</h4>
-			  <em class="card-text"><b>Made 5 sells!</b></em>
+			  <em class="card-text"><b>Made {{request.user.profile.trophies.0}} sells!</b></em>
               <p class="card-text"> Metis is the Titan of wisdom, prudence, and deep thought. Making those smart sells means you are making prudent decisions.</p>
             </div>
             <div class="card-footer">
               <a href="#" class="btn btn-primary">Find Out More!</a>
+            </div>
+            {% else %}
+             <img class="card-img-top" src="/static/home2/lock.png" alt="">
+            <div class="card-body">
+              <p class="card-text">Keep trading to unlock this achievement!</p>
             </div>
           </div>
         </div>
