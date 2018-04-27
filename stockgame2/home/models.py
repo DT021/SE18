@@ -4,15 +4,15 @@ from datetime import datetime
 from django.contrib.auth.models import User as auth_User
 from django.contrib.postgres.fields import ArrayField
 
+
 # Create your models here.
-
-
 class Profile(models.Model):
 	user = models.OneToOneField(auth_User, on_delete=models.CASCADE)
 	trophies = ArrayField(models.IntegerField(), size = 8)
 	statement = models.CharField(max_length=250)
 	name = models.CharField(max_length=40)
 	birthday = models.DateTimeField()
+	TitanCoins = models.IntegerField()
 
 
 class League(models.Model):
@@ -33,6 +33,7 @@ class Player(models.Model):
 	percentChange = models.DecimalField(decimal_places=2,max_digits=25)
 	totalWorth = models.DecimalField(decimal_places=2,max_digits=25)
 	isAi = models.BooleanField(False)
+	cumWorth = models.DecimalField(decimal_places=2,max_digits=35)
 
 
 class Transaction(models.Model):

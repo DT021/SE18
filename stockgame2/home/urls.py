@@ -6,6 +6,7 @@ from django.views.generic.base import TemplateView
 
 
 urlpatterns = [
+	url(r"^badges/", include("pinax.badges.urls", namespace="pinax_badges")),
 	path('', views.index, name='index'),
 	path('newLeague',views.newLeague,name='newLeague'),
 	#path('', TemplateView.as_view(template_name='home.html'), name='home'),
@@ -43,6 +44,8 @@ urlpatterns = [
 	path('anonuser', views.anonuser, name='anonuser'),
 	path('settings', views.settings, name='settings'),
 	path('shop/<int:player_id>/', views.shop, name='shop'),
+	path('awards',views.awards, name='awards'),
+	path('leaderboard',views.leaderboard, name='leaderboard'),
 	path('receipt/<int:transaction_id>/', views.transactionReceipt, name='transactionReceipt'),
 	path('processInvalid', views.processInvalid, name='processInvalid'),
 	path('submitShop/<int:player_id>/',views.submitShop, name='submitShop')
