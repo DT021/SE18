@@ -28,8 +28,10 @@ urlpatterns = [
 	path('league3', views.league3, name='league3'),
 	path('profile', views.profile, name='profile'),
 	path('faq', views.faq, name='faq'),
-	path('buypage', views.buypage, name='buypage'),
-	path('sellform', views.sellform, name='sellform'),
+	path('buypage/<int:league_id>/<int:player_id>/', views.buypage, name='buypage'),
+	path('buy/<int:league_id>/<int:player_id>/',views.submitBuy,name='submitBuy'),
+	path('sell/<int:league_id>/<int:player_id>/<int:asset_id>/', views.sellform, name='sellform'),
+	path('sell2/<int:league_id>/<int:player_id>/<int:asset_id>/', views.submitSell, name='submitSell'),
 	path('profile', views.profile, name='profile'),
 	path('mission', views.mission, name="mission"),
 	path('accounts/', include('django.contrib.auth.urls')),
@@ -37,5 +39,7 @@ urlpatterns = [
 	path('universal', views.universal, name='universal'),
 	path('joinLeague', views.joinLeague, name='joinLeague'),
 	path('anonuser', views.anonuser, name='anonuser'),
-	path('settings', views.settings, name='settings')
+	path('settings', views.settings, name='settings'),
+	path('receipt/<int:transaction_id>/', views.transactionReceipt, name='transactionReceipt'),
+	path('processInvalid', views.processInvalid, name='processInvalid')
 	]

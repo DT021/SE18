@@ -1,9 +1,12 @@
 from django.shortcuts import render
 from django.template import loader
 from django.http import HttpResponse
+from django.core.exceptions import ValidationError
+from django.core import validators
 from home.models import Player, League,Transaction, Asset
 from django.contrib.auth.models import User as auth_User
 from home.forms import SignUpForm, LeagueForm, BuyForm, JoinLeagueForm, SellForm
+from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.core.mail import send_mail
 from django.core.validators import validate_email
@@ -14,6 +17,7 @@ import datetime
 import psycopg2
 from django.contrib.auth import logout
 from home.financepi import getPriceFromAPI
+import decimal
 
 def logout_view(request):
 	logout(request)
@@ -31,7 +35,7 @@ def newLeague(request):
 			ltype = form.cleaned_data.get('leagueType')
 			enddate = form.cleaned_data.get('endDate')
 			date_out = datetime.datetime(*[int(v) for v in enddate.replace('T', '-').replace(':', '-').split('-')])
-
+			
 			b = False
 			if ltype=="crypto":
 				b = True
@@ -61,15 +65,15 @@ def joinLeague(request):
 			# except:
 				# return HttpResponseRedirect('/joinLeague')
 			#if league.joinPassword == password:
+			# #league.numPlayers = 0
+			# # for p in players:
+				# # league.numPlayers+=1
 			players = Player.objects.filter(leagueID = league)
-			league.numPlayers = 0
-			for p in players:
-				league.numPlayers+=1
 			for p in players:
 				if p.userID == current_user:
-					league.save()
 					return HttpResponseRedirect('/joinLeague')
-			newPlayer = Player(leagueID=league,userID=current_user, buyingPower = league.startingBalance,percentChange=0,totalWorth=0)
+			
+			newPlayer = Player(leagueID=league,userID=current_user, buyingPower = league.startingBalance,percentChange=0,totalWorth=0,isAi=False)
 			league.numPlayers+=1
 			league.save()
 			newPlayer.save()
@@ -106,85 +110,135 @@ def submitSignup(request):
 		form = SignUpForm()
 		return render(request, 'signup.html', {'form': form})
 
-def submitBuy(request):
-	if request.method == 'POST' and False:
-		form = BuyForm(request.POST)
-		if form.is_valid():
-			current_user = request.user
-			ticker = form.cleaned_data.get('ticker')
-			shares = form.cleaned_data.get('shares')
-			buyingPrice = form.cleaned_data.get('buyingPrice')
-			new_asset = Asset(ticker = ticker, playerID = current_user.player, leagueID = "tmpLeagueID", shares = shares, buyingPrice = buyingPrice)
-			new_asset.save()
-			tmpPrice = 0
-			new_transaction = Transaction(leagueID = "tmpLeagueID", playerID = current_user.playerID, price = tmpPrice, ticker = ticker, shares = share, isBuy = True)
-			new_transaction.save()
-			return redirect('/home')
+def submitBuy(request,league_id,player_id):
+	league = League.objects.get(pk=league_id)
+	player = Player.objects.get(pk=player_id)
+	form = BuyForm(request.POST)
 
-		else:
-			 #return redirect("/dashboard")
-			return render(request, 'buypage.html', {'form': form})
+	if form.is_valid():	
+		current_user = request.user
+		ticker = form.cleaned_data.get('ticker')
+	# if(ticker == 'GOOG'):
+		# return redirect('/processInvalid')
+	# else:
+		shares = form.cleaned_data.get('shares')
+		#isCrypto = form.cleaned_data.get('isCrypto')
+		isCrypto = False
+		#buyingPrice = form.cleaned_data.get('buyingPrice')
+		buyingPrice = getPriceFromAPI(ticker,isCrypto) #allow crypto in future
+		#player = Player.objects.get(id=3)
+		#tempPid = 1
+		#tempLid = League.objects.get(name="k1")
+		tmpPrice = buyingPrice*shares
+		if tmpPrice > player.buyingPower:
+			storage = messages.get_messages(request)
+			messages.add_message(request, messages.ERROR, 'You do not have sufficient balance.')
+			storage.used = False
+			return render(request, 'buypage.html', {'form': form,'league':league,'player':player})
+		new_asset = Asset(ticker = ticker, playerID = player.id, leagueID = league, shares = shares, buyingPrice = buyingPrice)
+		new_asset.save()
+		player.totalWorth += tmpPrice
+		new_transaction = Transaction(leagueID = league, playerID = player.id, price = tmpPrice, ticker = ticker, shares = shares, isBuy = True)
+		player.buyingPower = player.buyingPower-tmpPrice
+		new_transaction.save()
+
+		url = '/receipt/'+str(new_transaction.id)+'/'
+		return redirect(url)
 	else:
-		form = BuyForm()
-		#return redirect("/dashboard")
-		return render(request, 'buypage.html', {'form': form})
+		return render(request, 'buypage.html', {'form': form,'league':league,'player':player})
+
+
+def transactionReceipt(request,transaction_id):
+	#lastTransaction = Transaction.objects.latest()
+	lastTransaction = Transaction.objects.get(pk=transaction_id)
+	#leagueID = lastTransaction.leagueID
+	#playerID = lastTransaction.playerID
+	price = lastTransaction.price
+	ticker = lastTransaction.ticker
+	shares = lastTransaction.shares
+	return render(request, 'receipt.html', {'price': price, 'ticker': ticker, 'shares': shares})
+
 
 
 # MUST UPDATE PLAYER BUYING POWER
-def submitSell(request):
+def submitSell(request,league_id,player_id,asset_id):
 	current_user = request.user
 	if request.method == 'POST':
 		form = SellForm(request.POST)
 		if (form.is_valid() and current_user.is_authenticated):
-			ticker = form.cleaned_data.get('ticker')
+			#ticker = form.cleaned_data.get('ticker')
 			shares = form.cleaned_data.get('shares')
 			limitPrice = form.cleaned_data.get('limitPrice')
 			stopPrice = form.cleaned_data.get('stopPrice')
+			player = Player.objects.get(pk=player_id)
+			league = League.objects.get(pk=league_id)
+			asset = Asset.objects.get(pk=asset_id)
+			currShares = asset.shares
+			if shares > currShares:
+				storage = messages.get_messages(request)
+				messages.add_message(request, messages.ERROR, 'You do not own this many shares.')
+				storage.used = False
+				#raise forms.ValidationError("You do not own this many shares.")
+				return render(request, 'sellform.html', {'form': form, 'league':league,'player':player,'asset':asset})
+			marketPrice = getPriceFromAPI(asset.ticker, False)
+			sellTotal = marketPrice*shares
+			player.buyingPower += sellTotal
+			player.totalWorth -= sellTotal
+			player.save()
+			asset.shares = currShares - shares
+			if asset.shares == 0:
+				asset.delete()
+			else:
+				asset.save()
+			url = '/leagues/'+str(league.id)+'/'
+			return redirect(url)
+			# # query for current num of shares of ticker
+			# conn = psycopg2.connect(dbname="gyesfxht", user="gyesfxht", password="VwftaOkFDwF2LoGElDUxJ7i4kjJyALvy", host="stampy.db.elephantsql.com", port="5432")
+			# cur = conn.cursor()
 
-			# query for current num of shares of ticker
-			conn = psycopg2.connect(dbname="gyesfxht", user="gyesfxht", password="VwftaOkFDwF2LoGElDUxJ7i4kjJyALvy", host="stampy.db.elephantsql.com", port="5432")
-			cur = conn.cursor()
+			# tempPid = 1	# TMP PLAYER ID
+			# tempLid = League.objects.get(name="k1") # TMP LEAGUE ID
+			# cur.execute('SELECT * from "home_asset" WHERE "playerID" = %s AND "ticker"=%s', [tempPid, ticker])
+			# x = cur.fetchone()
 
-			tempPid = 1	# TMP PLAYER ID
-			tempLid = League.objects.get(name="k1") # TMP LEAGUE ID
-			cur.execute('SELECT * from "home_asset" WHERE "playerID" = %s AND "ticker"=%s', [tempPid, ticker])
-			x = cur.fetchone()
+			# if not x:
+				# #error no
+				# print("ERROR: No such query element. \n")
+				# return HttpResponseRedirect('/dashboard')
 
-			if not x:
-				#error no
-				print("ERROR: No such query element. \n")
-				return HttpResponseRedirect('/dashboard')
+			# currshares = x[3] # gets num shares
+			# if shares > currshares:
+				# # error asked for too many shares back
+				# print("ERROR: Too many shares to sell.\n")
+				# return HttpResponseRedirect('/dashboard')
 
-			currshares = x[3] # gets num shares
-			if shares > currshares:
-				# error asked for too many shares back
-				print("ERROR: Too many shares to sell.\n")
-				return HttpResponseRedirect('/dashboard')
+			# sharesleft = int(currshares) - int(shares)
+			# cur.execute( 'UPDATE home_asset SET "shares"=%s WHERE "playerID" = %s AND "ticker"=%s ', [ sharesleft, tempPid, ticker])
+			# conn.commit() # commits the updates
 
-			sharesleft = int(currshares) - int(shares)
-			cur.execute( 'UPDATE home_asset SET "shares"=%s WHERE "playerID" = %s AND "ticker"=%s ', [ sharesleft, tempPid, ticker])
-			conn.commit() # commits the updates
-
-			marketPrice = getPriceFromAPI(ticker, False) #default not crypto
-			tmpPrice = int(shares)*marketPrice
-			new_transaction = Transaction(leagueID = tempLid, playerID = tempPid, price = tmpPrice, ticker = ticker, shares = sharesleft, isBuy = False)
-			new_transaction.save()
-			return HttpResponseRedirect('/aboutus')
+			# marketPrice = getPriceFromAPI(ticker, False) #default not crypto
+			# tmpPrice = int(shares)*marketPrice
+			# new_transaction = Transaction(leagueID = tempLid, playerID = tempPid, price = tmpPrice, ticker = ticker, shares = sharesleft, isBuy = False)
+			# new_transaction.save()
+			# return HttpResponseRedirect('/aboutus')
 
 		else:
-			print("ERROR: Not authenticated or Form not validated")
-			if (form.is_valid() == False and current_user.is_authenticated == False):
-				print("ERROR: BOTH ERRORS NOT AUTH AND FORM NOT VAL \n")
-			elif (form.is_valid() == False):
-				print("ERRORRRR: form not validated \n")
-			elif (current_user.is_authenticated == False):
-				print("ERRORRRR: user not authenticated \n")
 
-			return HttpResponseRedirect('/dashboard')
+			# print("ERROR: Not authenticated or Form not validated")
+			# if (form.is_valid() == False and current_user.is_authenticated == False):
+				# print("ERROR: BOTH ERRORS NOT AUTH AND FORM NOT VAL \n")
+			# elif (form.is_valid() == False):
+				# print("ERRORRRR: form not validated \n")
+			# elif (current_user.is_authenticated == False):
+				# print("ERRORRRR: user not authenticated \n")
+
+			# return HttpResponseRedirect('/dashboard')
+			return render(request, 'sellform.html', {'form': form})
 	else:
-		print("ERROR: request.method != FALSE")
-		form = SellForm()
-		return HttpResponseRedirect('/dashboard')
+		# print("ERROR: request.method != FALSE")
+		# form = SellForm()
+		# return HttpResponseRedirect('/dashboard')
+		return render(request, 'buypage.html')
 
 
 def get_user(request):
@@ -248,6 +302,7 @@ def dashboard(request):
 	current_user = request.user
 	if (current_user.is_authenticated):
 		players = Player.objects.filter(userID=request.user)
+
 		i = 1
 		admin = list()
 		for p in players:
@@ -257,6 +312,7 @@ def dashboard(request):
 					admin.append(l.userID.username)
 			i = i + 1
 		return render(request, 'dashboard.html', {'players': players, 'admin':admin})
+
 	else:
 		template = loader.get_template('anonuser.html')
 		return HttpResponse(template.render({},request))
@@ -273,14 +329,17 @@ def universal(request):
 	return HttpResponse(template.render({},request))
 def leagues(request,league_id):
 	league = League.objects.get(pk=league_id)
-	players = Player.objects.filter(leagueID = league)
+	players = Player.objects.filter(leagueID = league).order_by('-totalWorth')
 	for p in players:
 		if p.userID.id == league.adminID:
 			admin = p.userID # admin is auth_user object
 		if p.userID.id == request.user.id:
 			currPlayer = p
-	players.order_by('-totalWorth')
-	return render(request, 'individualleague.html', {'league': league, 'admin': admin, 'players':players,'currPlayer':currPlayer})
+	pAssets = Asset.objects.filter(playerID = currPlayer.id)
+	print(pAssets)
+	#players.order_by('-totalWorth')
+	return render(request, 'individualleague.html', {'league': league, 'admin': admin, 'players':players,'currPlayer':currPlayer,'pAssets':pAssets})
+
 def league1(request):	# (request, league_id)
 	template = loader.get_template('individualleague.html')
 	return HttpResponse(template.render({},request))
@@ -288,12 +347,15 @@ def league2(request):
 	return HttpResponse("This is the league2 page.")
 def league3(request):
 	return HttpResponse("This is the league3 page.")
-def buypage(request):
-	template = loader.get_template('buypage.html')
-	return HttpResponse(template.render({},request))
-def sellform(request):
-	template = loader.get_template('sellform.html')
-	return HttpResponse(template.render({},request))
+def buypage(request,league_id,player_id):
+	league = League.objects.get(pk=league_id)
+	player = Player.objects.get(pk=player_id)
+	return render(request, 'buypage.html', {'league': league,'player':player})
+def sellform(request,league_id,player_id,asset_id):
+	league = League.objects.get(pk=league_id)
+	player = Player.objects.get(pk=player_id)
+	asset = Asset.objects.get(pk=asset_id)
+	return render(request, 'sellform.html', {'league': league,'player':player,'asset':asset})
 def profile(request):
 	current_user = request.user
 	if (current_user.is_authenticated):
@@ -306,13 +368,19 @@ def profile(request):
 def mission(request):
 	template = loader.get_template('mission.html')
 	return HttpResponse(template.render({},request))
-def joinLeague(request):
-	template = loader.get_template('joinleague.html')
-	return HttpResponse(template.render({},request))
+# def joinLeague(request):
+	# template = loader.get_template('joinleague.html')
+	# return HttpResponse(template.render({},request))
 def anonuser(request):
 	template = loader.get_template('anonuser.html')
 	return HttpResponse(template.render({},request))
 def settings(request):
 	template = loader.get_template('settings.html')
+	return HttpResponse(template.render({},request))
+def receipt(request):
+	template = loader.get_template('receipt.html')
+	return HttpResponse(template.render({},request))
+def processInvalid(request):
+	template = loader.get_template('processInvalid.html')
 	return HttpResponse(template.render({},request))
 # Create your views here.

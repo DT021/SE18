@@ -8,6 +8,7 @@ from django.core import validators
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User as auth_User
 from home.models import Player, League, Asset
+from home.financepi import getPriceFromAPI
 
 class SignUpForm(UserCreationForm):
 	# username = forms.CharField(label='Your name', max_length=20)
@@ -21,15 +22,41 @@ class SignUpForm(UserCreationForm):
 class BuyForm(forms.Form):
 	ticker = forms.CharField(max_length=20)
 	shares = forms.DecimalField(decimal_places=0, max_digits=40)
-	buyingPrice = forms.DecimalField(decimal_places = 2, max_digits=40)
+	isCrypto = forms.BooleanField()
+	buyingPrice = forms.DecimalField(decimal_places = 2, max_digits=40, required=False)
+	def clean_ticker(self):
+		isCrypto = False
+		ticker = self.cleaned_data['ticker']
+		buyingPrice = getPriceFromAPI(ticker,isCrypto)
+		if buyingPrice == -1:
+			raise ValidationError(_("Ticker does not exist. "))
+		elif buyingPrice == -22:
+			raise ValidationError(_("Too many requests at this time."))
+		elif buyingPrice <0:
+			raise ValidationError (_("Invalid input"))
+		return ticker
+	# def clean_shares(self):
+		# isCrypto = False
+		# ticker = self.cleaned_data['ticker']
+		# shares = self.cleaned_data['shares']
+		# buyingPrice = getPriceFromAPI(ticker,isCrypto)
+		# tmpPrice = buyingPrice*shares
+		# if tmpPrice > player.buyingPower:
+			# raise ValidationError (_("Current balance insufficient."))
+		# return shares
 
 class SellForm(forms.Form):
-	ticker = forms.CharField(max_length=20)
+	#ticker = forms.CharField(max_length=20)
 	shares = forms.DecimalField(decimal_places=0, max_digits=40)
-	selltype = forms.CharField(max_length=20)
-	limitPrice = forms.DecimalField(decimal_places = 2, max_digits=40)
-	stopPrice = forms.DecimalField(decimal_places = 2, max_digits=40)
-
+	selltype = forms.CharField(max_length=20, required=False)
+	limitPrice = forms.DecimalField(decimal_places = 2, max_digits=40, required=False)
+	stopPrice = forms.DecimalField(decimal_places = 2, max_digits=40, required=False)
+	# def clean(self):
+		# asset = Asset.objects.get(pk=asset_id)
+		# if shares > asset.shares:
+			# raise ValidationError(_("You do not own this many shares."))
+			# return render(request, 'sellform.html', {'form': form})
+	
 class LeagueForm(forms.Form):
 	lname = forms.CharField(max_length=50)
 	endDate = forms.CharField(max_length=20)
@@ -43,8 +70,8 @@ class LeagueForm(forms.Form):
 			raise ValidationError(_("The date cannot be in the past!"))
 			date_inpast = True
 			#return render(request, 'createleague.html', {'form': form})
-		return date_out
-		
+		return enddate
+
 class JoinLeagueForm(forms.Form):
 	username = forms.CharField(max_length=50)
 	password = forms.CharField(max_length=20)
@@ -53,6 +80,7 @@ class JoinLeagueForm(forms.Form):
 			password = self.cleaned_data.get('password')
 			username = self.cleaned_data.get('username')
 			league = League.objects.get(name=username)
+			
 		except:
 			raise ValidationError(_("League does not exist!"))
 		
@@ -69,7 +97,7 @@ class JoinLeagueForm(forms.Form):
 		else:
 			raise ValidationError(_("Password is incorrect!"))
 		return password	
-	
+
 class LoginForm(forms.Form):
 	username = forms.CharField(label='Your name', max_length=20)
 	password = forms.CharField(max_length=20)
