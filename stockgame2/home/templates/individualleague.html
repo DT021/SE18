@@ -19,7 +19,7 @@
     
     <!-- Custom styles for this template -->
     <link href="/static/dashboard/css/2-col-portfolio.css" rel="stylesheet">
-
+    <link href="/static/leaguepage/css/leaguepage.css" rel="stylesheet">
     <link href="/static/dashboard2/vendor/metisMenu/metisMenu.min.css" rel="stylesheet">
 	
     <!-- Custom CSS -->
@@ -29,6 +29,11 @@
     <link href="/static/dashboard2/vendor/morrisjs/morris.css" rel="stylesheet">
      <!-- Custom Fonts -->
     <link href="/static/dashboard2/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <!-- Custom JS -->
+    <link href="/static/leaguepage/js/fbshare.js">
+
   </head>
 
   <body background = "/static/home2/skyscraper1.jpg" style = "background-repeat:no-repeat; background-size:cover; background-attachment: fixed;">
@@ -177,8 +182,8 @@
                <ol style="list-style-type:none;margin:0;padding:0;font-size:1em;text-align:center;border-bottom:1px solid rgba(118,118,118,0.1);color:#767676;">
                 <li style="text-align:left">{{request.user.username}}:</li>
                 <li>Buying Power: ${{currPlayer.buyingPower}}</li>
-                <li>Rank: 1</li>
-                <li>Total Worth: ${{currPlayer.totalWorth}}</li>
+                <li>Rank: {{rank}}</li>
+                <li>Total Assets: ${{currPlayer.totalWorth}}</li>
               </ol>
               <ol style="list-style-type:none;margin:0;padding:0;font-size:1em;text-align:center;border-bottom:1px solid rgba(118,118,118,0.1);color:#767676;">
                 <li style="text-align:left">League Settings:</li>
@@ -216,19 +221,14 @@
         </div>
     </div>
 
-        <div class="col-lg-6 portfolio-item">
+        <div class="col-lg-12 portfolio-item">
           <div class="card h-100">
            <a href="/buypage/{{league.id}}/{{currPlayer.id}}/"><div class="btn btn-success" style="width:100%;height:40%"><i class="fa fa-plus-square" style="font-size:400%;margin:auto"></i><h1>BUY</h1>
           </div></a>
           </div>
         </div>
         
-        <div class="col-lg-6 portfolio-item">
-          <div class="card h-100">
-          <a href="/sellform"><div class="btn btn-success" style="width:100%;height:40%" ><i class="fa fa-plus-square" style="font-size:400%;margin:auto"></i><h1>SELL</h1>
-          </div></a>
-          </div>
-        </div>
+        
 		
 		{% for a in pAssets%}
 		<div class="col-lg-6 portfolio-item">
@@ -241,7 +241,39 @@
       <!-- /.row -->
 
     </div>
+
+    <!-- Add email invite link -->
+    <div class="col-lg-12 portfolio-item">
+      <div class="card h-100">
+          <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#inviteFriendsModal">
+            Invite your friends!
+          </button>
+        </div>
+      </div>
+    </div>
     <!-- /.container -->
+
+    <!-- Modal -->
+    <div class="modal fade" id="inviteFriendsModal" tabindex="-1" role="dialog" aria-labelledby="inviteFriendsModal" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="inviteFriendsModal">Invite your friends</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="row">
+              
+                <a class="fa-top fa-facebook" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Ftitantrading.com%2F&amp;src=sdkpreparse" class="fb-xfbml-parse-ignore"><div class="fb-share-button" data-href="https://titantrading.com" data-layout="button" data-size="large" data-mobile-iframe="false"></div></a>
+                <a href="mailto:someone@example.com?Subject=Titan%20Trading%20League%20Invitation%20&amp;body=You%20have%20been%20invited%20to%20compete%20against%20your%20friends%20on%20Titan%20Trading%2C%20the%20leading%20fantasy%20stock%20trading%20application!%0D%0ATo%20join,%20just%20sign%20up%20for%20an%20account%20and%20press%20the%20'Join%20League'%20button%20on%20the%20dashboard.Then%20fill%20out%20the%20league%20information%20as%20shown%20below:%0D%0A%0D%0ALeague%20name:'{{league.name}}'%0D%0ALeague%20Password%20:'{{league.joinPassword}}'%0D%0A%0D%0AWe%20look%20forward%20to%20seeing%20you%20join%20in%20on%20the%20fun!%0D%0A%0D%0AMay%20the%20tickers%20be%20in%20your%20favor!%0D%0AThe%20Titan%20Trading%20Team" class="fa-top fa fa-envelope-square" style="font-size:400%;margin:auto"></a>  
+                <a href="http://twitter.com/home?status=I'm having so much fun playing Titan Trading! Come join on the fun! Just use the 'Join League' function with the league name: '{{league.name}}' and password: '{{league.joinPassword}}'" class="fa-top fa fa-twitter" style="font-size:400%;margin:auto"></a>  
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
 
   <!-- Footer -->
 	<footer class="py-2 filter-dark" style="background-color: rgba(81,81,81,0.9)">

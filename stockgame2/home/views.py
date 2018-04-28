@@ -5,7 +5,7 @@ from django.core.exceptions import ValidationError
 from django.core import validators
 from home.models import Player, League,Transaction, Asset, Profile
 from django.contrib.auth.models import User as auth_User
-from home.forms import SignUpForm, LeagueForm, BuyForm, JoinLeagueForm, SellForm
+from home.forms import SignUpForm, LeagueForm, BuyForm, JoinLeagueForm, SellForm, CreateAiForm
 from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.core.mail import send_mail
@@ -175,17 +175,28 @@ def transactionReceipt(request,transaction_id):
 	return render(request, 'receipt.html', {'price': price, 'ticker': ticker, 'shares': shares})
 
 
-
+def createai(request):
+	form = CreateAiForm(request.POST)
+	if(form.is_valid()):
+		ainame = form.cleaned_data.get('ainame')
+		leaguename = form.cleaned_data.get('leaguename')
+		league = League.objects.get(name=leaguename)
+		userid = auth_User.objects.filter(username = ainame)
+		print(userid)
+		newPlayer = Player(leagueID=league,userID=userid.first(), buyingPower = league.startingBalance,percentChange=0,totalWorth=0,isAi=True)
+		league.numPlayers+=1
+		league.save()
+		newPlayer.save()
+		return render(request, 'individualleague.html')
+	else:
+		return render(request, 'home.html')
 # MUST UPDATE PLAYER BUYING POWER
 def submitSell(request,league_id,player_id,asset_id):
 	current_user = request.user
 	if request.method == 'POST':
 		form = SellForm(request.POST)
 		if (form.is_valid() and current_user.is_authenticated):
-			#ticker = form.cleaned_data.get('ticker')
 			shares = form.cleaned_data.get('shares')
-			limitPrice = form.cleaned_data.get('limitPrice')
-			stopPrice = form.cleaned_data.get('stopPrice')
 			player = Player.objects.get(pk=player_id)
 			league = League.objects.get(pk=league_id)
 			asset = Asset.objects.get(pk=asset_id)
@@ -194,7 +205,6 @@ def submitSell(request,league_id,player_id,asset_id):
 				storage = messages.get_messages(request)
 				messages.add_message(request, messages.ERROR, 'You do not own this many shares.')
 				storage.used = False
-				#raise forms.ValidationError("You do not own this many shares.")
 				return render(request, 'sellform.html', {'form': form, 'league':league,'player':player,'asset':asset})
 			marketPrice = getPriceFromAPI(asset.ticker, False)
 			sellTotal = marketPrice*shares
@@ -212,52 +222,12 @@ def submitSell(request,league_id,player_id,asset_id):
 				asset.save()
 			url = '/leagues/'+str(league.id)+'/'
 			return redirect(url)
-			# # query for current num of shares of ticker
-			# conn = psycopg2.connect(dbname="gyesfxht", user="gyesfxht", password="VwftaOkFDwF2LoGElDUxJ7i4kjJyALvy", host="stampy.db.elephantsql.com", port="5432")
-			# cur = conn.cursor()
-
-			# tempPid = 1	# TMP PLAYER ID
-			# tempLid = League.objects.get(name="k1") # TMP LEAGUE ID
-			# cur.execute('SELECT * from "home_asset" WHERE "playerID" = %s AND "ticker"=%s', [tempPid, ticker])
-			# x = cur.fetchone()
-
-			# if not x:
-				# #error no
-				# print("ERROR: No such query element. \n")
-				# return HttpResponseRedirect('/dashboard')
-
-			# currshares = x[3] # gets num shares
-			# if shares > currshares:
-				# # error asked for too many shares back
-				# print("ERROR: Too many shares to sell.\n")
-				# return HttpResponseRedirect('/dashboard')
-
-			# sharesleft = int(currshares) - int(shares)
-			# cur.execute( 'UPDATE home_asset SET "shares"=%s WHERE "playerID" = %s AND "ticker"=%s ', [ sharesleft, tempPid, ticker])
-			# conn.commit() # commits the updates
-
-			# marketPrice = getPriceFromAPI(ticker, False) #default not crypto
-			# tmpPrice = int(shares)*marketPrice
-			# new_transaction = Transaction(leagueID = tempLid, playerID = tempPid, price = tmpPrice, ticker = ticker, shares = sharesleft, isBuy = False)
-			# new_transaction.save()
-			# return HttpResponseRedirect('/aboutus')
+			
 
 		else:
 
-			# print("ERROR: Not authenticated or Form not validated")
-			# if (form.is_valid() == False and current_user.is_authenticated == False):
-				# print("ERROR: BOTH ERRORS NOT AUTH AND FORM NOT VAL \n")
-			# elif (form.is_valid() == False):
-				# print("ERRORRRR: form not validated \n")
-			# elif (current_user.is_authenticated == False):
-				# print("ERRORRRR: user not authenticated \n")
-
-			# return HttpResponseRedirect('/dashboard')
 			return render(request, 'sellform.html', {'form': form})
 	else:
-		# print("ERROR: request.method != FALSE")
-		# form = SellForm()
-		# return HttpResponseRedirect('/dashboard')
 		return render(request, 'buypage.html')
 
 
@@ -280,11 +250,37 @@ def get_user(request):
 
 	return render(request, 'user.html', {'form': form})
 
+def sendinvite(request):
+	current_user = request.user
+	if(request.method == 'POST'):
+		if(current_user.is_authenticated):
+			#Make query for the league password
+			conn = psycopg2.connect(dbname="gyesfxht", user="gyesfxht", password="VwftaOkFDwF2LoGElDUxJ7i4kjJyALvy", host="stampy.db.elephantsql.com", port="5432")
+			cur = conn.cursor()
+			cur.execute()
+
+			x = cur.fetchone()
+
+			#username = 
+			league = League.objects.get(name=username)
+			password = league.joinPassword
+			send_mail(
+				'Titan Trading League Invitation',
+				'You have been invited to compete against your friends on Titan Trading, the leading fantasy stock trading application!\n To join just sign up for an account and press the \'Join League\' button on the dashboard. The league password is: ' + password + '\nWe look forward to seeing you join in on the fun!\nMay the odds be in your favor,\nThe Titan Trading Team'
+				'titantrading@gmail.com',
+				['to@example.com'],
+				fail_silently=False,
+			)
+
+
 def index(request):
 	template = loader.get_template('greet.html')
 	return HttpResponse(template.render({},request))
 def signup(request):
 	template = loader.get_template('signup.html')
+	return HttpResponse(template.render({},request))
+def createaipage(request):
+	template = loader.get_template('createaipage.html')
 	return HttpResponse(template.render({},request))
 def login(request):
 	template = loader.get_template('login.html')
@@ -325,6 +321,7 @@ def universal(request):
 	template = loader.get_template('universalleague.html')
 	return HttpResponse(template.render({},request))
 def leagues(request,league_id):
+	current_user = request.user
 	league = League.objects.get(pk=league_id)
 	endDate = league.endDate
 	presentDate = datetime.now()
@@ -333,30 +330,31 @@ def leagues(request,league_id):
 	rank = 0
 	numAIbeat = 0
 	for p in players:
-		count++
+		count+=1
 		if p.userID.id == league.adminID:
 			admin = p.userID # admin is auth_user object
 		if p.userID.id == request.user.id:
 			currPlayer = p
 			rank = count
 		if p.isAi and count > 0: # AI placing worse than user
-			numAIbeat++
+			numAIbeat += 1
 	if (endDate < presentDate): # league has ended, redirect to leaderboard.html
-		if !(league.hasEnded): # need to handle trophies
+		if not (league.hasEnded): # need to handle trophies
 			league.hasEnded = True
 			current_user.profile.trophies[3] += 1 # increment for game played
 			if rank < 4: # top 3 = win
 				current_user.profile.trophies[2] += 1 # increment for win
 			current_user.profile.trophies[4] = current_user.profile.trophies[4] + numAIbeat 
-			if currPlayer.userID.id == request.user.id: # this user is admin
+			if admin.id == request.user.id: # this user is admin
 				if current_user.profile.trophies[5] < count: # new record for # ppl managed
 					current_user.profile.trophies[5] = count
 			current_user.save()
 		return render(request, 'leaderboard.html', {'league': league, 'admin': admin, 'players':players,'currPlayer':currPlayer, 'rank':rank})
+
 	pAssets = Asset.objects.filter(playerID = currPlayer.id)
 	print(pAssets)
 	#players.order_by('-totalWorth')
-	return render(request, 'individualleague.html', {'league': league, 'admin': admin, 'players':players,'currPlayer':currPlayer,'pAssets':pAssets})
+	return render(request, 'individualleague.html', {'league': league, 'admin': admin, 'players':players,'currPlayer':currPlayer,'pAssets':pAssets,'rank':rank})
 
 def league1(request):	# (request, league_id)
 	template = loader.get_template('individualleague.html')
@@ -382,13 +380,19 @@ def profile(request):
 	else:
 		template = loader.get_template('anonuser.html')
 		return HttpResponse(template.render({},request))
+def getTargetedNews(request):
+	link = "https://www.google.co.uk/finance/company_news?q=LON:VOD&output=rss"
+	#print (top_headlines)
+	conn = psycopg2.connect(dbname="gyesfxht", user="gyesfxht", password="VwftaOkFDwF2LoGElDUxJ7i4kjJyALvy", host="stampy.db.elephantsql.com", port="5432")
+	cur.execute('SELECT * from "home_asset" WHERE "playerID" = %s', [current_user.id])
+	x = cur.fetchone
+	ticker = x[1]
+	print (ticker)
+	return render(request, 'home.html', {'ticker': ticker})
 
 def mission(request):
 	template = loader.get_template('mission.html')
 	return HttpResponse(template.render({},request))
-# def joinLeague(request):
-	# template = loader.get_template('joinleague.html')
-	# return HttpResponse(template.render({},request))
 def anonuser(request):
 	template = loader.get_template('anonuser.html')
 	return HttpResponse(template.render({},request))
