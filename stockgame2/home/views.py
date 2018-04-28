@@ -14,6 +14,7 @@ from django.contrib.auth import login as auth_login, authenticate
 from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import render, redirect
 import datetime
+from django.utils import timezone
 import psycopg2
 from django.contrib.auth import logout
 from home.financepi import getPriceFromAPI
@@ -295,16 +296,23 @@ def dashboard(request):
 	current_user = request.user
 	if (current_user.is_authenticated):
 		players = Player.objects.filter(userID=request.user)
-
+		
 		i = 1
 		admin = list()
+		rank = list()
 		for p in players:
-			people = Player.objects.filter(leagueID = p.leagueID)
+			people = Player.objects.filter(leagueID = p.leagueID).order_by('-cumWorth')
+			count = 0
 			for l in people:
+				count+=1
 				if l.userID.id == p.leagueID.adminID:
 					admin.append(l.userID.username)
+				if l.userID.id == request.user.id:
+					rank.append(count)
 			i = i + 1
-		return render(request, 'dashboard.html', {'players': players, 'admin':admin})
+			
+			
+		return render(request, 'dashboard.html', {'players': players, 'admin':admin,'rank':rank})
 
 	else:
 		template = loader.get_template('anonuser.html')
@@ -324,7 +332,7 @@ def leagues(request,league_id):
 	current_user = request.user
 	league = League.objects.get(pk=league_id)
 	endDate = league.endDate
-	presentDate = datetime.now()
+	presentDate = timezone.now()
 	players = Player.objects.filter(leagueID = league).order_by('-cumWorth')
 	count = 0 
 	rank = 0
