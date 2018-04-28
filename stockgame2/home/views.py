@@ -358,6 +358,15 @@ def profile(request):
 	else:
 		template = loader.get_template('anonuser.html')
 		return HttpResponse(template.render({},request))
+def getTargetedNews(request):
+	link = "https://www.google.co.uk/finance/company_news?q=LON:VOD&output=rss"
+	#print (top_headlines)
+	conn = psycopg2.connect(dbname="gyesfxht", user="gyesfxht", password="VwftaOkFDwF2LoGElDUxJ7i4kjJyALvy", host="stampy.db.elephantsql.com", port="5432")
+	cur.execute('SELECT * from "home_asset" WHERE "playerID" = %s', [current_user.id])
+	x = cur.fetchone
+	ticker = x[1]
+	print (ticker)
+	return render(request, 'home.html', {'ticker': ticker})
 
 def mission(request):
 	template = loader.get_template('mission.html')
