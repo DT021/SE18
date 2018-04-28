@@ -292,6 +292,56 @@ def aboutus(request):
 def home(request):
 	template = loader.get_template('home.html')
 	return HttpResponse(template.render({},request))
+def buydash(ticker, shares, league_id, player_id):
+	league = League.objects.get(pk=league_id)
+	player = Player.objects.get(pk=player_id)
+	buyingPrice = getPriceFromAPI(ticker,False)
+	tmpPrice = buyingPrice*shares
+	if tmpPrice > player.buyingPower:
+		storage = messages.get_messages(request)
+		messages.add_message(request, messages.ERROR, 'You do not have sufficient balance.')
+		storage.used = False
+		return render(request, 'dashboard.html')
+	pAssets = Asset.objects.filter(leagueID = league,playerID = player.id)
+	assetExists = False
+	for i in pAssets:
+		if i.ticker == ticker:
+			assetExists = True
+			new_asset = i
+	if assetExists == False:
+		new_asset = Asset(ticker = ticker, playerID = player.id, leagueID = league, shares = shares, buyingPrice = buyingPrice)
+	else:
+		new_asset.shares += shares
+		new_asset.buyingPrice = buyingPrice
+	new_asset.save()
+	player.totalWorth += tmpPrice
+	new_transaction = Transaction(leagueID = league, playerID = player.id, price = tmpPrice, ticker = ticker, shares = shares, isBuy = True)
+	player.buyingPower -= tmpPrice
+	player.cumWorth = player.totalWorth + player.buyingPower
+	player.save()
+	new_transaction.save()
+def selldash(shares,player_id, league_id, asset_id):
+	player = Player.objects.get(pk=player_id)
+	league = League.objects.get(pk=league_id)
+	asset = Asset.objects.get(pk=asset_id)
+	currShares = asset.shares
+	if shares > currShares:
+		storage = messages.get_messages(request)
+		messages.add_message(request, messages.ERROR, 'You do not own this many shares.')
+		storage.used = False
+		#raise forms.ValidationError("You do not own this many shares.")
+		return render(request, 'sellform.html', {'form': form, 'league':league,'player':player,'asset':asset})
+	marketPrice = getPriceFromAPI(asset.ticker, False)
+	sellTotal = marketPrice*shares
+	player.buyingPower += sellTotal
+	player.totalWorth -= sellTotal
+	player.cumWorth = player.buyingPower + player.totalWorth
+	player.save()
+	asset.shares = currShares - shares
+	if asset.shares == 0:
+		asset.delete()
+	else:
+		asset.save()
 def dashboard(request):
 	current_user = request.user
 	if (current_user.is_authenticated):
@@ -301,8 +351,86 @@ def dashboard(request):
 		admin = list()
 		rank = list()
 		for p in players:
-			people = Player.objects.filter(leagueID = p.leagueID).order_by('-cumWorth')
+
 			count = 0
+
+			currasset = list()
+			curramt = list()
+			result = list()
+			people = Player.objects.filter(leagueID = p.leagueID).order_by('-cumWorth')
+			assething = Asset.objects.filter(leagueID = p.leagueID)
+			for l in people:
+				if l.userID.id == 14:
+					for h in assething:
+						if h.playerID == l.id:
+							currasset.append(h.ticker)
+							curramt.append(h.shares)
+					result = easyAI(p.leagueID.isCrypto,l.buyingPower,currasset,curramt)
+					 #allow crypto in future
+					shares = result[1]
+					ticker = result[0]
+					if shares != 0:
+						buydash(ticker, shares,l.leagueID.id, l.id)
+					print(result[3])
+					print(currasset)
+					print(curramt)
+					if result[3] != 0:
+						asset123 = Asset.objects.filter(ticker = result[2])
+						print(result[2])
+						print(asset123)
+						selldash(result[3],l.id,l.leagueID.id,asset123.first().id)
+					result.clear()
+					currasset.clear()
+					curramt.clear()
+					
+				if l.userID.id == 15:
+					for h in assething:
+						if h.playerID == l.id:
+							currasset.append(h.ticker)
+							curramt.append(h.shares)
+					result = getBuy_med(l.buyingPower)
+					ticker = result[0]
+					shares = result[1]
+					if shares != 0:
+						buydash(ticker, shares,l.leagueID.id, l.id)
+					print(currasset)
+					print(curramt)
+					result.clear()
+					result = getSell_med(currasset,curramt)
+					ticker = result[0]
+					shares = result[1]
+					if shares != 0:
+						asset123 = Asset.objects.filter(ticker = ticker)
+						print(asset123)
+						selldash(shares,l.id,l.leagueID.id,asset123.first().id)
+					result.clear()
+					currasset.clear()
+					curramt.clear()
+				if l.userID.id == 16:
+					for h in assething:
+						if h.playerID == l.id:
+							currasset.append(h.ticker)
+							curramt.append(h.shares)
+					result = getBuy_hard(l.buyingPower)
+					ticker = result[0]
+					shares = result[1]
+					if shares != 0:
+						buydash(ticker, shares,l.leagueID.id, l.id)
+					print(currasset)
+					print(curramt)
+					result.clear()
+					result = getSell_hard(currasset,curramt)
+					ticker = result[0]
+					shares = result[1]
+					if shares != 0:
+						asset123 = Asset.objects.filter(ticker = ticker)
+						print(asset123)
+						selldash(shares,l.id,l.leagueID.id,asset123.first().id)
+					result.clear()
+					currasset.clear()
+					curramt.clear()
+
+
 			for l in people:
 				count+=1
 				if l.userID.id == p.leagueID.adminID:
