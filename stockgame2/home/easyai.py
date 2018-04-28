@@ -1,8 +1,9 @@
 import random
 import math
-from financepi import *
-from listofstockscrypto import *
+from home.financepi import *
+from home.listofstockscrypto import *
 import time
+import decimal
 
 def easyAI(isCrypto, buyingPower, currAssets, currAmts):
 
@@ -46,15 +47,17 @@ def easyAI(isCrypto, buyingPower, currAssets, currAmts):
         randBuyStock = 'BTC'
         randBuyNum = 1
   else: # has a valid price because has not reached max iter
-      rangeNumToBuy = math.floor(abs(percent*buyingPower/float(price)))
+      rangeNumToBuy = math.floor(abs(float(percent)*float(buyingPower)/float(price)))
       randBuyNum = random.randint(0, rangeNumToBuy)
 
   ################ SELL ORDER
   lenAssets = len(currAssets)
+  if lenAssets == 0:
+    return [randBuyStock, randBuyNum, 'none123', 0]
   randInd =random.randint(0, lenAssets-1)
   randSellStock = currAssets[randInd]
   randNumToSell = random.randint(0, currAmts[randInd])
 
-  return randBuyStock, randBuyNum, randSellStock, randNumToSell
+  return [randBuyStock, randBuyNum, randSellStock, randNumToSell]
 
 print(easyAI(False, 1000000, ['abc', 'fgb', 'lmf'], [5, 20, 30]))

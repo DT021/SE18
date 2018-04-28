@@ -1,7 +1,7 @@
-from listofstockscrypto import *
-from aiscripts import *
-from financepi import *
-from medai import *
+from home.listofstockscrypto import *
+from home.aiscripts import *
+from home.financepi import *
+from home.medai import *
 import math
 import random
 
@@ -35,9 +35,9 @@ def getBuy_hard(buyingPower):
 			hi_score = tot_score
 			hi_item = item
 	price = getPriceFromAPI(hi_item, False)
-	rangeNumToBuy = math.floor(abs(0.25*buyingPower/float(price)))
+	rangeNumToBuy = math.floor(abs(0.25*float(buyingPower)/float(price)))
 	randBuyNum = random.randint(1, rangeNumToBuy)
-	return hi_item, randBuyNum
+	return [hi_item, randBuyNum]
 	
 def getSell_hard(currAssets, currAmts):
 	if not currAssets:
@@ -74,5 +74,4 @@ def getSell_hard(currAssets, currAmts):
 			lo_index = index
 		index+=1
 	randNumToSell = random.randint(1, currAmts[lo_index])
-	return lo_item, randNumToSell
-	
+	return [lo_item, randNumToSell]

@@ -1,8 +1,8 @@
 import numpy as np
 import math
-from financepi import *
+from home.financepi import *
 import time
-from listofstockscrypto import *
+from home.listofstockscrypto import *
 #import matplotlib.pyplot as plt
 #import matplotlib.lines as mlines
 import tensorflow as tf
@@ -102,27 +102,27 @@ def getBuy_med(buyingPower):
 			hi_item = item
 	#print([hi_item,hi_score])
 	price = getPriceFromAPI(hi_item, False)
-	rangeNumToBuy = math.floor(abs(0.25*buyingPower/float(price)))
+	rangeNumToBuy = math.floor(abs(0.25*float(buyingPower)/float(price)))
 	randBuyNum = random.randint(1, rangeNumToBuy)
-	return hi_item, randBuyNum
+	return [hi_item, randBuyNum]
 	
 def getSell_med(currAssets, currAmts):
-	if not currAssets:
+	if currAmts == 0:
 		return 'none123', 0
 	#list = getDow()
 	lo_score = 10000000
 	lo_item = 'blank'
 	index = 0
 	lo_index = 0
-	for item in list:
+	for item in currAssets:
 		data = getLastMonth(item)
 		[w,b,loss] = runLinearReg(data)
 		score = w*1000/loss
-		if score<hi_score:
+		if score<lo_score:
 			lo_score = score
 			lo_item = item
 			lo_index = index
 		index+=1
 	#print([hi_item,hi_score])
 	randNumToSell = random.randint(1, currAmts[lo_index])
-	return lo_item, randNumToSell
+	return [lo_item, randNumToSell]
