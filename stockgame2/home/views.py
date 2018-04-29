@@ -150,10 +150,13 @@ def submitBuy(request,league_id,player_id):
 		# return redirect('/processInvalid')
 	# else:
 		shares = form.cleaned_data.get('shares')
-		#isCrypto = form.cleaned_data.get('isCrypto')
-		isCrypto = False
+		isCrypto = form.cleaned_data.get('isCrypto')
+		#isCrypto = False
 		#buyingPrice = form.cleaned_data.get('buyingPrice')
-		buyingPrice = getPriceFromAPI(ticker,isCrypto) #allow crypto in future
+		if isCrypto == True:
+			buyingPrice = getCryptoPriceFromAPI(ticker, isCrypto)
+		if isCrypto == False:
+			buyingPrice = getPriceFromAPI(ticker,isCrypto) #allow crypto in future
 		#player = Player.objects.get(id=3)
 		#tempPid = 1
 		#tempLid = League.objects.get(name="k1")
