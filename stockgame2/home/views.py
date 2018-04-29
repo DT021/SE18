@@ -50,9 +50,9 @@ def newLeague(request):
 			b = False
 			if ltype=="crypto":
 				b = True
-			new_league = League(adminID = current_user.id,name=lname,numPlayers=1,joinPassword=joinpwd,startingBalance=startbal,isCrypto=b, endDate=date_out,isUniversal=False)
+			new_league = League(adminID = current_user.id,name=lname,numPlayers=1,joinPassword=joinpwd,startingBalance=startbal,isCrypto=b, endDate=date_out,isUniversal=False, hasEnded = False)
 			new_league.save()
-			newPlayer = Player(leagueID=new_league,userID=current_user, buyingPower = startbal,percentChange=0,totalWorth=0, cumWorth = startbal)
+			newPlayer = Player(leagueID=new_league,userID=current_user, buyingPower = startbal,percentChange=0,totalWorth=0, cumWorth = startbal, isAi = False)
 			newPlayer.save()
 			return HttpResponseRedirect('/dashboard')
 		else:
@@ -210,7 +210,7 @@ def createai(request):
 		league = League.objects.get(name=leaguename)
 		userid = auth_User.objects.filter(username = ainame)
 		print(userid)
-		newPlayer = Player(leagueID=league,userID=userid.first(), buyingPower = league.startingBalance,percentChange=0,totalWorth=0,isAi=True)
+		newPlayer = Player(leagueID=league,userID=userid.first(), buyingPower = league.startingBalance,percentChange=0,totalWorth=0,isAi=True, cumWorth = league.startingBalance)
 		league.numPlayers+=1
 		league.save()
 		newPlayer.save()
@@ -221,18 +221,107 @@ def createai(request):
 
 
 def aipage(request, league_id):
-	aiplayer = Player.objects.get(leagueID = league_id, isAi = True)
+
+	# get ai player
+	aiplayer = Player.objects.filter(leagueID = league_id, isAi = True)
 	if not aiplayer:
-		template = loader.get_template('createaipage.html')
-		return HttpResponse(template.render({},request))
-	cumWorth = aiplayer.cumWorth
-	buyingPower = aiplayer.buyingPower
-	pTransactions = Transaction.objects.filter(playerID = aiplayer.id)
+		return render(request, 'createaipage.html')
+
+	l = aiplayer.first()
+
+	# perform transactions
+	count = 0
+
+	currasset = list()
+	curramt = list()
+	result = list()
+	assething = Asset.objects.filter(leagueID = league_id)
+
+	if l.userID.id == 14:
+		for h in assething:
+			if h.playerID == l.id:
+				currasset.append(h.ticker)
+				curramt.append(h.shares)
+		result = easyAI(l.leagueID.isCrypto,l.buyingPower,currasset,curramt)
+		 #allow crypto in future
+		shares = result[1]
+		ticker = result[0]
+		if shares != 0:
+			buydash(ticker, shares,l.leagueID.id, l.id)
+		print(result[3])
+		print(currasset)
+		print(curramt)
+		if result[3] != 0:
+			asset123 = Asset.objects.filter(ticker = result[2])
+			print(result[2])
+			print(asset123)
+			selldash(result[3],l.id,l.leagueID.id,asset123.first().id)
+		result.clear()
+		currasset.clear()
+		curramt.clear()
+
+	if l.userID.id == 15:
+		for h in assething:
+			if h.playerID == l.id:
+				currasset.append(h.ticker)
+				curramt.append(h.shares)
+		result = getBuy_med(l.buyingPower)
+		ticker = result[0]
+		shares = result[1]
+		if shares != 0:
+			buydash(ticker, shares,l.leagueID.id, l.id)
+		print(currasset)
+		print(curramt)
+		result.clear()
+		result = getSell_med(currasset,curramt)
+		ticker = result[0]
+		shares = result[1]
+		print(ticker)
+		print(shares)
+		if shares != 0:
+			asset123 = Asset.objects.filter(ticker = ticker)
+			print(asset123)
+			selldash(shares,l.id,l.leagueID.id,asset123.first().id)
+		result.clear()
+		currasset.clear()
+		curramt.clear()
+	if l.userID.id == 16:
+		for h in assething:
+			if h.playerID == l.id:
+				currasset.append(h.ticker)
+				curramt.append(h.shares)
+		result = getBuy_hard(l.buyingPower)
+		ticker = result[0]
+		shares = result[1]
+		if shares != 0:
+			buydash(ticker, shares,l.leagueID.id, l.id)
+		print(currasset)
+		print(curramt)
+		result.clear()
+		result = getSell_hard(currasset,curramt)
+		ticker = result[0]
+		shares = result[1]
+		if shares != 0:
+			asset123 = Asset.objects.filter(ticker = ticker)
+			print(asset123)
+			selldash(shares,l.id,l.leagueID.id,asset123.first().id)
+		result.clear()
+		currasset.clear()
+		curramt.clear()
+
+
+
+
+	# query for changes in the database
+	cumWorth = l.cumWorth
+	buyingPower = l.buyingPower
+	pTransactions = Transaction.objects.filter(playerID = l.id)
 	print(pTransactions)
-	pAssets = Asset.objects.filter(leagueID = league_id, playerID = aiplayer.id)
+	pAssets = Asset.objects.filter(leagueID = league_id, playerID = l.id)
 	print(pAssets)
 
 	return render(request, 'aipage.html', {'assets': pAssets, 'cumWorth': cumWorth, 'buyingPower': buyingPower, 'transactions': pTransactions})
+
 
 
 
@@ -388,107 +477,30 @@ def selldash(shares,player_id, league_id, asset_id):
 	else:
 		asset.save()
 def dashboard(request):
-	current_user = request.user
-	if (current_user.is_authenticated):
-		players = Player.objects.filter(userID=request.user)
-		
-		i = 1
-		admin = list()
-		rank = list()
-		for p in players:
+  	current_user = request.user
+  	if (current_user.is_authenticated):
+  		players = Player.objects.filter(userID=request.user)
 
-			count = 0
-
-			currasset = list()
-			curramt = list()
-			result = list()
-			people = Player.objects.filter(leagueID = p.leagueID).order_by('-cumWorth')
-			assething = Asset.objects.filter(leagueID = p.leagueID)
-			for l in people:
-				if l.userID.id == 14:
-					for h in assething:
-						if h.playerID == l.id:
-							currasset.append(h.ticker)
-							curramt.append(h.shares)
-					result = easyAI(p.leagueID.isCrypto,l.buyingPower,currasset,curramt)
-					 #allow crypto in future
-					shares = result[1]
-					ticker = result[0]
-					if shares != 0:
-						buydash(ticker, shares,l.leagueID.id, l.id)
-					print(result[3])
-					print(currasset)
-					print(curramt)
-					if result[3] != 0:
-						asset123 = Asset.objects.filter(ticker = result[2])
-						print(result[2])
-						print(asset123)
-						selldash(result[3],l.id,l.leagueID.id,asset123.first().id)
-					result.clear()
-					currasset.clear()
-					curramt.clear()
-
-				if l.userID.id == 15:
-					for h in assething:
-						if h.playerID == l.id:
-							currasset.append(h.ticker)
-							curramt.append(h.shares)
-					result = getBuy_med(l.buyingPower)
-					ticker = result[0]
-					shares = result[1]
-					if shares != 0:
-						buydash(ticker, shares,l.leagueID.id, l.id)
-					print(currasset)
-					print(curramt)
-					result.clear()
-					result = getSell_med(currasset,curramt)
-					ticker = result[0]
-					shares = result[1]
-					if shares != 0:
-						asset123 = Asset.objects.filter(ticker = ticker)
-						print(asset123)
-						selldash(shares,l.id,l.leagueID.id,asset123.first().id)
-					result.clear()
-					currasset.clear()
-					curramt.clear()
-				if l.userID.id == 16:
-					for h in assething:
-						if h.playerID == l.id:
-							currasset.append(h.ticker)
-							curramt.append(h.shares)
-					result = getBuy_hard(l.buyingPower)
-					ticker = result[0]
-					shares = result[1]
-					if shares != 0:
-						buydash(ticker, shares,l.leagueID.id, l.id)
-					print(currasset)
-					print(curramt)
-					result.clear()
-					result = getSell_hard(currasset,curramt)
-					ticker = result[0]
-					shares = result[1]
-					if shares != 0:
-						asset123 = Asset.objects.filter(ticker = ticker)
-						print(asset123)
-						selldash(shares,l.id,l.leagueID.id,asset123.first().id)
-					result.clear()
-					currasset.clear()
-					curramt.clear()
+  		i = 1
+  		admin = list()
+  		rank = list()
+  		for p in players:
+  			count = 0
+  			people = Player.objects.filter(leagueID = p.leagueID).order_by('-cumWorth')
 
 
-			for l in people:
-				count+=1
-				if l.userID.id == p.leagueID.adminID:
-					admin.append(l.userID.username)
-				if l.userID.id == request.user.id:
-					rank.append(count)
-			i = i + 1
+  			for l in people:
+  				count+=1
+  				if l.userID.id == p.leagueID.adminID:
+  					admin.append(l.userID.username)
+  				if l.userID.id == request.user.id:
+  					rank.append(count)
+  			i = i + 1
 
-		return render(request, 'dashboard.html', {'players': players, 'admin':admin,'rank':rank})
-
-	else:
-		template = loader.get_template('anonuser.html')
-		return HttpResponse(template.render({},request))
+  		return render(request, 'dashboard.html', {'players': players, 'admin':admin,'rank':rank})
+  	 else:
+  		template = loader.get_template('anonuser.html')
+  		return HttpResponse(template.render({},request))
 
 def createleague(request):
 	date_inpast = False

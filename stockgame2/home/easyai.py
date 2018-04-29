@@ -47,6 +47,8 @@ def easyAI(isCrypto, buyingPower, currAssets, currAmts):
         randBuyStock = 'BTC'
         randBuyNum = 1
   else: # has a valid price because has not reached max iter
+      if price == 0:
+        price = 10
       rangeNumToBuy = math.floor(abs(float(percent)*float(buyingPower)/float(price)))
       randBuyNum = random.randint(0, rangeNumToBuy)
 

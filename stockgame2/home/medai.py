@@ -107,7 +107,7 @@ def getBuy_med(buyingPower):
 	return [hi_item, randBuyNum]
 	
 def getSell_med(currAssets, currAmts):
-	if currAmts == 0:
+	if len(currAmts) == 0:
 		return ['none123', 0]
 	#list = getDow()
 	lo_score = 10000000
