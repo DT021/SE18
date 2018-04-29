@@ -141,7 +141,7 @@ def submitBuy(request,league_id,player_id):
 	form = BuyForm(request.POST)
 
 
-	if True:	
+	if True:
 		form.is_valid()
 
 		current_user = request.user
@@ -252,7 +252,7 @@ def aipage(request, league_id):
 		print(currasset)
 		print(curramt)
 		if result[3] != 0:
-			asset123 = Asset.objects.filter(ticker = result[2])
+			asset123 = Asset.objects.filter(ticker = result[2], playerID = l.id)
 			print(result[2])
 			print(asset123)
 			selldash(result[3],l.id,l.leagueID.id,asset123.first().id)
@@ -279,8 +279,7 @@ def aipage(request, league_id):
 		print(ticker)
 		print(shares)
 		if shares != 0:
-			asset123 = Asset.objects.filter(ticker = ticker)
-			print(asset123)
+			asset123 = Asset.objects.filter(ticker = ticker, playerID = l.id)
 			selldash(shares,l.id,l.leagueID.id,asset123.first().id)
 		result.clear()
 		currasset.clear()
@@ -302,10 +301,9 @@ def aipage(request, league_id):
 		ticker = result[0]
 		shares = result[1]
 		if shares != 0:
-			asset123 = Asset.objects.filter(ticker = ticker)
+			asset123 = Asset.objects.filter(ticker = ticker, playerID = l.id)
 			print(asset123)
 			selldash(shares,l.id,l.leagueID.id,asset123.first().id)
-		result.clear()
 		currasset.clear()
 		curramt.clear()
 
@@ -477,28 +475,32 @@ def selldash(shares,player_id, league_id, asset_id):
 	else:
 		asset.save()
 def dashboard(request):
-	current_user = request.user
-	if (current_user.is_authenticated):
-		players = Player.objects.filter(userID=request.user)
 
-		i = 1
-		admin = list()
-		rank = list()
-		for p in players:
-			count = 0
-			people = Player.objects.filter(leagueID = p.leagueID).order_by('-cumWorth')
-			for l in people:
-				count+=1
-				if l.userID.id == p.leagueID.adminID:
-					admin.append(l.userID.username)
-				if l.userID.id == request.user.id:
-					rank.append(count)
-			i = i + 1
+  	current_user = request.user
+  	if (current_user.is_authenticated):
+  		players = Player.objects.filter(userID=request.user)
 
-		return render(request, 'dashboard.html', {'players': players, 'admin':admin,'rank':rank})
-	else:
-		template = loader.get_template('anonuser.html')
-		return HttpResponse(template.render({},request))
+  		i = 1
+  		admin = list()
+  		rank = list()
+  		for p in players:
+  			count = 0
+  			people = Player.objects.filter(leagueID = p.leagueID).order_by('-cumWorth')
+
+
+  			for l in people:
+  				count+=1
+  				if l.userID.id == p.leagueID.adminID:
+  					admin.append(l.userID.username)
+  				if l.userID.id == request.user.id:
+  					rank.append(count)
+  			i = i + 1
+
+  		return render(request, 'dashboard.html', {'players': players, 'admin':admin,'rank':rank})
+  	else:
+  		template = loader.get_template('anonuser.html')
+  		return HttpResponse(template.render({},request))
+
 
 def createleague(request):
 	date_inpast = False
@@ -612,21 +614,20 @@ def shop(request):
 @csrf_exempt
 def submitShop(request,item):
 
-	
+
 	if item == 1:
-		
+
 		request.user.profile.TitanCoins = request.user.profile.TitanCoins + 100
 	elif item == 2:
-		
+
 		request.user.profile.TitanCoins = request.user.profile.TitanCoins + 200
 	elif item == 3:
-		
+
 		request.user.profile.TitanCoins = request.user.profile.TitanCoins + 300
 	elif item == 4:
-		
+
 		if (request.user.profile.TitanCoins<100):
 			return HttpResponseRedirect('/dashboard')
 		request.user.profile.TitanCoins = request.user.profile.TitanCoins + 300
 
 	print(request.user.profile.TitanCoins)
-
