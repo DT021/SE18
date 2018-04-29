@@ -48,5 +48,5 @@ urlpatterns = [
 	path('leaderboard',views.leaderboard, name='leaderboard'),
 	path('receipt/<int:transaction_id>/', views.transactionReceipt, name='transactionReceipt'),
 	path('processInvalid', views.processInvalid, name='processInvalid'),
-	path('submitShop',views.submitShop, name='submitShop')
+	path('submitShop/<int:item>/',views.submitShop, name='submitShop')
 	]

@@ -435,8 +435,19 @@ def processInvalid(request):
 def shop(request):
 	return render(request, 'shop.html', {})
 @csrf_exempt
-def submitShop(request):
+def submitShop(request,item):
+	#uncomment once profile implemented
 	#player = Player.objects.get(pk=player_id)
 	#request.user.profile.TitanCoins = request.user.profile.TitanCoins + request.titancoins
+	if item == 1
+	#request.user.profile.TitanCoins = request.user.profile.TitanCoins + 100
+	elif item == 2
+	#request.user.profile.TitanCoins = request.user.profile.TitanCoins + 200
+	elif item == 3
+	#request.user.profile.TitanCoins = request.user.profile.TitanCoins + 300
+	elif item == 4
+	if request.user.profile.TitanCoins<100
+		return render(request, 'shop.html', {}) #make error more elegant
+	#request.user.profile.TitanCoins = request.user.profile.TitanCoins + 300
 	print(request.user.profile.TitanCoins)
 	return HttpResponseRedirect('/dashboard')
