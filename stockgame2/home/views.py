@@ -439,15 +439,19 @@ def submitShop(request,item):
 	#uncomment once profile implemented
 	#player = Player.objects.get(pk=player_id)
 	#request.user.profile.TitanCoins = request.user.profile.TitanCoins + request.titancoins
-	if item == 1
+	if item == 1:
+		pass
 	#request.user.profile.TitanCoins = request.user.profile.TitanCoins + 100
-	elif item == 2
+	elif item == 2:
+		pass
 	#request.user.profile.TitanCoins = request.user.profile.TitanCoins + 200
-	elif item == 3
+	elif item == 3:
+		pass
 	#request.user.profile.TitanCoins = request.user.profile.TitanCoins + 300
-	elif item == 4
-	if request.user.profile.TitanCoins<100
-		return render(request, 'shop.html', {}) #make error more elegant
+	elif item == 4:
+		pass
+	if (request.user.profile.TitanCoins<100):
+		pass
 	#request.user.profile.TitanCoins = request.user.profile.TitanCoins + 300
 	print(request.user.profile.TitanCoins)
 	return HttpResponseRedirect('/dashboard')
