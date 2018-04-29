@@ -95,66 +95,16 @@
           <tr>
             <th>Rank</th>
             <th>UserName</th>
-            <th>Total Assets</th>
+            <th>Total Worth</th>
           </tr>
 		  {% for p in players %}
           <tr>
             <td>{{forloop.counter}}</td>
             <td>{{p.userID.username}}</td>
-            <td>{{p.totalWorth}}</td>
+            <td>{{p.cumWorth}}</td>
           </tr>
 		  {% endfor %}
-          <!--<tr>
-            <td>1</td>
-            <td>IvanMarsic</td>
-            <td>$422,598</td>
-          </tr>
-          <tr>
-            <td>2</td>
-            <td>StevenAdler</td>
-            <td>$369,698</td>
-          </tr>
-          <tr>
-            <td>3</td>
-            <td>Safa</td>
-            <td>$344,256</td>
-          </tr>
-          <tr>
-            <td>4</td>
-            <td>Avanish</td>
-            <td>$312,597</td>
-          </tr>
-          <tr>
-            <td>5</td>
-            <td>Brooks</td>
-            <td>$256,127</td>
-          </tr>
-          <tr>
-            <td>6</td>
-            <td>TimothyLiu</td>
-            <td>$231,056</td>
-          </tr>
-          <tr>
-            <td>7</td>
-            <td>Kristene</td>
-            <td>$112,372</td>
-          </tr>
-          <tr>
-            <td>8</td>
-            <td>DavidZhang</td>
-            <td>$50,914</td>
-          </tr>
-          <tr>
-            <td>9</td>
-            <td>Lurski</td>
-            <td>$25,614</td>
-          </tr>
-          <tr>
-            <td>10</td>
-            <td>KristianWu</td>
-            <td>$12,618</td>
-          </tr>
-		-->
+          
         </table>
         <div class="card-footer" style="background-color:#fff;text-align:center">
           <div class="container" style="margin:auto;padding-top:4%">
@@ -186,7 +136,7 @@
                 <li style="text-align:left">{{request.user.username}}:</li>
                 <li>Buying Power: ${{currPlayer.buyingPower}}</li>
                 <li>Rank: {{rank}}</li>
-                <li>Total Assets: ${{currPlayer.cumWorth}}</li>
+                <li>Total Assets: ${{currPlayer.totalWorth}}</li>
               </ol>
               <ol style="list-style-type:none;margin:0;padding:0;font-size:1em;text-align:center;border-bottom:1px solid rgba(118,118,118,0.1);color:#767676;">
                 <li style="text-align:left">League Settings:</li>
@@ -207,16 +157,7 @@
 				<li>{{p.userID.username}}</li>
 
 				{% endfor %}
-                <!--<li>IvanMarsic</li>
-                <li>StevenAdler</li>
-                <li>Safa</li>
-                <li>Avanish</li>
-                <li>Brooks</li>
-                <li>TimothyLiu</li>
-                <li>Kristene</li>
-                <li>DavidZhang</li>
-                <li>Lurski</li>
-                <li>KristianWu</li>-->
+                
               </ol>
               </div>
           </div>

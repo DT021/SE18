@@ -477,30 +477,28 @@ def selldash(shares,player_id, league_id, asset_id):
 	else:
 		asset.save()
 def dashboard(request):
-  	current_user = request.user
-  	if (current_user.is_authenticated):
-  		players = Player.objects.filter(userID=request.user)
+	current_user = request.user
+	if (current_user.is_authenticated):
+		players = Player.objects.filter(userID=request.user)
 
-  		i = 1
-  		admin = list()
-  		rank = list()
-  		for p in players:
-  			count = 0
-  			people = Player.objects.filter(leagueID = p.leagueID).order_by('-cumWorth')
+		i = 1
+		admin = list()
+		rank = list()
+		for p in players:
+			count = 0
+			people = Player.objects.filter(leagueID = p.leagueID).order_by('-cumWorth')
+			for l in people:
+				count+=1
+				if l.userID.id == p.leagueID.adminID:
+					admin.append(l.userID.username)
+				if l.userID.id == request.user.id:
+					rank.append(count)
+			i = i + 1
 
-
-  			for l in people:
-  				count+=1
-  				if l.userID.id == p.leagueID.adminID:
-  					admin.append(l.userID.username)
-  				if l.userID.id == request.user.id:
-  					rank.append(count)
-  			i = i + 1
-
-  		return render(request, 'dashboard.html', {'players': players, 'admin':admin,'rank':rank})
-  	 else:
-  		template = loader.get_template('anonuser.html')
-  		return HttpResponse(template.render({},request))
+		return render(request, 'dashboard.html', {'players': players, 'admin':admin,'rank':rank})
+	else:
+		template = loader.get_template('anonuser.html')
+		return HttpResponse(template.render({},request))
 
 def createleague(request):
 	date_inpast = False
@@ -549,7 +547,7 @@ def leagues(request,league_id):
 
 	pAssets = Asset.objects.filter(playerID = currPlayer.id)
 	print(pAssets)
-	#players.order_by('-totalWorth')
+	
 	return render(request, 'individualleague.html', {'league': league, 'admin': admin, 'players':players,'currPlayer':currPlayer,'pAssets':pAssets,'rank':rank})
 
 def league1(request):	# (request, league_id)
