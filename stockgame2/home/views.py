@@ -571,6 +571,7 @@ def shop(request):
 	return render(request, 'shop.html', {})
 @csrf_exempt
 def submitShop(request,item):
+
 	
 	if item == 1:
 		
@@ -586,5 +587,6 @@ def submitShop(request,item):
 		if (request.user.profile.TitanCoins<100):
 			return HttpResponseRedirect('/dashboard')
 		request.user.profile.TitanCoins = request.user.profile.TitanCoins + 300
+
 	print(request.user.profile.TitanCoins)
 	return HttpResponseRedirect('/dashboard')
