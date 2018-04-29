@@ -304,7 +304,6 @@ def aipage(request, league_id):
 			asset123 = Asset.objects.filter(ticker = ticker, playerID = l.id)
 			print(asset123)
 			selldash(shares,l.id,l.leagueID.id,asset123.first().id)
-		result.clear()
 		currasset.clear()
 		curramt.clear()
 
