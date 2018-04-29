@@ -20,15 +20,13 @@ from django.contrib.auth import logout
 from home.financepi import getPriceFromAPI
 import decimal
 from django.contrib.postgres.fields import ArrayField
-<<<<<<< HEAD
 from home.easyai import *
 from home.medai import *
 from home.hardai import *
-=======
 # from home.easyai import *
 # from home.medai import *
 # from home.hardai import *
->>>>>>> 355c7fec4b85fe0c19a6c2d51b614a3cb17d6417
+
 
 def logout_view(request):
 	logout(request)
@@ -46,7 +44,7 @@ def newLeague(request):
 			ltype = form.cleaned_data.get('leagueType')
 			enddate = form.cleaned_data.get('endDate')
 			date_out = datetime.datetime(*[int(v) for v in enddate.replace('T', '-').replace(':', '-').split('-')])
-			
+
 			b = False
 			if ltype=="crypto":
 				b = True
@@ -83,7 +81,7 @@ def joinLeague(request):
 			for p in players:
 				if p.userID == current_user:
 					return HttpResponseRedirect('/joinLeague')
-			
+
 			newPlayer = Player(leagueID=league,userID=current_user, buyingPower = league.startingBalance,percentChange=0,totalWorth=0,isAi=False, cumWorth = league.startingBalance)
 			league.numPlayers+=1
 			league.save()
@@ -140,7 +138,7 @@ def submitBuy(request,league_id,player_id):
 	player = Player.objects.get(pk=player_id)
 	form = BuyForm(request.POST)
 
-	if form.is_valid():	
+	if form.is_valid():
 		current_user = request.user
 		ticker = form.cleaned_data.get('ticker')
 	# if(ticker == 'GOOG'):
@@ -214,6 +212,25 @@ def createai(request):
 		return render(request, 'individualleague.html')
 	else:
 		return render(request, 'home.html')
+
+
+
+def aipage(request, league_id):
+	aiplayer = Player.objects.get(leagueID = league_id, isAi = True)
+	if not aiplayer:
+		template = loader.get_template('createaipage.html')
+		return HttpResponse(template.render({},request))
+	cumWorth = aiplayer.cumWorth
+	buyingPower = aiplayer.buyingPower
+	pTransactions = Transaction.objects.filter(playerID = aiplayer.id)
+	print(pTransactions)
+	pAssets = Asset.objects.filter(leagueID = league_id, playerID = aiplayer.id)
+	print(pAssets)
+
+	return render(request, 'aipage.html', {'assets': pAssets, 'cumWorth': cumWorth, 'buyingPower': buyingPower, 'transactions': pTransactions})
+
+
+
 # MUST UPDATE PLAYER BUYING POWER
 def submitSell(request,league_id,player_id,asset_id):
 	current_user = request.user
@@ -246,7 +263,7 @@ def submitSell(request,league_id,player_id,asset_id):
 				asset.save()
 			url = '/leagues/'+str(league.id)+'/'
 			return redirect(url)
-			
+
 
 		else:
 
@@ -285,7 +302,7 @@ def sendinvite(request):
 
 			x = cur.fetchone()
 
-			#username = 
+			#username =
 			league = League.objects.get(name=username)
 			password = league.joinPassword
 			send_mail(
@@ -369,7 +386,7 @@ def dashboard(request):
 	current_user = request.user
 	if (current_user.is_authenticated):
 		players = Player.objects.filter(userID=request.user)
-		
+
 		i = 1
 		admin = list()
 		rank = list()
@@ -405,7 +422,7 @@ def dashboard(request):
 					result.clear()
 					currasset.clear()
 					curramt.clear()
-					
+
 				if l.userID.id == 15:
 					for h in assething:
 						if h.playerID == l.id:
@@ -461,8 +478,8 @@ def dashboard(request):
 				if l.userID.id == request.user.id:
 					rank.append(count)
 			i = i + 1
-			
-			
+
+
 		return render(request, 'dashboard.html', {'players': players, 'admin':admin,'rank':rank})
 
 	else:
@@ -485,7 +502,7 @@ def leagues(request,league_id):
 	endDate = league.endDate
 	presentDate = timezone.now()
 	players = Player.objects.filter(leagueID = league).order_by('-cumWorth')
-	count = 0 
+	count = 0
 	rank = 0
 	numAIbeat = 0
 	for p in players:
@@ -503,7 +520,7 @@ def leagues(request,league_id):
 			current_user.profile.trophies[3] += 1 # increment for game played
 			if rank < 4: # top 3 = win
 				current_user.profile.trophies[2] += 1 # increment for win
-			current_user.profile.trophies[4] = current_user.profile.trophies[4] + numAIbeat 
+			current_user.profile.trophies[4] = current_user.profile.trophies[4] + numAIbeat
 			if admin.id == request.user.id: # this user is admin
 				if current_user.profile.trophies[5] < count: # new record for # ppl managed
 					current_user.profile.trophies[5] = count

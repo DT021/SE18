@@ -6,7 +6,7 @@ from django.views.generic.base import TemplateView
 
 
 urlpatterns = [
-	url(r"^badges/", include("pinax.badges.urls", namespace="pinax_badges")),
+	url("badges/", include("pinax.badges.urls", namespace="pinax_badges")),
 	path('', views.index, name='index'),
 	path('newLeague',views.newLeague,name='newLeague'),
 	#path('', TemplateView.as_view(template_name='home.html'), name='home'),
@@ -24,6 +24,7 @@ urlpatterns = [
 	path('createleague', views.createleague, name='createleague'),
 	path('universal', views.universal, name='universal'),
 	path('leagues/<int:league_id>/', views.leagues, name='leagues'),
+	path('aipage/<int:league_id>/', views.aipage, name='aipage'),
 	path('league1', views.league1, name='league1'),
 	path('league2', views.league2, name='league2'),
 	path('league3', views.league3, name='league3'),
