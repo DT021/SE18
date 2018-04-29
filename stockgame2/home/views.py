@@ -14,14 +14,21 @@ from django.contrib.auth import login as auth_login, authenticate
 from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import render, redirect
 import datetime
+from django.utils import timezone
 import psycopg2
 from django.contrib.auth import logout
 from home.financepi import getPriceFromAPI
 import decimal
 from django.contrib.postgres.fields import ArrayField
+<<<<<<< HEAD
 from home.easyai import *
 from home.medai import *
 from home.hardai import *
+=======
+# from home.easyai import *
+# from home.medai import *
+# from home.hardai import *
+>>>>>>> 355c7fec4b85fe0c19a6c2d51b614a3cb17d6417
 
 def logout_view(request):
 	logout(request)
@@ -92,9 +99,22 @@ def submitSignup(request):
 		form = SignUpForm(request.POST)
 		if form.is_valid():
 			form.save()
+			# pr = Profile()
+			# pr.trophies[0] = 0
+			# pr.trophies[1] = 0
+			# pr.trophies[2] = 0
+			# pr.trophies[3] = 0
+			# pr.trophies[4] = 0
+			# pr.trophies[5] = 0
+			# pr.trophies[6] = 0
+			# pr.trophies[7] = 0
+			# pr.statement = ''
+			# pr.name = ''
+			# pr.TitanCoins = 0
 			username = form.cleaned_data.get('username')
 			raw_password = form.cleaned_data.get('password1')
 			user = authenticate(username=username, password=raw_password)
+			user.save()
 			auth_login(request, user)
 			return redirect('/home')
 			# pwd = form.cleaned_data.get('password')
@@ -109,9 +129,10 @@ def submitSignup(request):
 			# user.save()
 			# return HttpResponseRedirect('/home')
 		else:
+			print('invalid')
 			return render(request, 'signup.html', {'form': form})
 	else:
-		form = SignUpForm()
+		form = SignUpForm(request.POST)
 		return render(request, 'signup.html', {'form': form})
 
 def submitBuy(request,league_id,player_id):
@@ -348,14 +369,18 @@ def dashboard(request):
 	current_user = request.user
 	if (current_user.is_authenticated):
 		players = Player.objects.filter(userID=request.user)
-
+		
 		i = 1
 		admin = list()
+		rank = list()
 		for p in players:
+
+			count = 0
+
 			currasset = list()
 			curramt = list()
 			result = list()
-			people = Player.objects.filter(leagueID = p.leagueID)
+			people = Player.objects.filter(leagueID = p.leagueID).order_by('-cumWorth')
 			assething = Asset.objects.filter(leagueID = p.leagueID)
 			for l in people:
 				if l.userID.id == 14:
@@ -428,11 +453,17 @@ def dashboard(request):
 					currasset.clear()
 					curramt.clear()
 
+
 			for l in people:
+				count+=1
 				if l.userID.id == p.leagueID.adminID:
 					admin.append(l.userID.username)
+				if l.userID.id == request.user.id:
+					rank.append(count)
 			i = i + 1
-		return render(request, 'dashboard.html', {'players': players, 'admin':admin})
+			
+			
+		return render(request, 'dashboard.html', {'players': players, 'admin':admin,'rank':rank})
 
 	else:
 		template = loader.get_template('anonuser.html')
@@ -452,7 +483,7 @@ def leagues(request,league_id):
 	current_user = request.user
 	league = League.objects.get(pk=league_id)
 	endDate = league.endDate
-	presentDate = datetime.now()
+	presentDate = timezone.now()
 	players = Player.objects.filter(leagueID = league).order_by('-cumWorth')
 	count = 0 
 	rank = 0
