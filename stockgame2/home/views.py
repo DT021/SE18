@@ -476,30 +476,39 @@ def selldash(shares,player_id, league_id, asset_id):
 		asset.save()
 def dashboard(request):
 
-  	current_user = request.user
-  	if (current_user.is_authenticated):
-  		players = Player.objects.filter(userID=request.user)
+	current_user = request.user
+	if (current_user.is_authenticated):
+		players = Player.objects.filter(userID=request.user)
 		
-  		i = 1
-  		admin = list()
-  		rank = list()
-  		for p in players:
-  			count = 0
-  			people = Player.objects.filter(leagueID = p.leagueID).order_by('-cumWorth')
+		i = 1
+		admin = list()
+		rank = list()
+		for p in players:
+			count = 0
+			people = Player.objects.filter(leagueID = p.leagueID).order_by('-cumWorth')
+			for i in people:
+				worth = 0
+				assets = Asset.objects.filter(playerID=i.id)
+				for a in assets:
+					marketPrice = getPriceFromAPI(a.ticker, league.isCrypto)
+					worth+= marketPrice*a.shares
+				i.totalWorth = worth
+				i.cumWorth = i.totalWorth + i.buyingPower
+				i.save()
+			people = Player.objects.filter(leagueID = p.leagueID).order_by('-cumWorth')
 
+			for l in people:
+				count+=1
+				if l.userID.id == p.leagueID.adminID:
+					admin.append(l.userID.username)
+				if l.userID.id == request.user.id:
+					rank.append(count)
+			i = i + 1
 
-  			for l in people:
-  				count+=1
-  				if l.userID.id == p.leagueID.adminID:
-  					admin.append(l.userID.username)
-  				if l.userID.id == request.user.id:
-  					rank.append(count)
-  			i = i + 1
-
-  		return render(request, 'dashboard.html', {'players': players, 'admin':admin,'rank':rank})
-  	else:
-  		template = loader.get_template('anonuser.html')
-  		return HttpResponse(template.render({},request))
+		return render(request, 'dashboard.html', {'players': players, 'admin':admin,'rank':rank})
+	else:
+		template = loader.get_template('anonuser.html')
+		return HttpResponse(template.render({},request))
 
 
 def createleague(request):
