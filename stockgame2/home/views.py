@@ -480,7 +480,7 @@ def dashboard(request):
 	if (current_user.is_authenticated):
 		players = Player.objects.filter(userID=request.user)
 		
-		i = 1
+		
 		admin = list()
 		rank = list()
 		for p in players:
@@ -490,7 +490,7 @@ def dashboard(request):
 				worth = 0
 				assets = Asset.objects.filter(playerID=i.id)
 				for a in assets:
-					marketPrice = getPriceFromAPI(a.ticker, league.isCrypto)
+					marketPrice = getPriceFromAPI(a.ticker, p.leagueID.isCrypto)
 					worth+= marketPrice*a.shares
 				i.totalWorth = worth
 				i.cumWorth = i.totalWorth + i.buyingPower
@@ -503,7 +503,7 @@ def dashboard(request):
 					admin.append(l.userID.username)
 				if l.userID.id == request.user.id:
 					rank.append(count)
-			i = i + 1
+			
 
 		return render(request, 'dashboard.html', {'players': players, 'admin':admin,'rank':rank})
 	else:
