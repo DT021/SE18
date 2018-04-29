@@ -16,7 +16,7 @@ def getPriceFromAPI(symbol, isCrypto):
 	df = get_price_data(param)
 	if not df.empty:
 		price = df['Open'][-1]
-		return decimal.Decimal(price)
+		return round(decimal.Decimal(price),2)
 	param = {
 	'q': symbol, # Stock symbol (ex: "AAPL")
 	'i': "86400", # Interval size in seconds ("86400" = 1 day intervals)
@@ -27,7 +27,7 @@ def getPriceFromAPI(symbol, isCrypto):
 	df = get_price_data(param)
 	if not df.empty:
 		price = df['Open'][-1]
-		return decimal.Decimal(price)
+		return round(decimal.Decimal(price),2)
 		
 	param = {
 	'q': symbol, # Stock symbol (ex: "AAPL")
@@ -39,7 +39,7 @@ def getPriceFromAPI(symbol, isCrypto):
 	df = get_price_data(param)
 	if not df.empty:
 		price = df['Open'][-1]
-		return decimal.Decimal(price)
+		return round(decimal.Decimal(price),2)
 		
 	param = {
 	'q': symbol, # Stock symbol (ex: "AAPL")
@@ -51,7 +51,7 @@ def getPriceFromAPI(symbol, isCrypto):
 	df = get_price_data(param)
 	if not df.empty:
 		price = df['Open'][-1]
-		return decimal.Decimal(price)
+		return round(decimal.Decimal(price),2)
 	return -1
 #print(getPriceFromAPI('GOOGL', False))
 
