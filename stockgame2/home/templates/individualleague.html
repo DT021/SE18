@@ -1,8 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-
-  <head>
-
+<head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
@@ -10,6 +8,21 @@
 	<!-- PAGE settings -->
 	<link rel="icon" href="/static/home2/titanhead_logo_trans.png">
     <title>{{league.name}}</title>
+
+    <!--===============================================================================================-->
+    	<link rel="stylesheet" type="text/css" href="/static/leaderboard/vendor/bootstrap/css/bootstrap.min.css">
+    <!--===============================================================================================-->
+    	<link rel="stylesheet" type="text/css" href="/static/leaderboard/fonts/font-awesome-4.7.0/css/font-awesome.min.css">
+    <!--===============================================================================================-->
+    	<link rel="stylesheet" type="text/css" href="/static/leaderboard/vendor/animate/animate.css">
+    <!--===============================================================================================-->
+    	<link rel="stylesheet" type="text/css" href="/static/leaderboard/vendor/select2/select2.min.css">
+    <!--===============================================================================================-->
+    	<link rel="stylesheet" type="text/css" href="/static/leaderboard/vendor/perfect-scrollbar/perfect-scrollbar.css">
+    <!--===============================================================================================-->
+    	<link rel="stylesheet" type="text/css" href="/static/leaderboard/css/util.css">
+    	<link rel="stylesheet" type="text/css" href="/static/leaderboard/css/main.css">
+    <!--===============================================================================================-->
 
     <!-- Bootstrap core CSS -->
     <link href="/static/dashboard/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -34,9 +47,8 @@
     <!-- Custom JS -->
     <link href="/static/leaguepage/js/fbshare.js">
 
-  </head>
-
-  <body background = "/static/home2/skyscraper1.jpg" style = "background-repeat:no-repeat; background-size:cover; background-attachment: fixed;">
+</head>
+  <body background = "/static/home2/skyscraper1.jpg">
   <div class="background-shade">
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
@@ -95,17 +107,17 @@
           <tr>
             <th>Rank</th>
             <th>UserName</th>
-            <th>Total Worth</th>
+            <th>Total Assets</th>
           </tr>
 		  {% for p in players %}
           <tr>
             <td>{{forloop.counter}}</td>
             <td>{{p.userID.username}}</td>
-            <td>{{p.cumWorth}}</td>
+            <td>{{p.totalWorth}}</td>
           </tr>
 		  {% endfor %}
-          
         </table>
+
       </div>
       <!-- /.col-md-4 -->
             </div>
@@ -123,14 +135,14 @@
             </div>
             <div class="row">
             <div class="col-lg-5" style="border-right:1px solid rgba(118,118,118,0.1);height:270px;">
-              <img style="margin:auto;position:absolute;top:0;bottom:0;left:0;right:0;" src="/static/home2/se18.png">
+              <img style="margin:auto;position:absolute;top:0;bottom:0;left:0;right:0;" src="/static/home2/logo_trans.png">
             </div>
             <div class="col-lg-7" style="padding-left:0;height:270px">
                <ol style="list-style-type:none;margin:0;padding:0;font-size:1em;text-align:center;border-bottom:1px solid rgba(118,118,118,0.1);color:#767676;">
                 <li style="text-align:left">{{request.user.username}}:</li>
                 <li>Buying Power: ${{currPlayer.buyingPower}}</li>
                 <li>Rank: {{rank}}</li>
-                <li>Total Assets: ${{currPlayer.totalWorth}}</li>
+                <li>Total Assets: ${{currPlayer.cumWorth}}</li>
               </ol>
               <ol style="list-style-type:none;margin:0;padding:0;font-size:1em;text-align:center;border-bottom:1px solid rgba(118,118,118,0.1);color:#767676;">
                 <li style="text-align:left">League Settings:</li>
@@ -145,14 +157,12 @@
               </ol>
               <div style="overflow-y:scroll;padding:.5em;text-align:left;white-space:normal;color:#0a0a0a;flex:1;height:100px">
               <ol>
+                <h3>Members List:</h3>
+				{% for p in players %}
 
-                        <h3>Members List:</h3>
-        				{% for p in players %}
+				<li>{{p.userID.username}}</li>
 
-        				<li>{{p.userID.username}}</li>
-
-        				{% endfor %}
-
+				{% endfor %}
               </ol>
               </div>
           </div>
@@ -161,70 +171,73 @@
     </div>
   </div>
 
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <div class = "row">
-        <div class="col-lg-4 portfolio-item">
-          <!--<div class="card h-100">-->
-           <a href="/buypage/{{league.id}}/{{currPlayer.id}}/"><div class="btn btn-warning" style="width:100%;height:100%"><h1>BUY</h1>
-          <!--</div></a>-->
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+      <div class = "row">
+          <div class="col-lg-4 portfolio-item">
+            <!--<div class="card h-100">-->
+             <a href="/buypage/{{league.id}}/{{currPlayer.id}}/"><div class="btn btn-warning" style="width:100%;height:100%"><h1>BUY</h1>
+            <!--</div></a>-->
+            </div>
           </div>
-        </div>
 
-        <div class="col-lg-4 portfolio-item">
-         <a href="/aipage/{{league.id}}/"><div class="btn btn-warning" style="width:100%;height:100%"><h1>Your AI</h1>
-         </div>
-        </div>
+          <div class="col-lg-4 portfolio-item">
+           <a href="/aipage/{{league.id}}/"><div class="btn btn-warning" style="width:100%;height:100%"><h1>Your AI</h1>
+           </div>
+          </div>
 
-        <div class="col-lg-4 portfolio-item">
-         <a href="/dashboard"><div class="btn btn-warning" style="width:100%;height:100%"><h3>Back to Dashboard!</h3>
-         </div>
-        </div>
-
-      </div>
-              <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-
-              <div class="container">
-
-          <h2>Your Holdings</h2>
-          <!--<p>The .table-striped class adds zebra-stripes to a table:</p>-->
-          <table class="table table-striped">
-            <thead>
-              <tr>
-                <th>Asset</th>
-                <th>Number of Shares</th>
-                <th>Sell!</th>
-              </tr>
-            </thead>
-            <tbody>
-              {% for a in pAssets%}
-                <tr>
-                <td>{{a.ticker}}</td>
-                <td>{{a.shares}}</td>
-                <td><a href="/sell/{{league.id}}/{{currPlayer.id}}/{{a.id}}/"><div class="btn btn-success" style="width:50%;height:10%" >Click to sell!</div></a></td>
-              <!--<div class="col-lg-12 portfolio-item">
-                    <a href="/sell/{{league.id}}/{{currPlayer.id}}/{{a.id}}/"><div class="btn btn-success" style="width:100%;height:20%" ><h1>Sell {{ a.ticker }} - {{a.shares}} shares</h1></div></a>
-                  </div>-->
-                </tr>
-              {% endfor %}
-            </tbody>
-          </table>
-        </div>
-
-
-        <!-- /.row -->
-
-      </div>
-
-
-
+          <div class="col-lg-4 portfolio-item">
+           <a href="/dashboard"><div class="btn btn-warning" style="width:100%;height:100%"><h3>Back to Dashboard!</h3></a>
+           </div>
+          </div>
 
     </div>
 
+    <div class="table100 ver3 js-pscroll">
+      <div class="table100-head">
+        <table>
+          <thead>
+            <tr class="row100 head" style = "background-color: rgb(255,255,255); opacity: 0.8;">
+              <th class="cell100 column1">Asset</th>
+              <th class="cell100 column2">Share</th>
+              <th class="cell100 column3">Sell Here!</th>
+
+            </tr>
+          </thead>
+        </table>
+      </div>
+
+      <div class="table100-body js-pscroll">
+        <table>
+          <tbody>
+
+            {% for a in pAssets%}
+                  <tr>
+                    <td class="cell100 column1">{{a.ticker}}</td>
+                    <td class="cell100 column2">{{a.shares}}</td>
+                    <td class="cell100 column3">  <a href="/sell/{{league.id}}/{{currPlayer.id}}/{{a.id}}/"><div class="btn btn-success">Sell here!</div></a></td>
+                  </tr>
+            {% endfor %}
+            <!--<tr class="row100 body">
+              <td class="cell100 column1">ivanmarsic</td>
+              <td class="cell100 column2">No</td>
+              <td class="cell100 column3">$</td>
+              <td class="cell100 column4">Aaron Chapman</td>
+              <td class="cell100 column5">10</td>
+            </tr> -->
+
+
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+
+ <div class="row my-2"></div>
 
     <!-- Add email invite link -->
     <div class="col-lg-12 portfolio-item">
       <div class="card h-100">
-          <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#inviteFriendsModal">
+          <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#inviteFriendsModal">
             Invite your friends!
           </button>
         </div>
@@ -253,6 +266,9 @@
         </div>
       </div>
     </div>
+  </div>
+  </div>
+</div>
 
   <!-- Footer -->
 	<footer class="py-2 filter-dark" style="background-color: rgba(81,81,81,0.9)">
@@ -274,6 +290,7 @@
         </div>
       </div>
     </div>
+
     <!-- /.container -->
   </footer>
 
