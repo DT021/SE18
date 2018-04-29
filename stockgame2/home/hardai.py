@@ -7,8 +7,8 @@ import random
 
 def getBuy_hard(buyingPower):
 	list = getDow()
-	hi_score = -10000000
-	hi_item = 'blank'
+	hi_score = [-10000000,-10000000,-10000000]
+	hi_item = ['blank','blank','blank']
 	for item in list:
 		pos, neg, neut, tnum = getTwitterSentiments(item)
 		if neg == 0:
@@ -31,13 +31,27 @@ def getBuy_hard(buyingPower):
 			news_score = pos/neg
 		
 		tot_score = twit_score*linreg_score*news_score
-		if tot_score>hi_score:
-			hi_score = tot_score
-			hi_item = item
-	price = getPriceFromAPI(hi_item, False)
+
+		if tot_score>hi_score[0]:
+			hi_score[2]=hi_score[1]
+			hi_score[1]=hi_score[0]
+			hi_score[0]=tot_score
+			hi_item[2]=hi_item[1]
+			hi_item[1]=hi_item[0]
+			hi_item[0]=item
+		elif tot_score>hi_score[1]:
+			hi_score[2]=hi_score[1]
+			hi_score[1]=tot_score
+			hi_item[2]=hi_item[1]
+			hi_item[1]=item
+		elif tot_score>hi_score[2]:
+			hi_score[2]=tot_score
+			hi_item[2]=item
+	buy_item = hi_item[random.randint(0, 2)]
+	price = getPriceFromAPI(buy_item, False)
 	rangeNumToBuy = math.floor(abs(0.25*float(buyingPower)/float(price)))
 	randBuyNum = random.randint(1, rangeNumToBuy)
-	return [hi_item, randBuyNum]
+	return [buy_item, randBuyNum]
 	
 def getSell_hard(currAssets, currAmts):
 	if not currAssets:
