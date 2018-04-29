@@ -3,17 +3,28 @@ from django.conf import settings
 from datetime import datetime  
 from django.contrib.auth.models import User as auth_User
 from django.contrib.postgres.fields import ArrayField
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+from django.db import IntegrityError
 
 
 # Create your models here.
 class Profile(models.Model):
 	user = models.OneToOneField(auth_User, on_delete=models.CASCADE)
-	trophies = ArrayField(models.IntegerField(), size = 8)
-	statement = models.CharField(max_length=250)
-	name = models.CharField(max_length=40)
-	birthday = models.DateTimeField()
-	TitanCoins = models.IntegerField()
+	trophies = ArrayField(models.IntegerField(default = 0), size = 8,default=[0]*8)
+	statement = models.CharField(max_length=250, default = '')
+	name = models.CharField(max_length=40, default='')
+	birthday = models.DateTimeField(null=True)
+	TitanCoins = models.IntegerField(default = 0)
 
+@receiver(post_save, sender=auth_User)
+def create_user_profile(sender, instance, created, **kwargs):
+    if created:
+        Profile.objects.create(user=instance)
+
+@receiver(post_save, sender=auth_User)
+def save_user_profile(sender, instance, **kwargs):
+    instance.profile.save()
 
 class League(models.Model):
 	name = models.CharField(max_length=50)

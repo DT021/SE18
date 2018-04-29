@@ -14,6 +14,7 @@ class SignUpForm(UserCreationForm):
 	class Meta:
 		model = auth_User
 		fields = ('username', 'password1', 'password2', 'email')
+		#fields = UserCreationForm.Meta.fields + ('email',)
 
 class BuyForm(forms.Form):
 	ticker = forms.CharField(max_length=20)

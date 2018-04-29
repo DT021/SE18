@@ -20,6 +20,9 @@ from django.contrib.auth import logout
 from home.financepi import getPriceFromAPI
 import decimal
 from django.contrib.postgres.fields import ArrayField
+# from home.easyai import *
+# from home.medai import *
+# from home.hardai import *
 
 def logout_view(request):
 	logout(request)
@@ -90,9 +93,22 @@ def submitSignup(request):
 		form = SignUpForm(request.POST)
 		if form.is_valid():
 			form.save()
+			# pr = Profile()
+			# pr.trophies[0] = 0
+			# pr.trophies[1] = 0
+			# pr.trophies[2] = 0
+			# pr.trophies[3] = 0
+			# pr.trophies[4] = 0
+			# pr.trophies[5] = 0
+			# pr.trophies[6] = 0
+			# pr.trophies[7] = 0
+			# pr.statement = ''
+			# pr.name = ''
+			# pr.TitanCoins = 0
 			username = form.cleaned_data.get('username')
 			raw_password = form.cleaned_data.get('password1')
 			user = authenticate(username=username, password=raw_password)
+			user.save()
 			auth_login(request, user)
 			return redirect('/home')
 			# pwd = form.cleaned_data.get('password')
@@ -107,9 +123,10 @@ def submitSignup(request):
 			# user.save()
 			# return HttpResponseRedirect('/home')
 		else:
+			print('invalid')
 			return render(request, 'signup.html', {'form': form})
 	else:
-		form = SignUpForm()
+		form = SignUpForm(request.POST)
 		return render(request, 'signup.html', {'form': form})
 
 def submitBuy(request,league_id,player_id):
