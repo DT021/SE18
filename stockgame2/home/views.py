@@ -19,6 +19,9 @@ from django.contrib.auth import logout
 from home.financepi import getPriceFromAPI
 import decimal
 from django.contrib.postgres.fields import ArrayField
+from home.easyai import *
+from home.medai import *
+from home.hardai import *
 
 def logout_view(request):
 	logout(request)
