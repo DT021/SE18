@@ -304,7 +304,6 @@ def aipage(request, league_id):
 			asset123 = Asset.objects.filter(ticker = ticker, playerID = l.id)
 			print(asset123)
 			selldash(shares,l.id,l.leagueID.id,asset123.first().id)
-		result.clear()
 		currasset.clear()
 		curramt.clear()
 
@@ -476,6 +475,7 @@ def selldash(shares,player_id, league_id, asset_id):
 	else:
 		asset.save()
 def dashboard(request):
+
   	current_user = request.user
   	if (current_user.is_authenticated):
   		players = Player.objects.filter(userID=request.user)
@@ -500,6 +500,7 @@ def dashboard(request):
   	else:
   		template = loader.get_template('anonuser.html')
   		return HttpResponse(template.render({},request))
+
 
 def createleague(request):
 	date_inpast = False
@@ -548,7 +549,7 @@ def leagues(request,league_id):
 
 	pAssets = Asset.objects.filter(playerID = currPlayer.id)
 	print(pAssets)
-	#players.order_by('-totalWorth')
+	
 	return render(request, 'individualleague.html', {'league': league, 'admin': admin, 'players':players,'currPlayer':currPlayer,'pAssets':pAssets,'rank':rank})
 
 def league1(request):	# (request, league_id)

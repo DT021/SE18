@@ -95,73 +95,17 @@
           <tr>
             <th>Rank</th>
             <th>UserName</th>
-            <th>Total Assets</th>
+            <th>Total Worth</th>
           </tr>
 		  {% for p in players %}
           <tr>
             <td>{{forloop.counter}}</td>
             <td>{{p.userID.username}}</td>
-            <td>{{p.totalWorth}}</td>
+            <td>{{p.cumWorth}}</td>
           </tr>
 		  {% endfor %}
-          <!--<tr>
-            <td>1</td>
-            <td>IvanMarsic</td>
-            <td>$422,598</td>
-          </tr>
-          <tr>
-            <td>2</td>
-            <td>StevenAdler</td>
-            <td>$369,698</td>
-          </tr>
-          <tr>
-            <td>3</td>
-            <td>Safa</td>
-            <td>$344,256</td>
-          </tr>
-          <tr>
-            <td>4</td>
-            <td>Avanish</td>
-            <td>$312,597</td>
-          </tr>
-          <tr>
-            <td>5</td>
-            <td>Brooks</td>
-            <td>$256,127</td>
-          </tr>
-          <tr>
-            <td>6</td>
-            <td>TimothyLiu</td>
-            <td>$231,056</td>
-          </tr>
-          <tr>
-            <td>7</td>
-            <td>Kristene</td>
-            <td>$112,372</td>
-          </tr>
-          <tr>
-            <td>8</td>
-            <td>DavidZhang</td>
-            <td>$50,914</td>
-          </tr>
-          <tr>
-            <td>9</td>
-            <td>Lurski</td>
-            <td>$25,614</td>
-          </tr>
-          <tr>
-            <td>10</td>
-            <td>KristianWu</td>
-            <td>$12,618</td>
-          </tr>
-		-->
+          
         </table>
-        <div class="card-footer" style="background-color:#fff;text-align:center">
-          <div class="container" style="margin:auto;padding-top:4%">
-           <a class="btn btn-primary" href="/dashboard">Back to League Dashboard!</a>
-          </div>
-        </div>
-
       </div>
       <!-- /.col-md-4 -->
             </div>
@@ -186,7 +130,7 @@
                 <li style="text-align:left">{{request.user.username}}:</li>
                 <li>Buying Power: ${{currPlayer.buyingPower}}</li>
                 <li>Rank: {{rank}}</li>
-                <li>Total Assets: ${{currPlayer.cumWorth}}</li>
+                <li>Total Assets: ${{currPlayer.totalWorth}}</li>
               </ol>
               <ol style="list-style-type:none;margin:0;padding:0;font-size:1em;text-align:center;border-bottom:1px solid rgba(118,118,118,0.1);color:#767676;">
                 <li style="text-align:left">League Settings:</li>
@@ -201,56 +145,81 @@
               </ol>
               <div style="overflow-y:scroll;padding:.5em;text-align:left;white-space:normal;color:#0a0a0a;flex:1;height:100px">
               <ol>
-                <h3>Members List:</h3>
-				{% for p in players %}
 
-				<li>{{p.userID.username}}</li>
+                        <h3>Members List:</h3>
+        				{% for p in players %}
 
-				{% endfor %}
-                <!--<li>IvanMarsic</li>
-                <li>StevenAdler</li>
-                <li>Safa</li>
-                <li>Avanish</li>
-                <li>Brooks</li>
-                <li>TimothyLiu</li>
-                <li>Kristene</li>
-                <li>DavidZhang</li>
-                <li>Lurski</li>
-                <li>KristianWu</li>-->
+        				<li>{{p.userID.username}}</li>
+
+        				{% endfor %}
+
               </ol>
               </div>
           </div>
           </div>
         </div>
     </div>
+  </div>
 
-        <div class="col-lg-12 portfolio-item">
-          <div class="card h-100">
-           <a href="/buypage/{{league.id}}/{{currPlayer.id}}/"><div class="btn btn-success" style="width:100%;height:40%"><i class="fa fa-plus-square" style="font-size:400%;margin:auto"></i><h1>BUY</h1>
-          </div></a>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <div class = "row">
+        <div class="col-lg-4 portfolio-item">
+          <!--<div class="card h-100">-->
+           <a href="/buypage/{{league.id}}/{{currPlayer.id}}/"><div class="btn btn-warning" style="width:100%;height:100%"><h1>BUY</h1>
+          <!--</div></a>-->
           </div>
         </div>
 
-        <div class="col-lg-12 portfolio-item">
-        <div class="card h-100">
-         <a href="/aipage/{{league.id}}/"><div class="btn btn-success" style="width:100%;height:40%"><i class="fa fa-plus-square" style="font-size:400%;margin:auto"></i><h1>Your AI</h1>
-        </div></a>
+        <div class="col-lg-4 portfolio-item">
+         <a href="/aipage/{{league.id}}/"><div class="btn btn-warning" style="width:100%;height:100%"><h1>Your AI</h1>
+         </div>
         </div>
+
+        <div class="col-lg-4 portfolio-item">
+         <a href="/dashboard"><div class="btn btn-warning" style="width:100%;height:100%"><h3>Back to Dashboard!</h3>
+         </div>
+        </div>
+
+      </div>
+              <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+              <div class="container">
+
+          <h2>Your Holdings</h2>
+          <!--<p>The .table-striped class adds zebra-stripes to a table:</p>-->
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th>Asset</th>
+                <th>Number of Shares</th>
+                <th>Sell!</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for a in pAssets%}
+                <tr>
+                <td>{{a.ticker}}</td>
+                <td>{{a.shares}}</td>
+                <td><a href="/sell/{{league.id}}/{{currPlayer.id}}/{{a.id}}/"><div class="btn btn-success" style="width:50%;height:10%" >Click to sell!</div></a></td>
+              <!--<div class="col-lg-12 portfolio-item">
+                    <a href="/sell/{{league.id}}/{{currPlayer.id}}/{{a.id}}/"><div class="btn btn-success" style="width:100%;height:20%" ><h1>Sell {{ a.ticker }} - {{a.shares}} shares</h1></div></a>
+                  </div>-->
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+
+
+        <!-- /.row -->
+
       </div>
 
 
 
-		{% for a in pAssets%}
-		<div class="col-lg-6 portfolio-item">
-          <div class="card h-100">
-          <a href="/sell/{{league.id}}/{{currPlayer.id}}/{{a.id}}/"><div class="btn btn-success" style="width:100%;height:40%" ><h1>Sell {{ a.ticker }} - {{a.shares}} shares</h1>
-          </div></a>
-          </div>
-        </div>
-		{% endfor %}
-      <!-- /.row -->
 
     </div>
+
 
     <!-- Add email invite link -->
     <div class="col-lg-12 portfolio-item">
