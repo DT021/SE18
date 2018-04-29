@@ -479,7 +479,7 @@ def dashboard(request):
   	current_user = request.user
   	if (current_user.is_authenticated):
   		players = Player.objects.filter(userID=request.user)
-
+		
   		i = 1
   		admin = list()
   		rank = list()
@@ -518,7 +518,18 @@ def leagues(request,league_id):
 	endDate = league.endDate
 	presentDate = timezone.now()
 	players = Player.objects.filter(leagueID = league).order_by('-cumWorth')
-
+	
+	for i in players:
+		worth = 0
+		assets = Asset.objects.filter(playerID=i.id)
+		for a in assets:
+			marketPrice = getPriceFromAPI(a.ticker, league.isCrypto)
+			worth+= marketPrice*a.shares
+		i.totalWorth = worth
+		i.cumWorth = i.totalWorth + i.buyingPower
+		i.save()
+	players = Player.objects.filter(leagueID = league).order_by('-cumWorth')
+			
 	count = 0
 
 	rank = 0
@@ -530,7 +541,7 @@ def leagues(request,league_id):
 		if p.userID.id == request.user.id:
 			currPlayer = p
 			rank = count
-		if p.isAi and count > 0: # AI placing worse than user
+		if p.isAi and rank > 0: # AI placing worse than user
 			numAIbeat += 1
 	if (endDate < presentDate): # league has ended, redirect to leaderboard.html
 		if not (league.hasEnded): # need to handle trophies
@@ -552,13 +563,6 @@ def leagues(request,league_id):
 	
 	return render(request, 'individualleague.html', {'league': league, 'admin': admin, 'players':players,'currPlayer':currPlayer,'pAssets':pAssets,'rank':rank})
 
-def league1(request):	# (request, league_id)
-	template = loader.get_template('individualleague.html')
-	return HttpResponse(template.render({},request))
-def league2(request):
-	return HttpResponse("This is the league2 page.")
-def league3(request):
-	return HttpResponse("This is the league3 page.")
 def buypage(request,league_id,player_id):
 	league = League.objects.get(pk=league_id)
 	player = Player.objects.get(pk=player_id)
