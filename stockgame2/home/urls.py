@@ -43,10 +43,10 @@ urlpatterns = [
 	path('joinLeague', views.joinLeague, name='joinLeague'),
 	path('anonuser', views.anonuser, name='anonuser'),
 	path('settings', views.settings, name='settings'),
-	path('shop/<int:player_id>/', views.shop, name='shop'),
+	path('shop', views.shop, name='shop'),
 	path('awards',views.awards, name='awards'),
 	path('leaderboard',views.leaderboard, name='leaderboard'),
 	path('receipt/<int:transaction_id>/', views.transactionReceipt, name='transactionReceipt'),
 	path('processInvalid', views.processInvalid, name='processInvalid'),
-	path('submitShop/<int:player_id>/',views.submitShop, name='submitShop')
+	path('submitShop',views.submitShop, name='submitShop')
 	]

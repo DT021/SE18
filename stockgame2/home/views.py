@@ -44,7 +44,7 @@ def newLeague(request):
 				b = True
 			new_league = League(adminID = current_user.id,name=lname,numPlayers=1,joinPassword=joinpwd,startingBalance=startbal,isCrypto=b, endDate=date_out,isUniversal=False)
 			new_league.save()
-			newPlayer = Player(leagueID=new_league,userID=current_user, buyingPower = startbal,percentChange=0,totalWorth=0, cumWorth = startbal)
+			newPlayer = Player(leagueID=new_league,userID=current_user, buyingPower = startbal,percentChange=0,totalWorth=0, cumWorth = startbal, isAi = True)
 			newPlayer.save()
 			return HttpResponseRedirect('/dashboard')
 		else:
@@ -118,7 +118,8 @@ def submitBuy(request,league_id,player_id):
 	player = Player.objects.get(pk=player_id)
 	form = BuyForm(request.POST)
 
-	if form.is_valid():	
+	if True:
+		form.is_valid()
 		current_user = request.user
 		ticker = form.cleaned_data.get('ticker')
 	# if(ticker == 'GOOG'):
@@ -431,12 +432,11 @@ def processInvalid(request):
 	template = loader.get_template('processInvalid.html')
 	return HttpResponse(template.render({},request))
 # Create your views here.
-def shop(request,player_id):
-	player = Player.objects.get(pk=player_id)
-	return render(request, 'shop.html', {'player':player})
+def shop(request):
+	return render(request, 'shop.html', {})
 @csrf_exempt
-def submitShop(request,player_id):
-	player = Player.objects.get(pk=player_id)
-	#player.TitanCoins = player.TitanCoins + request.titancoins
+def submitShop(request):
+	#player = Player.objects.get(pk=player_id)
+	#request.user.profile.TitanCoins = request.user.profile.TitanCoins + request.titancoins
 	print(request.user.profile.TitanCoins)
 	return HttpResponseRedirect('/dashboard')
