@@ -281,7 +281,6 @@ def aipage(request, league_id):
 		if shares != 0:
 			asset123 = Asset.objects.filter(ticker = ticker, playerID = l.id)
 			selldash(shares,l.id,l.leagueID.id,asset123.first().id)
-		result.clear()
 		currasset.clear()
 		curramt.clear()
 	if l.userID.id == 16:
