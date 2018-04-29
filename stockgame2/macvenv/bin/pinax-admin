@@ -1,0 +1,12 @@
+#!/Users/timmliu16888/Desktop/SE18/stockgame2/macvenv/bin/python3
+# EASY-INSTALL-ENTRY-SCRIPT: 'Pinax==0.9a2','console_scripts','pinax-admin'
+__requires__ = 'Pinax==0.9a2'
+import re
+import sys
+from pkg_resources import load_entry_point
+
+if __name__ == '__main__':
+    sys.argv[0] = re.sub(r'(-script\.pyw?|\.exe)?$', '', sys.argv[0])
+    sys.exit(
+        load_entry_point('Pinax==0.9a2', 'console_scripts', 'pinax-admin')()
+    )

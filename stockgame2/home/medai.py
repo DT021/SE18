@@ -1,11 +1,13 @@
 import numpy as np
 import math
-from financepi import *
+from home.financepi import *
 import time
-from listofstockscrypto import *
+from home.listofstockscrypto import *
 #import matplotlib.pyplot as plt
 #import matplotlib.lines as mlines
 import tensorflow as tf
+import random
+import math
 
 def getLastMonth(item):
 	df = getPriceFromAPI_m(item,False)
@@ -87,7 +89,7 @@ def runLinearReg(data):
 	  #  dataY.append(pair[1])
 
 	#plt.scatter(dataX, avgLossPerIndex);
-def getBuy_med():
+def getBuy_med(buyingPower):
 	list = getDow()
 	hi_score = -10000000
 	hi_item = 'blank'
@@ -99,17 +101,28 @@ def getBuy_med():
 			hi_score = score
 			hi_item = item
 	#print([hi_item,hi_score])
-	return hi_item
-def getSell_med(list):
+	price = getPriceFromAPI(hi_item, False)
+	rangeNumToBuy = math.floor(abs(0.25*float(buyingPower)/float(price)))
+	randBuyNum = random.randint(1, rangeNumToBuy)
+	return [hi_item, randBuyNum]
+	
+def getSell_med(currAssets, currAmts):
+	if currAmts == 0:
+		return ['none123', 0]
 	#list = getDow()
 	lo_score = 10000000
 	lo_item = 'blank'
-	for item in list:
+	index = 0
+	lo_index = 0
+	for item in currAssets:
 		data = getLastMonth(item)
 		[w,b,loss] = runLinearReg(data)
 		score = w*1000/loss
-		if score<hi_score:
+		if score<lo_score:
 			lo_score = score
 			lo_item = item
+			lo_index = index
+		index+=1
 	#print([hi_item,hi_score])
-	return lo_item
+	randNumToSell = random.randint(1, currAmts[lo_index])
+	return [lo_item, randNumToSell]

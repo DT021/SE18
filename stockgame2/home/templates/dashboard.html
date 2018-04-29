@@ -127,7 +127,13 @@
               </ul>
               <ol style="list-style-type:none;margin:0;padding:0;font-size:1em;text-align:center;border-bottom:1px solid rgba(118,118,118,0.1);color:#767676;">
                 <li style="text-align:left">Player Information:</li>
-                <li>Rank:102</li>
+                {% for r in rank %}
+                  {% if forloop.counter == forloop.parentloop.counter %}
+                    <li>Rank: {{ r }}</li>
+                  {% else %}
+                  {% endif %}
+                {% endfor %}
+				<!-- <li>Rank:102</li> -->
                 <li>Buying Power: {{L.buyingPower}}</li>
                 <li>Total Assets: {{L.totalWorth}}</li>
               </ol>
