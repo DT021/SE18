@@ -108,11 +108,8 @@ def getCryptoPriceFromAPI2(symbol,isCrypto):
 	jsonData = json.loads(binary) #gets JSON data
 
 	# Check if any errors, return -1
-	if ('Error Message' in jsonData):
+	if ('error' in jsonData):
 		return -1
-
-	if ('Information' in jsonData):
-		return -22
 	price = jsonData['rate']
 	print(price)
 	return decimal.Decimal(price)

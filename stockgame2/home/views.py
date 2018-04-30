@@ -166,7 +166,8 @@ def submitBuy(request,league_id,player_id):
 		# return redirect('/processInvalid')
 	# else:
 		shares = form.cleaned_data.get('shares')
-		isCrypto = form.cleaned_data.get('isCrypto')
+		#isCrypto = form.cleaned_data.get('isCrypto')
+		isCrypto = league.isCrypto
 		print(isCrypto)
 		#buyingPrice = form.cleaned_data.get('buyingPrice')
 		if isCrypto == True:
@@ -175,7 +176,7 @@ def submitBuy(request,league_id,player_id):
 			buyingPrice = getPriceFromAPI(ticker,False) #allow crypto in future
 		if buyingPrice == -1:
 			storage = messages.get_messages(request)
-			messages.add_message(request, messages.ERROR, 'Please enter a valid ticker.')
+			messages.add_message(request, messages.ERROR, 'Please enter a valid ticker. Cryptocurrency leagues only accept cryptocurrency.')
 			storage.used = False
 			return render(request, 'buypage.html', {'form': form,'league':league,'player':player})
 		elif buyingPrice == -22:
@@ -251,8 +252,8 @@ def createai(request):
 		league.numPlayers+=1
 		league.save()
 		newPlayer.save()
-		url = '/leagues/'+str(league.id)+'/'
-		return render(request, url)
+		#url = '/leagues/'+str(league.id)+'/'
+		return render(request, 'home.html')
 	else:
 		return render(request, 'home.html')
 
@@ -587,7 +588,10 @@ def leagues(request,league_id):
 		worth = 0
 		assets = Asset.objects.filter(playerID=i.id)
 		for a in assets:
-				marketPrice = getPriceFromAPI(a.ticker, league.isCrypto)
+				if league.isCrypto:
+					marketPrice = getCryptoPriceFromAPI2(a.ticker, league.isCrypto)
+				else:
+					marketPrice = getPriceFromAPI(a.ticker, league.isCrypto)
 				worth+= (marketPrice*a.shares)
 		i.totalWorth = worth
 		i.cumWorth = i.totalWorth + i.buyingPower
