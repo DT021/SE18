@@ -139,11 +139,23 @@
                  I can read Tweets and news articles from across the Internet to determine if there
                  has been positive or negative publicity for it! You can my stats for my most recent transaction below.
                </li>
-               <h1>My most recent transaction stats </h1>
-               <h2>Five positive tweets</h2>
-               (%for text, sentiment in ptweets.items)
-                      <li class="list-group-item"><span class="fa fa-twitter"></span>{{text}}</li>
-               (%endfor%)
+               <h2>My most recent transaction stats </h2>
+               <h3>Five positive tweets</h3>
+               {%for tweet in ptweets%}
+                      <li class="list-group-item"><span class="fa fa-twitter"></span>{{tweet.text}}</li>
+               {%endfor%}
+               <h3>Five negative tweets</h3>
+               {%for tweet in ntweets%}
+                      <li class="list-group-item"><span class="fa fa-twitter"></span>{{tweet.text}}</li>
+               {%endfor%}
+               <h3>Five positive news </h3>
+               {%for article in pnews%}
+                      <li class="list-group-item"><span class="fa fa-twitter"></span><a href = {{article.url}}>{{article.title}}</a></li>
+               {%endfor%}
+               <h3>Five negative news </h3>
+               {%for article in pnews%}
+                      <li class="list-group-item"><span class="fa fa-twitter"></span><a href = {{article.url}}>{{article.title}}</a></li>
+               {%endfor%}
 
             </ul>
             {%endif%}

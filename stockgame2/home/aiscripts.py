@@ -123,7 +123,7 @@ def getTwitterSentiments(ticker):
 
     ##print("Total Number of Tweets: {}".format(len(tweets)))
 	if len(tweets) == 0:
-		return 0, 0, 0, 0
+		return 0, 0, 0, 0, 0, 0
 	posPercent = len(ptweets)/len(tweets)
 	negPercent = len(ntweets)/len(tweets)
 	neutPercent = 1 - posPercent - negPercent
@@ -185,7 +185,7 @@ def getNewsSentiments(ticker):
     pnews = [a for a in arts if a['sentiment'] == 'positive']
     nnews = [a for a in arts if a['sentiment'] == 'negative']
     if numAll == 0:
-        return 0, 0, 0, 0
+        return 0, 0, 0, 0, 0, 0
     perPos = len(pnews)/numAll
     perNeg = len(nnews)/numAll
     perNeut = 1 - perPos - perNeg

@@ -316,8 +316,7 @@ def aipage(request, league_id):
         ticker = result[0]
         shares = result[1]
         medweight = result[2]
-        medbias = result[3]
-        medloss = result[4]
+        medloss = result[3]
         if shares != 0:
             buydash(ticker, shares,l.leagueID.id, l.id)
         print(currasset)
@@ -369,9 +368,11 @@ def aipage(request, league_id):
     print(pTransactions)
     pAssets = Asset.objects.filter(leagueID = league_id, playerID = l.id)
     print(pAssets)
+    p, n, neutPercent, len, ptweets, ntweets = getTwitterSentiments(ticker)
+    perPos, perNeg, perNeut, numAll, pnews, nnews = getNewsSentiments(ticker)
 
     return render(request, 'aipage.html', {'assets': pAssets, 'cumWorth': cumWorth, 'buyingPower': buyingPower, 'transactions': pTransactions, 'diff':diff,
-    'easyBuyIndex':easyBuyIndex, 'medWeight':medweight, 'medBias':medbias, 'medLoss':medloss, 'ptweets':ptweets[:5], 'ntweets':ntweets[:5], 'pnews':pnews[:5], 'nnews':nnews[:5]})
+    'easyBuyIndex':easyBuyIndex, 'medWeight':medweight, 'medLoss':medloss, 'ptweets':ptweets[:5], 'ntweets':ntweets[:5], 'pnews':pnews[:5], 'nnews':nnews[:5]})
 
 
 
@@ -645,7 +646,7 @@ def leagues(request,league_id):
 					current_user.profile.trophies[5] = count
 					current_user.profile.TitanCoins += 100
 			current_user.save()
-			#current_user.profile.TitanCoins += 
+			#current_user.profile.TitanCoins +=
 		return render(request, 'leaderboard.html', {'league': league, 'admin': admin, 'players':players,'currPlayer':currPlayer, 'rank':rank})
 
 	pAssets = Asset.objects.filter(playerID = currPlayer.id)

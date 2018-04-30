@@ -13,6 +13,7 @@ import math
 
 def getLastMonth(item):
 	df = getPriceFromAPI_m(item,False)
+	print(df)
 	i = 0
 	data = np.zeros(shape=(df.shape[0],2))
 	while i<df.shape[0]:

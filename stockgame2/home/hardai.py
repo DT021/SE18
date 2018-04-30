@@ -53,6 +53,7 @@ def getBuy_hard(buyingPower):
 	price = getPriceFromAPI(buy_item, False)
 	rangeNumToBuy = math.floor(abs(0.25*float(buyingPower)/float(price)))
 	randBuyNum = random.randint(1, rangeNumToBuy)
+	print(ptweets)
 	return [buy_item, randBuyNum, ptweets, ntweets, pnews, nnews]
 
 def getSell_hard(currAssets, currAmts):
