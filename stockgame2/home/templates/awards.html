@@ -75,6 +75,7 @@
       <header class="jumbotron my-4">
         <h1 class="display-3">Titan Achievements</h1>
         <p class="lead">Congratulations! You are an active trader with Titan Trading. Gain TitanCoins with every award!</p>
+        <em class="lead">TitanCoins: {{request.user.profile.TitanCoins}}</em>
         <!--<a href="#" class="btn btn-primary btn-lg">Call to action!</a>-->
       </header>
 
@@ -90,9 +91,9 @@
 			  <em class="card-text"><b>Made {{request.user.profile.trophies.0}} buys!</b></em>
               <p class="card-text">Just like Atlas led the Titans in battle, you've been working hard to expand your portfolio! Keep trading and you'll soon be on top of the world! (Pun intended)</p>
             </div>
-            <div class="card-footer">
+            <!--<div class="card-footer">
               <a href="#" class="btn btn-primary">Find Out More!</a>
-            </div>
+            </div>-->
             {% else %}
              <img class="card-img-top" src="/static/home2/lock.png" alt="">
             <div class="card-body">
@@ -111,9 +112,9 @@
 			  <em class="card-text"><b>Made {{request.user.profile.trophies.1}} sells!</b></em>
               <p class="card-text"> Metis is the Titan of wisdom, prudence, and deep thought. Making those smart sells means you are making prudent decisions.</p>
             </div>
-            <div class="card-footer">
+            <!--<div class="card-footer">
               <a href="#" class="btn btn-primary">Find Out More!</a>
-            </div>
+            </div>-->
             {% else %}
              <img class="card-img-top" src="/static/home2/lock.png" alt="">
             <div class="card-body">
@@ -132,9 +133,9 @@
 			  <em class="card-text"><b>Placed in top 3 {{request.user.profile.trophies.2}} times!</b></em>
               <p class="card-text">Like Cronus overthrew Uranus, you've topped your league!</p>
             </div>
-            <div class="card-footer">
+            <!--<div class="card-footer">
               <a href="#" class="btn btn-primary">Find Out More!</a>
-            </div>
+            </div>-->
             {% else %}
              <img class="card-img-top" src="/static/home2/lock.png" alt="">
             <div class="card-body">
@@ -153,9 +154,9 @@
 			  <em class="card-text"><b>Beat the AI {{request.user.profile.trophies.4}} times!</b></em>
               <p class="card-text">Hyperion is the Titan of the sun and moon, and represents watchfulness and wisdom. You have reached this level by beating one of our complex AI players.</p>
             </div>
-            <div class="card-footer">
+            <!--<div class="card-footer">
               <a href="#" class="btn btn-primary">Find Out More!</a>
-            </div>
+            </div>-->
 			{% else %}
              <img class="card-img-top" src="/static/home2/lock.png" alt="">
             <div class="card-body">
@@ -191,9 +192,9 @@
               <p class="card-text">The name Prometheus is derived from the Greek word for forethought. Like Prometheus won the war against the old gods, you've survived competing against top traders.</p>
 
             </div>
-            <div class="card-footer">
+            <!--<div class="card-footer">
               <a href="#" class="btn btn-primary">Find Out More!</a>
-            </div>
+            </div>-->
             {% else %}
              <img class="card-img-top" src="/static/home2/lock.png" alt="">
             <div class="card-body">
@@ -214,9 +215,9 @@
               <p class="card-text">Uranus was the Titan of the Sky and father of all Titans. Like Uranus managed the Titans, you were able to manage a large league successfully!</p>
 
             </div>
-            <div class="card-footer">
+            <!--<div class="card-footer">
               <a href="#" class="btn btn-primary">Find Out More!</a>
-            </div>
+            </div>-->
             {% else %}
              <img class="card-img-top" src="/static/home2/lock.png" alt="">
             <div class="card-body">

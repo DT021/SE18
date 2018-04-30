@@ -209,7 +209,8 @@
             <tr class="row100 head" style = "background-color: rgb(255,255,255); opacity: 0.8;">
               <th class="cell100 column1">Asset</th>
               <th class="cell100 column2">Share</th>
-              <th class="cell100 column3">Sell Here!</th>
+              <th class="cell100 column3">Asset Worth</th>
+              <th class="cell100 column4">Sell Here!</th>
 
             </tr>
           </thead>
@@ -224,7 +225,12 @@
                   <tr>
                     <td class="cell100 column1">{{a.ticker}}</td>
                     <td class="cell100 column2">{{a.shares}}</td>
-                    <td class="cell100 column3">  <a href="/sell/{{league.id}}/{{currPlayer.id}}/{{a.id}}/"><div class="btn btn-success">Sell here!</div></a></td>
+                    {% for w in assetWorth%}
+                    {% if forloop.counter == forloop.parentloop.counter %}
+                    <td class="cell100 column3">{{w}}</td>
+                    {% endif %}
+                    {% endfor %}
+                    <td class="cell100 column4">  <a href="/sell/{{league.id}}/{{currPlayer.id}}/{{a.id}}/"><div class="btn btn-success">Sell here!</div></a></td>
                   </tr>
             {% endfor %}
             <!--<tr class="row100 body">

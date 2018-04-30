@@ -392,7 +392,26 @@ def submitSell(request,league_id,player_id,asset_id):
 				messages.add_message(request, messages.ERROR, 'You do not own this many shares.')
 				storage.used = False
 				return render(request, 'sellform.html', {'form': form, 'league':league,'player':player,'asset':asset})
-			marketPrice = getPriceFromAPI(asset.ticker, False)
+			#marketPrice = getPriceFromAPI(asset.ticker, False)
+			if league.isCrypto == True:
+				marketPrice = getCryptoPriceFromAPI2(asset.ticker, True)
+			else:
+				marketPrice = getPriceFromAPI(asset.ticker,False) #allow crypto in future
+			if marketPrice == -1:
+				storage = messages.get_messages(request)
+				messages.add_message(request, messages.ERROR, 'Please enter a valid ticker. Cryptocurrency leagues only accept cryptocurrency.')
+				storage.used = False
+				return render(request, 'sellform.html', {'form': form, 'league':league,'player':player,'asset':asset})
+			elif marketPrice == -22:
+				storage = messages.get_messages(request)
+				messages.add_message(request, messages.ERROR, 'Too many requests at this time.')
+				storage.used = False
+				return render(request, 'sellform.html', {'form': form, 'league':league,'player':player,'asset':asset})
+			elif marketPrice <0:
+				storage = messages.get_messages(request)
+				messages.add_message(request, messages.ERROR, 'Invalid Input.')
+				storage.used = False
+				return render(request, 'sellform.html', {'form': form, 'league':league,'player':player,'asset':asset})
 			sellTotal = marketPrice*shares
 			player.buyingPower += sellTotal
 			player.totalWorth -= sellTotal
@@ -614,22 +633,32 @@ def leagues(request,league_id):
 		if not (league.hasEnded): # need to handle trophies
 			league.hasEnded = True
 			current_user.profile.trophies[3] += 1 # increment for game played
+			current_user.profile.TitanCoins += 50
 			if rank < 4: # top 3 = win
 				current_user.profile.trophies[2] += 1 # increment for win
-
+				current_user.profile.TitanCoins += 100
 			current_user.profile.trophies[4] = current_user.profile.trophies[4] + numAIbeat
-
+			if numAIbeat>0:
+				current_user.profile.TitanCoins += 25*numAIbeat
 			if admin.id == request.user.id: # this user is admin
 				if current_user.profile.trophies[5] < count: # new record for # ppl managed
 					current_user.profile.trophies[5] = count
+					current_user.profile.TitanCoins += 100
 			current_user.save()
 			#current_user.profile.TitanCoins += 
 		return render(request, 'leaderboard.html', {'league': league, 'admin': admin, 'players':players,'currPlayer':currPlayer, 'rank':rank})
 
 	pAssets = Asset.objects.filter(playerID = currPlayer.id)
-	print(pAssets)
+	assetWorth = list()
+	for a in pAssets:
+		if league.isCrypto:
+			marketPrice = getCryptoPriceFromAPI2(a.ticker, league.isCrypto)
+		else:
+			marketPrice = getPriceFromAPI(a.ticker, league.isCrypto)
+		assetWorth.append(marketPrice*a.shares)
+	#print(pAssets)
 
-	return render(request, 'individualleague.html', {'league': league, 'admin': admin, 'players':players,'currPlayer':currPlayer,'pAssets':pAssets,'rank':rank})
+	return render(request, 'individualleague.html', {'league': league, 'admin': admin, 'players':players,'currPlayer':currPlayer,'pAssets':pAssets,'rank':rank,'assetWorth':assetWorth})
 
 def buypage(request,league_id,player_id):
 	league = League.objects.get(pk=league_id)
