@@ -24,7 +24,11 @@ from django.views.decorators.csrf import csrf_exempt
 import decimal
 
 account_sid = "AC0442f02a5d307c7c2f9bb0b6d63d98b7"
-auth_token  = "x"
+try:  
+   auth_token = os.environ["TWILIO_SECRET"]
+except KeyError: 
+   auth_token  = "x"
+
 
 from django.contrib.postgres.fields import ArrayField
 
