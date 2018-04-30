@@ -1,0 +1,11 @@
+django
+pinax
+twilio
+psycopg2
+datetime
+googlefinance.client
+pinax-badges
+tensorflow
+tweepy
+textblob
+gunicorn

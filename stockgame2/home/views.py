@@ -18,7 +18,19 @@ from django.utils import timezone
 import psycopg2
 from django.contrib.auth import logout
 from home.financepi import getPriceFromAPI
+from twilio.rest import Client
+from twilio.twiml.messaging_response import MessagingResponse
+from django.views.decorators.csrf import csrf_exempt
 import decimal
+import os
+
+account_sid = "AC0442f02a5d307c7c2f9bb0b6d63d98b7"
+try:  
+	auth_token = os.environ["TWILIO_SECRET"]
+except KeyError: 
+	auth_token  = "x"
+
+
 from django.contrib.postgres.fields import ArrayField
 
 from django.views.decorators.csrf import csrf_exempt
@@ -30,6 +42,9 @@ from home.hardai import *
 
 
 
+
+
+client = Client(account_sid, auth_token)
 def logout_view(request):
 	logout(request)
 	# Redirect to a success page.
@@ -135,6 +150,7 @@ def submitSignup(request):
 		form = SignUpForm(request.POST)
 		return render(request, 'signup.html', {'form': form})
 
+
 def submitBuy(request,league_id,player_id):
 	league = League.objects.get(pk=league_id)
 	player = Player.objects.get(pk=player_id)
@@ -150,10 +166,13 @@ def submitBuy(request,league_id,player_id):
 		# return redirect('/processInvalid')
 	# else:
 		shares = form.cleaned_data.get('shares')
-		#isCrypto = form.cleaned_data.get('isCrypto')
-		isCrypto = False
+		isCrypto = form.cleaned_data.get('isCrypto')
+		#isCrypto = False
 		#buyingPrice = form.cleaned_data.get('buyingPrice')
-		buyingPrice = getPriceFromAPI(ticker,isCrypto) #allow crypto in future
+		if isCrypto == True:
+			buyingPrice = getCryptoPriceFromAPI(ticker, isCrypto)
+		if isCrypto == False:
+			buyingPrice = getPriceFromAPI(ticker,isCrypto) #allow crypto in future
 		#player = Player.objects.get(id=3)
 		#tempPid = 1
 		#tempLid = League.objects.get(name="k1")
@@ -181,6 +200,12 @@ def submitBuy(request,league_id,player_id):
 		player.cumWorth = player.totalWorth + player.buyingPower
 		player.save()
 		new_transaction.save()
+
+		# message = client.messages.create(
+		#	to="+17329985271", 
+		#	from_="+17325079667",
+		#	body="You bought %d shares of %s at $%d!" % (shares,ticker,tmpPrice))
+
 		# update trophies array to count buys
 		current_user.profile.trophies[0] += 1
 		current_user.save()
@@ -353,6 +378,10 @@ def submitSell(request,league_id,player_id,asset_id):
 				asset.delete()
 			else:
 				asset.save()
+			# message = client.messages.create(
+			#	to="+17329985271", 
+			#	from_="+17325079667",
+			#	body="You Sold %d shares of %s at $%d!" % (shares,asset.ticker,tmpPrice))
 			url = '/leagues/'+str(league.id)+'/'
 			return redirect(url)
 
@@ -476,30 +505,39 @@ def selldash(shares,player_id, league_id, asset_id):
 		asset.save()
 def dashboard(request):
 
-  	current_user = request.user
-  	if (current_user.is_authenticated):
-  		players = Player.objects.filter(userID=request.user)
+	current_user = request.user
+	if (current_user.is_authenticated):
+		players = Player.objects.filter(userID=request.user)
 
-  		i = 1
-  		admin = list()
-  		rank = list()
-  		for p in players:
-  			count = 0
-  			people = Player.objects.filter(leagueID = p.leagueID).order_by('-cumWorth')
+		
+		admin = list()
+		rank = list()
+		for p in players:
+			count = 0
+			people = Player.objects.filter(leagueID = p.leagueID).order_by('-cumWorth')
+			for i in people:
+				worth = 0
+				assets = Asset.objects.filter(playerID=i.id)
+				for a in assets:
+						marketPrice = getPriceFromAPI(a.ticker, p.leagueID.isCrypto)
+						worth+= (marketPrice*a.shares)
+				i.totalWorth = worth
+				i.cumWorth = i.totalWorth + i.buyingPower
+				i.save()
+			people = Player.objects.filter(leagueID = p.leagueID).order_by('-cumWorth')
 
+			for l in people:
+				count+=1
+				if l.userID.id == p.leagueID.adminID:
+					admin.append(l.userID.username)
+				if l.userID.id == request.user.id:
+					rank.append(count)
+			
 
-  			for l in people:
-  				count+=1
-  				if l.userID.id == p.leagueID.adminID:
-  					admin.append(l.userID.username)
-  				if l.userID.id == request.user.id:
-  					rank.append(count)
-  			i = i + 1
-
-  		return render(request, 'dashboard.html', {'players': players, 'admin':admin,'rank':rank})
-  	else:
-  		template = loader.get_template('anonuser.html')
-  		return HttpResponse(template.render({},request))
+		return render(request, 'dashboard.html', {'players': players, 'admin':admin,'rank':rank})
+	else:
+		template = loader.get_template('anonuser.html')
+		return HttpResponse(template.render({},request))
 
 
 def createleague(request):
@@ -597,9 +635,11 @@ def anonuser(request):
 def settings(request):
 	template = loader.get_template('settings.html')
 	return HttpResponse(template.render({},request))
+
 def awards(request):
 	template = loader.get_template('awards.html')
 	return HttpResponse(template.render({},request))
+
 def receipt(request):
 	template = loader.get_template('receipt.html')
 	return HttpResponse(template.render({},request))
@@ -609,18 +649,43 @@ def leaderboard(request, league_id):
 def processInvalid(request):
 	template = loader.get_template('processInvalid.html')
 	return HttpResponse(template.render({},request))
+
+
+@csrf_exempt
+def sms(request):
+	league = League.objects.get(pk=17)
+	player = Player.objects.get(pk=30)
+	purchase = request.POST.get('Body', '')
+	processed = purchase.split()
+	print(processed)
+	shares = processed[0]
+	ticker = processed[1]
+	
+	buyingPrice = getPriceFromAPI(ticker,False) #allow crypto in future
+	tmpPrice = buyingPrice*decimal.Decimal(shares)
+	message = '<Response><Message>You bought %s shares of %s for $%s</Message></Response>' % (shares,ticker, tmpPrice)
+	if tmpPrice > player.buyingPower:
+		return redirect('/home')
+	new_asset = Asset(ticker = ticker, playerID = player.id, leagueID = league, shares = shares, buyingPrice = buyingPrice)
+	new_asset.save()
+	new_transaction = Transaction(leagueID = league, playerID = player.id, price = tmpPrice, ticker = ticker, shares = shares, isBuy = True)
+	player.buyingPower = player.buyingPower-tmpPrice
+	new_transaction.save()
+	return HttpResponse(message, content_type='text/xml')
+	
+
 # Create your views here.
 
 def shop(request):
 	return render(request, 'shop.html', {})
-@csrf_exempt
+
 def submitShop(request,item):
 	if item == 1:
 
 		request.user.profile.TitanCoins = request.user.profile.TitanCoins + 100
 	elif item == 2:
 
-		request.user.profile.TitanCoins = request.user.profile.TitanCoins + 200
+		request.user.profile.TitanCoins = request.user.profile.TitanCoins + 500
 	elif item == 3:
 
 		request.user.profile.TitanCoins = request.user.profile.TitanCoins + 300
@@ -631,3 +696,4 @@ def submitShop(request,item):
 		request.user.profile.TitanCoins = request.user.profile.TitanCoins + 300
 
 	print(request.user.profile.TitanCoins)
+

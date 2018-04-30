@@ -11,6 +11,7 @@
     <!-- PAGE settings -->
     <link rel="icon" href="/static/home2/titanhead_logo_trans.png">
     <link rel="stylesheet" href="/static/home2/css/titan-trading.css">
+    <link rel="stylesheet" href="/static/dashboard/css/buttons.css">
     <title>League Dashboard</title>
 
     <!-- Bootstrap core CSS -->
@@ -40,7 +41,7 @@
   </head>
 
 <!--  <body style = "background-color: rgba(169,225,236,0.5); background-repeat:no-repeat; background-size:cover; background-attachment: fixed;">-->
-<body background = "/static/home2/city7.jpg" style = "background-repeat:no-repeat; background-size:cover; background-attachment: fixed;">
+<body background = "/static/home2/city2.jpg" style = "background-repeat:no-repeat; background-size:cover; background-attachment: fixed;">
   <div ><!--class="background-shade"-->
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
@@ -54,7 +55,7 @@
             <li class="nav-item">
               <a class="nav-link" href="/home">Home</a>
             </li>
-            
+
             <li class="nav-item">
               <a class="nav-link" href="/dashboard">Dashboard</a>
             </li>
@@ -90,142 +91,87 @@
       </h1>
 	  <div class = "row ">
 		</div>
+
+    <div class = "row">
+      <div class ="col-lg-3">
+      <div class="row">
+        <div class="col-lg-12 portfolio-item">
+
+          <div class="card bg-transparent" style="position:fixed;">
+            <a href="/createleague"><div class="btn btn-success" style="width:100%;height:80%" ><i class="fa fa-plus-square" style="font-size:400%;margin:auto"></i><h1>Create a League!</h1>
+          </div></a>
+          <a href="/joinLeague"><div class="btn btn-secondary" style="width:100%;height:80%" ><i class="fa fa-group" style="font-size:400%;margin:auto;color:#fff"></i><h1 style="color:#fff">Join a League!</h1></div></a>
+          <a href="/faq"><div class="btn btn-primary" style="width:100%;height:80%" ><i class="fa fa-clipboard" style="font-size:400%;margin:auto;color:#fff"></i><h1 style="color:#fff">Have questions?</h1></div></a>
+
+            <!--div class="card-body">
+              <h4 class="card-title">
+                <a href="/faq">Learn about Private Leagues.</a>
+              </h4>
+              <p class="card-text">Create a new league to start trading with friends!</p>
+            </div>-->
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-1"></div>
+
+
+      <div class = "col-lg-8">
       <div class="row">
         {% for L in players%}
-        <div class="col-lg-6 portfolio-item">
-          <div class="card h-100">
-            <div style="width:100%;text-align:center;">
-              <h2 style="font-size:1.6em;text-overflow:ellipsis;line-height:1.8rem;margin:0.1rem 0 0;overflow:hidden;z-index:1; position:relative;"><b><a href="/leagues/{{L.leagueID.id}}">{{L.leagueID.name}}</a></b></h2>
+        <div class="col-lg-12 portfolio-item">
+          <div class="card text-white bg-dark mb-3" style="height: 9rem;">
+            <div class="row">
+            <div class="col-lg-4" style="border-right:1px solid rgba(118,118,118,0.1);height:100px;">
+              <div class = "row my-6">
+              <img height="100" style="margin:auto;position:absolute;top:0;bottom:0;left:0;right:0;" src="/static/home2/titanhead_logo_trans.png">
+            </div>
+            </div>
+            <div class="col-lg-5" style="padding-left:0;height:270px">
+              <h2 style="text-align:center;font-size:1.6em;text-overflow:ellipsis;line-height:1.8rem;margin:0.1rem 0 0;overflow:hidden;z-index:1; position:relative;"><b><a href="/leagues/{{L.leagueID.id}}">{{L.leagueID.name}}</a></b></h2>
 
               <ul style="margin:0;padding:0; list-style-type:none;border-bottom:1px solid rgba(118,118,118,0.1);color:#767676;">
                 {% if L.leagueID.isCrypto %}
-              <li>Crypto · </li>
+              <h5 style="text-align:center;">Crypto</h5>
                 {% else %}
-                 <li>Stock ·</li>
+                 <h5 style="text-align:center;">Stock</h5>
                  {% endif %}
-              <li>Timed</li>
+            <!--  <li style="text-align:center;">Timed</li>-->
               </ul>
-            </div>
-            <div class="row">
-            <div class="col-lg-5" style="border-right:1px solid rgba(118,118,118,0.1);height:270px;">
-              <img style="margin:auto;position:absolute;top:0;bottom:0;left:0;right:0;" src="/static/home2/titanhead_logo_trans.png">
-            </div>
-            <div class="col-lg-7" style="padding-left:0;height:270px">
-              <ul style="margin:0;padding:0;font-size:1em;text-align:center;border-bottom:1px solid rgba(118,118,118,0.1);color:#767676;">
+             <!--<ul style="margin:0;padding:0;font-size:1em;text-align:center;border-bottom:1px solid rgba(118,118,118,0.1);color:#767676;">
                 {% for a in admin %}
                   {% if forloop.counter == forloop.parentloop.counter %}
                     <li>Admin: {{ a }}</li>
                   {% else %}
                   {% endif %}
                 {% endfor %}
-              </ul>
-              <ul style="margin:0;padding:0;font-size:1em;text-align:center;border-bottom:1px solid rgba(118,118,118,0.1);color:#767676;">
-                <li>Created: {{L.leagueID.beginDate}}</li>
-              </ul>
-              <ul style="margin:0;padding:0;font-size:1em;text-align:center;border-bottom:1px solid rgba(118,118,118,0.1);color:#767676;">
-                <li>Ends: {{L.leagueID.endDate}}</li>
-              </ul>
+              </ul>-->
               <ol style="list-style-type:none;margin:0;padding:0;font-size:1em;text-align:center;border-bottom:1px solid rgba(118,118,118,0.1);color:#767676;">
-                <li style="text-align:left">Player Information:</li>
+                <!--<li style="text-align:left"><b>Player Information:</b></li>-->
                 {% for r in rank %}
                   {% if forloop.counter == forloop.parentloop.counter %}
-                    <li>Rank: {{ r }}</li>
+                    <li style="text-align:left">Rank: {{ r }}</li>
                   {% else %}
                   {% endif %}
                 {% endfor %}
-				<!-- <li>Rank:102</li> -->
-                <li>Buying Power: {{L.buyingPower}}</li>
-                <li>Total Assets: {{L.totalWorth}}</li>
+                <li style="text-align:left">Buying Power: {{L.buyingPower}}</li>
+                <li style="text-align:left">Total Assets: {{L.totalWorth}}</li>
               </ol>
-              <div style="overflow-y:scroll;padding:.5em;text-align:left;white-space:normal;color:#0a0a0a;flex:1;height:100px">
-              <p>The universal league is a Titan Trading created league that all users are automatically a part of. Compete with all other Titan Trading users to find out who is the superior investor and how ready you are for real investment.</p>
-              </div>
+            </div>
+            <div class = "row my-4">
+            <div class="col-lg-3">
+              <button type="button" class="btn btn-primary btn-lg"><a href="/leagues/{{L.leagueID.id}}">Enter!</a></button>
             </div>
           </div>
-            <div class="container" style="width:100%; bottom:0; border-top:1px solid rgba(118,118,118,0.1);">
-              <h4 class="card-title">
-                <a href="/leagues/{{L.leagueID.id}}">{{L.leagueID.name}}</a>
-              </h4>
-              <p class="card-text" style="color:#767676;">Click the link for more information about your Universal League.</p>
-            </div>
+          </div>
           </div>
         </div>
         {% endfor %}
-       <!--<div class="col-lg-6 portfolio-item">
-          <div class="card h-100">
-            <div style="width:100%;text-align:center;">
-              <h2 style="font-size:1.6em;text-overflow:ellipsis;line-height:1.8rem;margin:0.1rem 0 0;overflow:hidden;z-index:1; position:relative;">Class Of SE18 League</h2>
-
-              <ul style="margin:0;padding:0; list-style-type:none;border-bottom:1px solid rgba(118,118,118,0.1);color:#767676;">
-              <li>Stock · </li>
-              <li>Timed</li>
-              </ul>
-            </div>
-            <div class="row">
-            <div class="col-lg-5" style="border-right:1px solid rgba(118,118,118,0.1);height:270px;">
-              <img style="margin:auto;position:absolute;top:0;bottom:0;left:0;right:0;" src="/static/home2/se18.png">
-            </div>
-            <div class="col-lg-7" style="padding-left:0;height:270px">
-              <ul style="margin:0;padding:0;font-size:1em;text-align:center;border-bottom:1px solid rgba(118,118,118,0.1);color:#767676;">
-                <li>Admin: {{request.user}}</li>
-              </ul>
-              <ul style="margin:0;padding:0;font-size:1em;text-align:center;border-bottom:1px solid rgba(118,118,118,0.1);color:#767676;">
-                <li>Created: Jan 16 2018</li>
-              </ul>
-              <ul style="margin:0;padding:0;font-size:1em;text-align:center;border-bottom:1px solid rgba(118,118,118,0.1);color:#767676;">
-                <li>Ends: May 11 2018</li>
-              </ul>
-              <ol style="list-style-type:none;margin:0;padding:0;font-size:1em;text-align:center;border-bottom:1px solid rgba(118,118,118,0.1);color:#767676;">
-                <li style="text-align:left">Player Information:</li>
-                <li>Rank:1</li>
-                <li>Buying Power: $111,321</li>
-                <li>Total Assets: $302,197</li>
-              </ol>
-              <div style="overflow-y:scroll;padding:.5em;text-align:left;white-space:normal;color:#0a0a0a;flex:1;height:100px">
-              <p>A private league created for the students enrolled in Software Engineering 2018 Spring Semester.</p>
-              </div>
-            </div>
-          </div>
-            <div class="container" style="width:100%; bottom:0; border-top:1px solid rgba(118,118,118,0.1);">
-              <h4 class="card-title">
-                <a href="/league1">Class Of SE18 League</a>
-              </h4>
-              <p class="card-text" style="color:#767676;">Click the link for more information about your private League.</p>
-            </div>
-          </div>
         </div>
+      </div>
+</div>
+    </div>
 
-
-        <div class="col-lg-6 portfolio-item">
-          <div class="card h-100">
-           <a href="/createleague"><div class="btn btn-success" style="width:100%;height:80%"><i class="fa fa-plus-square" style="font-size:400%;margin:auto"></i><h1>Create a League!</h1>
-          </div></a>
-          <a href="/joinLeague"><div class="btn btn-secondary" style="width:100%;height:80%" ><i class="fa fa-group" style="font-size:400%;margin:auto;color:#fff"></i><h1 style="color:#fff">Join a League!</h1>
-          </div></a>
-            <div class="card-body">
-              <h4 class="card-title">
-                <a href="/faq">Learn more about Private Leagues.</a>
-              </h4>
-              <p class="card-text">Create a new league to start trading with friends!</p>
-            </div>
-          </div>
-        </div>
-      -->
-        <div class="col-lg-6 portfolio-item">
-          <div class="card h-100">
-
-          <a href="/createleague"><div class="btn btn-success" style="width:100%;height:80%" ><i class="fa fa-plus-square" style="font-size:400%;margin:auto"></i><h1>Create a League!</h1>
-          </div></a>
-          <a href="/joinLeague"><div class="btn btn-secondary" style="width:100%;height:80%" ><i class="fa fa-group" style="font-size:400%;margin:auto;color:#fff"></i><h1 style="color:#fff">Join a League!</h1></div></a>
-
-            <div class="card-body">
-              <h4 class="card-title">
-                <a href="/faq">Learn more about Private Leagues.</a>
-              </h4>
-              <p class="card-text">Create a new league to start trading with friends!</p>
-            </div>
-          </div>
-        </div>
       <!-- /.row -->
 
     </div>
