@@ -515,16 +515,16 @@ def dashboard(request):
 		for p in players:
 			count = 0
 			people = Player.objects.filter(leagueID = p.leagueID).order_by('-cumWorth')
-			for i in people:
-				worth = 0
-				assets = Asset.objects.filter(playerID=i.id)
-				for a in assets:
-						marketPrice = getPriceFromAPI(a.ticker, p.leagueID.isCrypto)
-						worth+= (marketPrice*a.shares)
-				i.totalWorth = worth
-				i.cumWorth = i.totalWorth + i.buyingPower
-				i.save()
-			people = Player.objects.filter(leagueID = p.leagueID).order_by('-cumWorth')
+			# for i in people:
+				# worth = 0
+				# assets = Asset.objects.filter(playerID=i.id)
+				# for a in assets:
+						# marketPrice = getPriceFromAPI(a.ticker, p.leagueID.isCrypto)
+						# worth+= (marketPrice*a.shares)
+				# i.totalWorth = worth
+				# i.cumWorth = i.totalWorth + i.buyingPower
+				# i.save()
+			# people = Player.objects.filter(leagueID = p.leagueID).order_by('-cumWorth')
 
 			for l in people:
 				count+=1
