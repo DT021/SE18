@@ -1,1 +1,1 @@
-web: gunicorn stockgame2.wsgi
+web: python stockgame2/manage.py runserver
