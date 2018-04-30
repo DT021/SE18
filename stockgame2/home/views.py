@@ -672,7 +672,7 @@ def submitShop(request,item):
 		request.user.profile.TitanCoins = request.user.profile.TitanCoins + 100
 	elif item == 2:
 
-		request.user.profile.TitanCoins = request.user.profile.TitanCoins + 200
+		request.user.profile.TitanCoins = request.user.profile.TitanCoins + 500
 	elif item == 3:
 
 		request.user.profile.TitanCoins = request.user.profile.TitanCoins + 300
