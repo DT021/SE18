@@ -761,5 +761,9 @@ def submitShop(request,item):
 		if (request.user.profile.TitanCoins<100):
 			return HttpResponseRedirect('/dashboard')
 		return HttpResponseRedirect('/dashboard')
+	elif item == 6:
 
-	print(request.user.profile.TitanCoins)
+		if (request.user.profile.TitanCoins<100):
+			return HttpResponseRedirect('/dashboard')
+		return HttpResponseRedirect('/dashboard')
+
