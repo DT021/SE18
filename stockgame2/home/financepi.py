@@ -7,18 +7,53 @@ import decimal
 
 def getPriceFromAPI(symbol, isCrypto):
 	param = {
-	'q': "AAPL", # Stock symbol (ex: "AAPL")
+	'q': symbol, # Stock symbol (ex: "AAPL")
 	'i': "86400", # Interval size in seconds ("86400" = 1 day intervals)
 	'x': "NASD", # Stock exchange symbol on which stock is traded (ex: "NASD")
-	'p': "1D" # Period (Ex: "1Y" = 1 year)
+	'p': "1Y" # Period (Ex: "1Y" = 1 year)
 	}
-	
+
 	df = get_price_data(param)
-	price = df['Open'][0]
-	return decimal.Decimal(price)
+	if not df.empty:
+		price = df['Open'][-1]
+		return round(decimal.Decimal(price),2)
+	param = {
+	'q': symbol, # Stock symbol (ex: "AAPL")
+	'i': "86400", # Interval size in seconds ("86400" = 1 day intervals)
+	'x': "INDEXDJX", # Stock exchange symbol on which stock is traded (ex: "NASD")
+	'p': "1Y" # Period (Ex: "1Y" = 1 year)
+	}
 
+	df = get_price_data(param)
+	if not df.empty:
+		price = df['Open'][-1]
+		return round(decimal.Decimal(price),2)
+		
+	param = {
+	'q': symbol, # Stock symbol (ex: "AAPL")
+	'i': "86400", # Interval size in seconds ("86400" = 1 day intervals)
+	'x': "INDEXSP", # Stock exchange symbol on which stock is traded (ex: "NASD")
+	'p': "1Y" # Period (Ex: "1Y" = 1 year)
+	}
 
+	df = get_price_data(param)
+	if not df.empty:
+		price = df['Open'][-1]
+		return round(decimal.Decimal(price),2)
+		
+	param = {
+	'q': symbol, # Stock symbol (ex: "AAPL")
+	'i': "86400", # Interval size in seconds ("86400" = 1 day intervals)
+	'x': "NYSE", # Stock exchange symbol on which stock is traded (ex: "NASD")
+	'p': "1Y" # Period (Ex: "1Y" = 1 year)
+	}
 
+	df = get_price_data(param)
+	if not df.empty:
+		price = df['Open'][-1]
+		return round(decimal.Decimal(price),2)
+	return -1
+#print(getPriceFromAPI('GOOGL', False))
 
 def getCryptoPriceFromAPI(symbol, isCrypto):
     APIKEY = 'TRKCXDZJRBBO0REH'
@@ -43,6 +78,9 @@ def getCryptoPriceFromAPI(symbol, isCrypto):
     if ('Error Message' in jsonData):
         return -1
 
+    if ('Information' in jsonData):
+        return -22
+
     # Dependent on JSON Format
     if isCrypto == False:
         timekey = 'Time Series (1min)'
@@ -59,4 +97,28 @@ def getCryptoPriceFromAPI(symbol, isCrypto):
     openPrice = recentPrices[whichprice]
 
     return openPrice
+
+def getPriceFromAPI_m(symbol, isCrypto):
+	param = {
+	'q': symbol, # Stock symbol (ex: "AAPL")
+	'i': "86400", # Interval size in seconds ("86400" = 1 day intervals)
+	'x': "NASD", # Stock exchange symbol on which stock is traded (ex: "NASD")
+	'p': "1M" # Period (Ex: "1Y" = 1 year)
+	}
+
+	df = get_price_data(param)
+	if not df.empty:
+		return df
+	
+	param = {
+	'q': symbol, # Stock symbol (ex: "AAPL")
+	'i': "86400", # Interval size in seconds ("86400" = 1 day intervals)
+	'x': "NYSE", # Stock exchange symbol on which stock is traded (ex: "NASD")
+	'p': "1M" # Period (Ex: "1Y" = 1 year)
+	}
+
+	df = get_price_data(param)
+	if not df.empty:
+		return df
+	return -1
 

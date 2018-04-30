@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+	<!-- PAGE settings -->
+	<link rel="icon" href="/static/home2/titanhead_logo_trans.png">
+  <title>Achievements</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="static/awards/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="static/awards/css/heroic-features.css" rel="stylesheet">
+
+  </head>
+
+  <body background = "/static/home2/city10.jpg" style = "background-repeat:no-repeat; background-size:cover; background-attachment: fixed;">
+
+    <!-- Navigation -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+    <div class="container">
+      <a class="navbar-brand" href="/home"><img src="/static/home2/logo_trans.png" width="125" height="45" alt="logo"></a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarResponsive">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="/home">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/shop">Shop</a>
+          </li>
+		  {% if request.user.is_authenticated%}
+          <li class="nav-item">
+            <a class="nav-link" href="/dashboard">Dashboard</a>
+          </li>
+		  {% endif %}
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">About Titan</a>
+            <div class="dropdown-menu">
+              <a class="dropdown-item" href="/aboutus">About Us</a>
+              <a class="dropdown-item" href="/mission">Our Mission</a>
+              <a class="dropdown-item" href="/faq">FAQ</a>
+            </div>
+          </li>
+		  {% if request.user.is_authenticated%}
+          <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">{{request.user.username}}</a>
+              <div class="dropdown-menu">
+                <a class="dropdown-item" href="/profile">Profile</a>
+                <a class="dropdown-item" href="/settings">Settings</a>
+                <a class="dropdown-item" href="/logout_view">Log Out</a>
+              </div>
+            </li>
+            {% else %}
+            <li class="nav-item">
+              <a class="nav-link" href="/accounts/login">Login</a>
+            </li>
+          {% endif %}
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+    <!-- Page Content -->
+    <div class="container">
+
+      <!-- Jumbotron Header -->
+      <header class="jumbotron my-4">
+        <h1 class="display-3">Titan Achievements</h1>
+        <p class="lead">Congratulations! You are an active trader with Titan Trading. Gain TitanCoins with every award!</p>
+        <!--<a href="#" class="btn btn-primary btn-lg">Call to action!</a>-->
+      </header>
+
+      <!-- Page Features -->
+      <div class="row text-center">
+
+        <div class="col-lg-3 col-md-6 mb-4">
+          <div class="card">
+          	{% if request.user.profile.trophies.0 > 0 %}
+            <img class="card-img-top" src="/static/home2/atlas.jpg" alt="">
+            <div class="card-body">
+              <h4 class="card-title">ATLAS</h4>
+			  <em class="card-text"><b>Made {{request.user.profile.trophies.0}} buys!</b></em>
+              <p class="card-text">Just like Atlas led the Titans in battle, you've been working hard to expand your portfolio! Keep trading and you'll soon be on top of the world! (Pun intended)</p>
+            </div>
+            <div class="card-footer">
+              <a href="#" class="btn btn-primary">Find Out More!</a>
+            </div>
+            {% else %}
+             <img class="card-img-top" src="/static/home2/lock.png" alt="">
+            <div class="card-body">
+              <p class="card-text">Keep trading to unlock this achievement!</p>
+            </div>
+			{% endif %}
+          </div>
+        </div>
+		
+		<div class="col-lg-3 col-md-6 mb-4">
+          <div class="card">
+          	{% if request.user.profile.trophies.1 > 0 %}
+            <img class="card-img-top" src="/static/home2/Metis.jpg" alt="">
+            <div class="card-body">
+              <h4 class="card-title">METIS</h4>
+			  <em class="card-text"><b>Made {{request.user.profile.trophies.1}} sells!</b></em>
+              <p class="card-text"> Metis is the Titan of wisdom, prudence, and deep thought. Making those smart sells means you are making prudent decisions.</p>
+            </div>
+            <div class="card-footer">
+              <a href="#" class="btn btn-primary">Find Out More!</a>
+            </div>
+            {% else %}
+             <img class="card-img-top" src="/static/home2/lock.png" alt="">
+            <div class="card-body">
+              <p class="card-text">Keep trading to unlock this achievement!</p>
+            </div>
+			{% endif %}
+          </div>
+        </div>
+
+        <div class="col-lg-3 col-md-6 mb-4">
+          <div class="card">
+            {% if request.user.profile.trophies.2 > 0 %}
+            <img class="card-img-top" src="/static/home2/cronus.jpg" alt="">
+            <div class="card-body">
+              <h4 class="card-title">CRONUS</h4>
+			  <em class="card-text"><b>Placed in top 3 {{request.user.profile.trophies.2}} times!</b></em>
+              <p class="card-text">Like Cronus overthrew Uranus, you've topped your league!</p>
+            </div>
+            <div class="card-footer">
+              <a href="#" class="btn btn-primary">Find Out More!</a>
+            </div>
+            {% else %}
+             <img class="card-img-top" src="/static/home2/lock.png" alt="">
+            <div class="card-body">
+              <p class="card-text">Keep trading to unlock this achievement!</p>
+            </div>
+      {% endif %}
+          </div>
+        </div>
+
+        <div class="col-lg-3 col-md-6 mb-4">
+          <div class="card">
+		   {% if request.user.profile.trophies.4 > 0 %}
+            <img class="card-img-top" src="/static/home2/hyperion.jpg" alt="">
+            <div class="card-body">
+              <h4 class="card-title">HYPERION</h4>
+			  <em class="card-text"><b>Beat the AI {{request.user.profile.trophies.4}} times!</b></em>
+              <p class="card-text">Hyperion is the Titan of the sun and moon, and represents watchfulness and wisdom. You have reached this level by beating one of our complex AI players.</p>
+            </div>
+            <div class="card-footer">
+              <a href="#" class="btn btn-primary">Find Out More!</a>
+            </div>
+			{% else %}
+             <img class="card-img-top" src="/static/home2/lock.png" alt="">
+            <div class="card-body">
+              <p class="card-text">Keep trading to unlock this achievement!</p>
+            </div>
+      {% endif %}
+          </div>
+        </div>
+		
+		<!--<div class="col-lg-3 col-md-6 mb-4">
+          <div class="card">
+            <img class="card-img-top" src="/static/home2/hyperion.jpg" alt="">
+            <div class="card-body">
+              <h4 class="card-title">OCEANUS</h4>
+			  <em class="card-text"><b>Played {{request.user.profile.trophies.3}} games!</b></em>
+              <p class="card-text">Oceanus, so fertile that his overproduction of aqueous elements of nature causing floods, would marvel at your countless game playing!</p>
+            </div>
+            <div class="card-footer">
+              <a href="#" class="btn btn-primary">Find Out More!</a>
+            </div>
+            
+          </div>
+        </div>-->
+		
+		<div class="col-lg-3 col-md-6 mb-4">
+          <div class="card">
+		  {% if request.user.profile.trophies.3 > 0 %}
+            <img class="card-img-top" src="/static/home2/prometheus.jpg" alt="">
+            <div class="card-body">
+
+              <h4 class="card-title">PROMETHEUS</h4>
+			  <em class="card-text"><b>Played {{request.user.profile.trophies.3}} games!</b></em>
+              <p class="card-text">The name Prometheus is derived from the Greek word for forethought. Like Prometheus won the war against the old gods, you've survived competing against top traders.</p>
+
+            </div>
+            <div class="card-footer">
+              <a href="#" class="btn btn-primary">Find Out More!</a>
+            </div>
+            {% else %}
+             <img class="card-img-top" src="/static/home2/lock.png" alt="">
+            <div class="card-body">
+              <p class="card-text">Keep trading to unlock this achievement!</p>
+            </div>
+      {% endif %}
+          </div>
+        </div>
+		
+		<div class="col-lg-3 col-md-6 mb-4">
+          <div class="card">
+		  {% if request.user.profile.trophies.5 > 0 %}
+            <img class="card-img-top" src="/static/home2/uranus.jpg" alt="">
+            <div class="card-body">
+
+              <h4 class="card-title">URANUS</h4>
+			  <em class="card-text"><b>Managed a League with 10 players!</b></em>
+              <p class="card-text">Uranus was the Titan of the Sky and father of all Titans. Like Uranus managed the Titans, you were able to manage a large league successfully!</p>
+
+            </div>
+            <div class="card-footer">
+              <a href="#" class="btn btn-primary">Find Out More!</a>
+            </div>
+            {% else %}
+             <img class="card-img-top" src="/static/home2/lock.png" alt="">
+            <div class="card-body">
+              <p class="card-text">Keep trading to unlock this achievement!</p>
+            </div>
+      {% endif %}
+          </div>
+        </div>
+
+      </div>
+      <!-- /.row -->
+
+    </div>
+    <!-- /.container -->
+
+    <!-- Footer -->
+    <footer class="py-2 filter-dark">
+      <div class="container">
+        <div class="row">
+        <div class="col-md-12 my-1">
+          <p class="mb-1 text-center text-light">© 2018-2019 Titan Trading</p>
+          <ul class="list-inline text-center">
+            <li class="list-inline-item">
+                <a href="/home">Home</a>
+              </li>
+              <li class="list-inline-item">
+                <a href="/faq">FAQ</a>
+              </li>
+              <li class="list-inline-item">
+                <a href="/aboutus">About Us</a>
+              </li>
+          </ul>
+        </div>
+      </div>
+      </div>
+      <!-- /.container -->
+    </footer>
+
+    <!-- Bootstrap core JavaScript -->
+    <script src="static/awards/vendor/jquery/jquery.min.js"></script>
+    <script src="static/awards/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+  </body>
+
+</html>

@@ -9,15 +9,15 @@
   <title>Buy Stock</title>
   <!-- CSS dependencies -->
   <link rel="stylesheet" href="/static/createleague/css/font-awesome.min.css" type="text/css">
-  <link rel="stylesheet" href="/static/home2/css/titan-trading.css">  
+  <link rel="stylesheet" href="/static/home2/css/titan-trading.css">
 
-  <link rel="stylesheet" href="/static/createleague/css/wireframe.css"> 
+  <link rel="stylesheet" href="/static/createleague/css/wireframe.css">
   <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:400,100,300,500">
-  
+
   </head>
 
 <body class="bg-dark " style=" text-align: left; background-image: url('/static/home2/wallstreetbull.jpg'); background-repeat:no-repeat; background-size:cover; background-attachment: fixed;">
-<div class="background-shade"> 
+<div class="background-shade">
   <!-- Navigation -->
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
       <div class="container">
@@ -29,6 +29,9 @@
           <ul class="navbar-nav ml-auto">
             <li class="nav-item">
               <a class="nav-link" href="/home">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/shop">Shop</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="/dashboard">Dashboard</a>
@@ -68,24 +71,49 @@
   <div class="filter-light">
     <div class="container">
       <div class="row">
-        <div class="col-md-4 order-md-2">
-          <h4 class="d-flex justify-content-between mb-3"> <span class="text-muted"><b>Your cart</b></span> <span class="badge badge-secondary badge-pill">3</span> </h4>
-          <ul class="list-group">
-            <li class="list-group-item d-flex justify-content-between">
-              <div>
-                <h6 class="my-0"><b>Stock ticker</b></h6> <small class="text-muted">(number)</small></div> <span class="text-muted">$12</span> </li>
+        <div class="col-md-6 order-md-2">
 
-            <li class="list-group-item d-flex justify-content-between"> <span>Total (USD)</span> <b>$20</b> </li>
-          </ul>
-          
+          <!-- TradingView Widget BEGIN -->
+            <div class="tradingview-widget-container">
+              <div id="tradingview_46dc4"></div>
+              <div class="tradingview-widget-copyright"><a href="https://www.tradingview.com/symbols/NASDAQ-AAPL/" rel="noopener" target="_blank"><span class="blue-text">AAPL chart</span></a> by TradingView</div>
+              <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
+              <script type="text/javascript">
+              new TradingView.widget(
+              {
+              "width": 450,
+              "height": 580,
+              "symbol": "NASDAQ:AAPL",
+              "interval": "D",
+              "timezone": "Etc/UTC",
+              "theme": "Light",
+              "style": "1",
+              "locale": "en",
+              "toolbar_bg": "#f1f3f6",
+              "enable_publishing": false,
+              "allow_symbol_change": true,
+              "container_id": "tradingview_46dc4"
+            }
+              );
+              </script>
+            </div>
+            <!-- TradingView Widget END -->
+
 
         </div>
-        <div class="col-md-8 order-md-1">
+        <div class="col-md-6 order-md-1">
           <h4 class="mb-3"><b>Transaction Information</b></h4>
+		  {% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
           <form class="needs-validation" role="form" action="/buy/{{league.id}}/{{player.id}}/" method="post" class="r-form">
             {% csrf_token %}
             {{ form.non_field_errors }}
-            <div class="mb-3"> 
+            <div class="mb-3">
               <h5 class = "mb-3"><b>Stock Ticker</b></h5>
               <label for = "ticker">{{ form.ticker.label_tag }}</label>
               {{ form.ticker.errors }}
@@ -93,27 +121,27 @@
               <div class="invalid-feedback"> Please enter a valid ticker symbol. </div>
             </div>
 
-            <div class="mb-3"> 
+            <div class="mb-3">
               <h5 class = "mb-3"><b>Number of Shares</b></h5>
               <label for="shares" >{{ form.shares.label_tag }}</label>
               {{ form.shares.errors }}
-              <input name = "shares" type="number" class="form-control"  min="0" placeholder="0" id="numshares"> 
+              <input name = "shares" type="number" class="form-control"  min="0" placeholder="0" id="numshares">
               </div>
 
             <div class="custom-control custom-checkbox">
               {{ form.isBuy.errors }}
-              <input name = "isCrypto" type="checkbox" class="custom-control-input" value="off" id="isCrypto"> <label class="custom-control-label" for="isCrypto">Crypto Order</label> 
+              <input name = "isCrypto" type="checkbox" class="custom-control-input" value="off" id="isCrypto"> <label class="custom-control-label" for="isCrypto">Crypto Order</label>
               </div>
 
             <div class="mb-3"> <label for="limit">Limit Price</label>
               <div class="input-group"> <span class="input-group-text">$</span>
               {{ form.buyingPrice.errors }}
-              <input name = "buyingPrice" type="number" min="0" step="0.01" data-number-to-fixed="2" data-number-stepfactor="100" class="form-control currency text-right" placeholder="0.00"  id="limit"> 
+              <input name = "buyingPrice" type="number" min="0" step="0.01" data-number-to-fixed="2" data-number-stepfactor="100" class="form-control currency text-right" placeholder="0.00"  id="limit">
               </div>
 
               <div class="invalid-feedback"> Please enter a limit price. </div>
 
-              <hr class="mb-4"> 
+              <hr class="mb-4">
               <button class="btn btn-lg btn-block btn-success" type="button" class="btn btn-primary" data-toggle="modal" data-target="#confirmModal">Confirm purchase</button>
 
               <!-- Modal -->

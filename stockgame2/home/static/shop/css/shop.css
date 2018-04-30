@@ -1,0 +1,12 @@
+.shopitem {
+    margin-top: 40px
+}
+
+.background-filler {
+    background-color: rgba(211,211,211,0.9);
+    border-radius: 1rem
+}
+
+.btn {
+    background-color: rgba(42, 137, 196, 0.80)
+}

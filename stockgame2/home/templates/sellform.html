@@ -34,6 +34,9 @@
           <li class="nav-item">
             <a class="nav-link" href="/home">Home</a>
           </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/shop">Shop</a>
+          </li>
 		  {% if request.user.is_authenticated%}
                     <li class="nav-item">
                         <a class="nav-link" href="/dashboard">Dashboard</a>
@@ -68,20 +71,27 @@
     <!-- Heading Row -->
     <div class="row my-5">
       <div class="col-lg-12">
-      <form role="form" action="/submitSell" method="POST" class="needs-validation" class = "r-form">
+	  {% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+      <form role="form" action="/sell2/{{league.id}}/{{player.id}}/{{asset.id}}/" method="POST" class="needs-validation" class = "r-form">
 
 	  {% csrf_token %}
 		{{ form.non_field_errors }}
-      <h2>Sell Form</h2>
+      <h2>Sell {{asset.ticker}}</h2>
       <div class="row my-3"></div>
       <div id="billing-info" class="row">
         <div class="col-sm-7 form-group">
-          <h5>Stock Ticker</h5>
-          <label class="sr-only" for="ticker">{{ form.ticker.label_tag }}</label>
+          <h5>Shares: You own {{asset.shares}} shares of {{asset.ticker}} </h5>
+          <!--<label class="sr-only" for="ticker">{{ form.ticker.label_tag }}</label>
           {{ form.ticker.errors}}
           <input data-mirror type="text" name = "ticker" class="form-control" placeholder="ex., GOOGL" id="ticker"/>
           <div class="invalid-feedback"> Please enter a valid ticker symbol. </div>
-          <span class="error small text-danger"></span>
+          <span class="error small text-danger"></span>-->
 
           <h5>Number of Shares</h5>
           <label class="sr-only" for="shares">{{ form.shares.label_tag }}</label>
@@ -128,17 +138,31 @@
 
         <div class="col-lg-5">
 
-          <h2>Trade Details</h2>
-          <!--<div id="billing-info" class="row">-->
-            <ul class="list-group">
-              <li class="list-group-item d-flex justify-content-between">
-
-                  <h6 class="my-0"><b>Stock ticker</b></h6> <small class="text-muted">(number)</small>
-
-                  <span class="text-muted">$12</span> </li>
-              <li class="list-group-item d-flex justify-content-between"> <span>Total (USD)</span> <b>$20</b> </li>
-            </ul>
-          <!--</div>-->
+          <!-- TradingView Widget BEGIN -->
+            <div class="tradingview-widget-container">
+              <div id="tradingview_46dc4"></div>
+              <div class="tradingview-widget-copyright"><a href="https://www.tradingview.com/symbols/NASDAQ-AAPL/" rel="noopener" target="_blank"><span class="blue-text">AAPL chart</span></a> by TradingView</div>
+              <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
+              <script type="text/javascript">
+              new TradingView.widget(
+              {
+              "width": 450,
+              "height": 350,
+              "symbol": "NASDAQ:AAPL",
+              "interval": "D",
+              "timezone": "Etc/UTC",
+              "theme": "Light",
+              "style": "1",
+              "locale": "en",
+              "toolbar_bg": "#f1f3f6",
+              "enable_publishing": false,
+              "allow_symbol_change": true,
+              "container_id": "tradingview_46dc4"
+            }
+              );
+              </script>
+            </div>
+            <!-- TradingView Widget END -->
 
           </div>
       </div>

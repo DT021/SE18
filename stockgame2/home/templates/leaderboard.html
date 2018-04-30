@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<!-- PAGE settings -->
+	<link rel="icon" href="/static/home2/titanhead_logo_trans.png">
+  <title>{{league.name}}'s Leaderboard</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="/static/leaderboard/vendor/bootstrap/css/bootstrap.min.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="/static/leaderboard/fonts/font-awesome-4.7.0/css/font-awesome.min.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="/static/leaderboard/vendor/animate/animate.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="/static/leaderboard/vendor/select2/select2.min.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="/static/leaderboard/vendor/perfect-scrollbar/perfect-scrollbar.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="/static/leaderboard/css/util.css">
+	<link rel="stylesheet" type="text/css" href="/static/leaderboard/css/main.css">
+<!--===============================================================================================-->
+</head>
+<body  background = "/static/home2/city10.jpg" style = "background-repeat:no-repeat; background-size:cover; background-attachment: fixed;">
+
+	 <!-- Navigation -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+    <div class="container">
+      <a class="navbar-brand" href="/home"><img src="/static/home2/logo_trans.png" width="125" height="45" alt="logo"></a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarResponsive">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="/home">Home</a>
+		  </li>
+		  <li class="nav-item">
+			<a class="nav-link" href="/shop">Shop</a>
+			</li>
+		  {% if request.user.is_authenticated%}
+          <li class="nav-item">
+            <a class="nav-link" href="/dashboard">Dashboard</a>
+          </li>
+		  {% endif %}
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">About Titan</a>
+            <div class="dropdown-menu">
+              <a class="dropdown-item" href="/aboutus">About Us</a>
+              <a class="dropdown-item" href="/mission">Our Mission</a>
+              <a class="dropdown-item" href="/faq">FAQ</a>
+            </div>
+          </li>
+		  {% if request.user.is_authenticated%}
+          <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">{{request.user.username}}</a>
+              <div class="dropdown-menu">
+                <a class="dropdown-item" href="/profile">Profile</a>
+                <a class="dropdown-item" href="/settings">Settings</a>
+                <a class="dropdown-item" href="/logout_view">Log Out</a>
+              </div>
+            </li>
+            {% else %}
+            <li class="nav-item">
+              <a class="nav-link" href="/accounts/login">Login</a>
+            </li>
+          {% endif %}
+        </ul>
+      </div>
+    </div>
+  </nav>
+	
+	<div class="container" style = "padding-top:100px;">
+		<!-- Jumbotron Header -->
+      <header class="jumbotron my-4" style = "background-color: rgb(255,255,255); opacity: 0.9;">
+        <h1 class="display-3">Your rank is: {{rank}}</h1>
+    {% if rank == 1 %}
+        <p class="lead">Congratulations! You've won in a private league! Check your achievements page for more rewards!</p>
+    {% elif rank < 4 %}
+    	<p class="lead">Congratulations! You've placed top 3! Check your achievements page for more rewards!</p>
+    {% else %}
+        <p class="lead">Thank you for playing! Check your achievements page for more rewards!</p>
+    {% endif %}
+        <a href="/awards" class="btn btn-primary btn-lg">Achievements</a>
+      </header>
+		<!-- <div class="container-table100" style = "background-color: rgb(255,255,255); opacity: 0.8;"> -->
+			<!-- <div class="wrap-table100"> -->
+				
+				<div class="table100 ver3 js-pscroll">
+					<div class="table100-head">
+						<table>
+							<thead>
+								<tr class="row100 head" style = "background-color: rgb(255,255,255); opacity: 0.8;">
+									<th class="cell100 column1">Rank</th>
+									<th class="cell100 column2">UserName</th>
+									<th class="cell100 column3">Total Assets</th>
+									<th class="cell100 column4">Buying Power</th>
+									<th class="cell100 column5">Total Worth</th>
+									
+								</tr>
+							</thead>
+						</table>
+					</div>
+
+					<div class="table100-body js-pscroll">
+						<table>
+							<tbody>
+								
+		  					{% for p in players %}
+          						<tr>
+            						<td class="cell100 column1">{{forloop.counter}}</td>
+            						<td class="cell100 column2">{{p.userID.username}}</td> 
+            						<td class="cell100 column3">{{p.totalWorth}}</td>
+									<td class="cell100 column4">{{p.buyingPower}}</td>
+									<td class="cell100 column3">{{p.cumWorth}}</td>
+          						</tr>
+		  					{% endfor %}
+								<!--<tr class="row100 body">
+									<td class="cell100 column1">ivanmarsic</td>
+									<td class="cell100 column2">No</td>
+									<td class="cell100 column3">$</td>
+									<td class="cell100 column4">Aaron Chapman</td>
+									<td class="cell100 column5">10</td>
+								</tr> -->
+
+								
+							</tbody>
+						</table>
+					</div>
+				</div>
+
+				
+
+				<!--<div class="table100 ver5">
+					<div class="table100-head">
+						<table>
+							<thead>
+								<tr class="row100 head" style = "background-color: rgb(0,0,0); opacity: 1;">
+									<th class="cell100 column1 text-light">Class name</th>
+									<th class="cell100 column2 text-light">Type</th>
+									<th class="cell100 column3 text-light">Hours</th>
+									<th class="cell100 column4 text-light">Trainer</th>
+									<th class="cell100 column5 text-light">Spots</th>
+								</tr>
+							</thead>
+						</table>
+					</div>
+
+					<div class="table100-body js-pscroll" >
+						<table>
+							<tbody>
+								<tr class="row100 body">
+									<td class="cell100 column1">Like a butterfly</td>
+									<td class="cell100 column2">Boxing</td>
+									<td class="cell100 column3">9:00 AM - 11:00 AM</td>
+									<td class="cell100 column4">Aaron Chapman</td>
+									<td class="cell100 column5">10</td>
+								</tr>
+
+								<tr class="row100 body">
+									<td class="cell100 column1">Mind & Body</td>
+									<td class="cell100 column2">Yoga</td>
+									<td class="cell100 column3">8:00 AM - 9:00 AM</td>
+									<td class="cell100 column4">Adam Stewart</td>
+									<td class="cell100 column5">15</td>
+								</tr>
+
+								<tr class="row100 body">
+									<td class="cell100 column1">Crit Cardio</td>
+									<td class="cell100 column2">Gym</td>
+									<td class="cell100 column3">9:00 AM - 10:00 AM</td>
+									<td class="cell100 column4">Aaron Chapman</td>
+									<td class="cell100 column5">10</td>
+								</tr>
+
+								<tr class="row100 body">
+									<td class="cell100 column1">Wheel Pose Full Posture</td>
+									<td class="cell100 column2">Yoga</td>
+									<td class="cell100 column3">7:00 AM - 8:30 AM</td>
+									<td class="cell100 column4">Donna Wilson</td>
+									<td class="cell100 column5">15</td>
+								</tr>
+
+								<tr class="row100 body">
+									<td class="cell100 column1">Playful Dancer's Flow</td>
+									<td class="cell100 column2">Yoga</td>
+									<td class="cell100 column3">8:00 AM - 9:00 AM</td>
+									<td class="cell100 column4">Donna Wilson</td>
+									<td class="cell100 column5">10</td>
+								</tr>
+
+								<tr class="row100 body">
+									<td class="cell100 column1">Zumba Dance</td>
+									<td class="cell100 column2">Dance</td>
+									<td class="cell100 column3">5:00 PM - 7:00 PM</td>
+									<td class="cell100 column4">Donna Wilson</td>
+									<td class="cell100 column5">20</td>
+								</tr>
+
+								<tr class="row100 body">
+									<td class="cell100 column1">Cardio Blast</td>
+									<td class="cell100 column2">Gym</td>
+									<td class="cell100 column3">5:00 PM - 7:00 PM</td>
+									<td class="cell100 column4">Randy Porter</td>
+									<td class="cell100 column5">10</td>
+								</tr>
+
+								<tr class="row100 body">
+									<td class="cell100 column1">Pilates Reformer</td>
+									<td class="cell100 column2">Gym</td>
+									<td class="cell100 column3">8:00 AM - 9:00 AM</td>
+									<td class="cell100 column4">Randy Porter</td>
+									<td class="cell100 column5">10</td>
+								</tr>
+
+								<tr class="row100 body">
+									<td class="cell100 column1">Supple Spine and Shoulders</td>
+									<td class="cell100 column2">Yoga</td>
+									<td class="cell100 column3">6:30 AM - 8:00 AM</td>
+									<td class="cell100 column4">Randy Porter</td>
+									<td class="cell100 column5">15</td>
+								</tr>
+
+								<tr class="row100 body">
+									<td class="cell100 column1">Yoga for Divas</td>
+									<td class="cell100 column2">Yoga</td>
+									<td class="cell100 column3">9:00 AM - 11:00 AM</td>
+									<td class="cell100 column4">Donna Wilson</td>
+									<td class="cell100 column5">20</td>
+								</tr>
+
+								<tr class="row100 body">
+									<td class="cell100 column1">Virtual Cycle</td>
+									<td class="cell100 column2">Gym</td>
+									<td class="cell100 column3">8:00 AM - 9:00 AM</td>
+									<td class="cell100 column4">Randy Porter</td>
+									<td class="cell100 column5">20</td>
+								</tr>
+
+								<tr class="row100 body">
+									<td class="cell100 column1">Like a butterfly</td>
+									<td class="cell100 column2">Boxing</td>
+									<td class="cell100 column3">9:00 AM - 11:00 AM</td>
+									<td class="cell100 column4">Aaron Chapman</td>
+									<td class="cell100 column5">10</td>
+								</tr>
+
+								<tr class="row100 body">
+									<td class="cell100 column1">Mind & Body</td>
+									<td class="cell100 column2">Yoga</td>
+									<td class="cell100 column3">8:00 AM - 9:00 AM</td>
+									<td class="cell100 column4">Adam Stewart</td>
+									<td class="cell100 column5">15</td>
+								</tr>
+
+								<tr class="row100 body">
+									<td class="cell100 column1">Crit Cardio</td>
+									<td class="cell100 column2">Gym</td>
+									<td class="cell100 column3">9:00 AM - 10:00 AM</td>
+									<td class="cell100 column4">Aaron Chapman</td>
+									<td class="cell100 column5">10</td>
+								</tr>
+
+								<tr class="row100 body">
+									<td class="cell100 column1">Wheel Pose Full Posture</td>
+									<td class="cell100 column2">Yoga</td>
+									<td class="cell100 column3">7:00 AM - 8:30 AM</td>
+									<td class="cell100 column4">Donna Wilson</td>
+									<td class="cell100 column5">15</td>
+								</tr>
+
+								<tr class="row100 body">
+									<td class="cell100 column1">Playful Dancer's Flow</td>
+									<td class="cell100 column2">Yoga</td>
+									<td class="cell100 column3">8:00 AM - 9:00 AM</td>
+									<td class="cell100 column4">Donna Wilson</td>
+									<td class="cell100 column5">10</td>
+								</tr>
+
+								<tr class="row100 body">
+									<td class="cell100 column1">Zumba Dance</td>
+									<td class="cell100 column2">Dance</td>
+									<td class="cell100 column3">5:00 PM - 7:00 PM</td>
+									<td class="cell100 column4">Donna Wilson</td>
+									<td class="cell100 column5">20</td>
+								</tr>
+
+								<tr class="row100 body">
+									<td class="cell100 column1">Cardio Blast</td>
+									<td class="cell100 column2">Gym</td>
+									<td class="cell100 column3">5:00 PM - 7:00 PM</td>
+									<td class="cell100 column4">Randy Porter</td>
+									<td class="cell100 column5">10</td>
+								</tr>
+
+								<tr class="row100 body">
+									<td class="cell100 column1">Pilates Reformer</td>
+									<td class="cell100 column2">Gym</td>
+									<td class="cell100 column3">8:00 AM - 9:00 AM</td>
+									<td class="cell100 column4">Randy Porter</td>
+									<td class="cell100 column5">10</td>
+								</tr>
+
+								<tr class="row100 body">
+									<td class="cell100 column1">Supple Spine and Shoulders</td>
+									<td class="cell100 column2">Yoga</td>
+									<td class="cell100 column3">6:30 AM - 8:00 AM</td>
+									<td class="cell100 column4">Randy Porter</td>
+									<td class="cell100 column5">15</td>
+								</tr>
+
+								<tr class="row100 body">
+									<td class="cell100 column1">Yoga for Divas</td>
+									<td class="cell100 column2">Yoga</td>
+									<td class="cell100 column3">9:00 AM - 11:00 AM</td>
+									<td class="cell100 column4">Donna Wilson</td>
+									<td class="cell100 column5">20</td>
+								</tr>
+
+								<tr class="row100 body">
+									<td class="cell100 column1">Virtual Cycle</td>
+									<td class="cell100 column2">Gym</td>
+									<td class="cell100 column3">8:00 AM - 9:00 AM</td>
+									<td class="cell100 column4">Randy Porter</td>
+									<td class="cell100 column5">20</td>
+								</tr> 
+							</tbody>
+						</table>
+					</div>
+				</div>-->
+			<!-- </div> -->
+		<!-- </div> -->
+	</div>
+
+<!-- Footer -->
+    <footer class="py-2 filter-dark">
+      <div class="container">
+        <div class="row">
+        <div class="col-md-12 my-1">
+          <p class="mb-1 text-center text-light">© 2018-2019 Titan Trading</p>
+          <ul class="list-inline text-center">
+            <li class="list-inline-item">
+                <a href="/home">Home</a>
+              </li>
+              <li class="list-inline-item">
+                <a href="/faq">FAQ</a>
+              </li>
+              <li class="list-inline-item">
+                <a href="/aboutus">About Us</a>
+              </li>
+          </ul>
+        </div>
+      </div>
+      </div>
+      <!-- /.container -->
+    </footer>
+<!--===============================================================================================-->	
+	<script src="/static/leaderboard/vendor/jquery/jquery-3.2.1.min.js"></script>
+<!--===============================================================================================-->
+	<script src="/static/leaderboard/vendor/bootstrap/js/popper.js"></script>
+	<script src="/static/leaderboard/vendor/bootstrap/js/bootstrap.min.js"></script>
+<!--===============================================================================================-->
+	<script src="/static/leaderboard/vendor/select2/select2.min.js"></script>
+<!--===============================================================================================-->
+	<script src="/static/leaderboard/vendor/perfect-scrollbar/perfect-scrollbar.min.js"></script>
+	<script>
+		$('.js-pscroll').each(function(){
+			var ps = new PerfectScrollbar(this);
+
+			$(window).on('resize', function(){
+				ps.update();
+			})
+		});
+			
+		
+	</script>
+<!--===============================================================================================-->
+	<script src="/static/leaderboard/js/main.js"></script>
+
+</body>
+</html>
