@@ -1,1 +1,1 @@
-web: gunicorn stockgame.wsgi
+web: gunicorn stockgame.wsgi.application
