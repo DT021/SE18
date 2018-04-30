@@ -28,9 +28,11 @@ def easyAI(isCrypto, buyingPower, currAssets, currAmts):
   iter = 0;
 
   # invalid call possible if API doesn't have currency
+  buyIndex = 1
   while (price == -1 and iter < 25):
       iter = iter + 1
-      randBuyStock = list[random.randint(0, lenList-1)]
+      buyIndex = random.randint(0, lenList-1)
+      randBuyStock = list[buyIndex]
       if isCrypto == False:
           price = getPriceFromAPI(randBuyStock, isCrypto)
       else:
@@ -43,9 +45,11 @@ def easyAI(isCrypto, buyingPower, currAssets, currAmts):
     if (isCrypto == False):
         randBuyStock = 'GOOGL'
         randBuyNum = 1
+        buyIndex = 1
     else:
         randBuyStock = 'BTC'
         randBuyNum = 1
+        buyIndex = 1
   else: # has a valid price because has not reached max iter
       if price == 0:
         price = 10
@@ -60,6 +64,6 @@ def easyAI(isCrypto, buyingPower, currAssets, currAmts):
   randSellStock = currAssets[randInd]
   randNumToSell = random.randint(0, currAmts[randInd])
 
-  return [randBuyStock, randBuyNum, randSellStock, randNumToSell]
+  return [randBuyStock, randBuyNum, randSellStock, randNumToSell, buyIndex]
 
-print(easyAI(False, 1000000, ['abc', 'fgb', 'lmf'], [5, 20, 30]))
+#print(easyAI(False, 1000000, ['abc', 'fgb', 'lmf'], [5, 20, 30]))
