@@ -25,9 +25,9 @@ import decimal
 import os
 
 account_sid = "AC0442f02a5d307c7c2f9bb0b6d63d98b7"
-try:  
+try:
 	auth_token = os.environ["TWILIO_SECRET"]
-except KeyError: 
+except KeyError:
 	auth_token  = "x"
 
 
@@ -202,7 +202,7 @@ def submitBuy(request,league_id,player_id):
 		new_transaction.save()
 
 		# message = client.messages.create(
-		#	to="+17329985271", 
+		#	to="+17329985271",
 		#	from_="+17325079667",
 		#	body="You bought %d shares of %s at $%d!" % (shares,ticker,tmpPrice))
 
@@ -248,102 +248,117 @@ def createai(request):
 
 def aipage(request, league_id):
 
-	# get ai player
-	aiplayer = Player.objects.filter(leagueID = league_id, isAi = True)
-	if not aiplayer:
-		return render(request, 'createaipage.html')
+    # get ai player
+    aiplayer = Player.objects.filter(leagueID = league_id, isAi = True)
+    if not aiplayer:
+        return render(request, 'createaipage.html')
 
-	l = aiplayer.first()
+    l = aiplayer.first()
 
 	# perform transactions
-	count = 0
+    count = 0
 
-	currasset = list()
-	curramt = list()
-	result = list()
-	assething = Asset.objects.filter(leagueID = league_id)
+    currasset = list()
+    curramt = list()
+    result = list()
+    easyBuyIndex = 0
 
-	if l.userID.id == 14:
-		for h in assething:
-			if h.playerID == l.id:
-				currasset.append(h.ticker)
-				curramt.append(h.shares)
-		result = easyAI(l.leagueID.isCrypto,l.buyingPower,currasset,curramt)
-		 #allow crypto in future
-		shares = result[1]
-		ticker = result[0]
-		if shares != 0:
-			buydash(ticker, shares,l.leagueID.id, l.id)
-		print(result[3])
-		print(currasset)
-		print(curramt)
-		if result[3] != 0:
-			asset123 = Asset.objects.filter(ticker = result[2], playerID = l.id)
-			print(result[2])
-			print(asset123)
-			selldash(result[3],l.id,l.leagueID.id,asset123.first().id)
-		result.clear()
-		currasset.clear()
-		curramt.clear()
+    medweight = 0
+    medbias = 0
+    medloss = 0
 
-	if l.userID.id == 15:
-		for h in assething:
-			if h.playerID == l.id:
-				currasset.append(h.ticker)
-				curramt.append(h.shares)
-		result = getBuy_med(l.buyingPower)
-		ticker = result[0]
-		shares = result[1]
-		if shares != 0:
-			buydash(ticker, shares,l.leagueID.id, l.id)
-		print(currasset)
-		print(curramt)
-		result.clear()
-		result = getSell_med(currasset,curramt)
-		ticker = result[0]
-		shares = result[1]
-		print(ticker)
-		print(shares)
-		if shares != 0:
-			asset123 = Asset.objects.filter(ticker = ticker, playerID = l.id)
-			selldash(shares,l.id,l.leagueID.id,asset123.first().id)
-		currasset.clear()
-		curramt.clear()
-	if l.userID.id == 16:
-		for h in assething:
-			if h.playerID == l.id:
-				currasset.append(h.ticker)
-				curramt.append(h.shares)
-		result = getBuy_hard(l.buyingPower)
-		ticker = result[0]
-		shares = result[1]
-		if shares != 0:
-			buydash(ticker, shares,l.leagueID.id, l.id)
-		print(currasset)
-		print(curramt)
-		result.clear()
-		result = getSell_hard(currasset,curramt)
-		ticker = result[0]
-		shares = result[1]
-		if shares != 0:
-			asset123 = Asset.objects.filter(ticker = ticker, playerID = l.id)
-			print(asset123)
-			selldash(shares,l.id,l.leagueID.id,asset123.first().id)
-		currasset.clear()
-		curramt.clear()
+    ptweets = []
+    ntweets = []
+    pnews = []
+    nnews = []
+    assething = Asset.objects.filter(leagueID = league_id)
 
+    if l.userID.id == 14:
+        for h in assething:
+            if h.playerID == l.id:
+                currasset.append(h.ticker)
+                curramt.append(h.shares)
+        result = easyAI(l.leagueID.isCrypto,l.buyingPower,currasset,curramt)
+        print(result)
+        shares = result[1]
+        ticker = result[0]
+        if shares != 0:
+            buydash(ticker, shares,l.leagueID.id, l.id)
+        if result[3] != 0:
+            asset123 = Asset.objects.filter(ticker = result[2], playerID = l.id)
+            selldash(result[3],l.id,l.leagueID.id,asset123.first().id)
+        easyBuyIndex = result[4]
+        diff = 1
+        result.clear()
+        currasset.clear()
+        curramt.clear()
 
+    if l.userID.id == 15:
+        diff = 2
+        for h in assething:
+            if h.playerID == l.id:
+                currasset.append(h.ticker)
+                curramt.append(h.shares)
+        result = getBuy_med(l.buyingPower)
+        ticker = result[0]
+        shares = result[1]
+        medweight = result[2]
+        medbias = result[3]
+        medloss = result[4]
+        if shares != 0:
+            buydash(ticker, shares,l.leagueID.id, l.id)
+        print(currasset)
+        print(curramt)
+        result.clear()
+        result = getSell_med(currasset,curramt)
+        ticker = result[0]
+        shares = result[1]
+        print(ticker)
+        print(shares)
+        if shares != 0:
+            asset123 = Asset.objects.filter(ticker = ticker, playerID = l.id)
+            selldash(shares,l.id,l.leagueID.id,asset123.first().id)
+        currasset.clear()
+        curramt.clear()
 
+    if l.userID.id == 16:
+        diff = 3
+        for h in assething:
+            if h.playerID == l.id:
+                currasset.append(h.ticker)
+                curramt.append(h.shares)
+        result = getBuy_hard(l.buyingPower)
+        ticker = result[0]
+        shares = result[1]
+        ptweets = result[2]
+        ntweets = result[3]
+        pnews = result[4]
+        nnews = result[5]
+        if shares != 0:
+            buydash(ticker, shares,l.leagueID.id, l.id)
+        print(currasset)
+        print(curramt)
+        result.clear()
+        result = getSell_hard(currasset,curramt)
+        ticker = result[0]
+        shares = result[1]
+        if shares != 0:
+            asset123 = Asset.objects.filter(ticker = ticker, playerID = l.id)
+            print(asset123)
+            selldash(shares,l.id,l.leagueID.id,asset123.first().id)
+        currasset.clear()
+        curramt.clear()
 
-	# query for changes in the database
-	cumWorth = l.cumWorth
-	buyingPower = l.buyingPower
-	pTransactions = Transaction.objects.filter(playerID = l.id)
-	print(pTransactions)
-	pAssets = Asset.objects.filter(leagueID = league_id, playerID = l.id)
-	print(pAssets)
+    # query for changes in the database
+    cumWorth = l.cumWorth
+    buyingPower = l.buyingPower
+    pTransactions = Transaction.objects.filter(playerID = l.id)
+    print(pTransactions)
+    pAssets = Asset.objects.filter(leagueID = league_id, playerID = l.id)
+    print(pAssets)
 
-	return render(request, 'aipage.html', {'assets': pAssets, 'cumWorth': cumWorth, 'buyingPower': buyingPower, 'transactions': pTransactions})
+    return render(request, 'aipage.html', {'assets': pAssets, 'cumWorth': cumWorth, 'buyingPower': buyingPower, 'transactions': pTransactions, 'diff':diff,
+    'easyBuyIndex':easyBuyIndex, 'medWeight':medweight, 'medBias':medbias, 'medLoss':medloss, 'ptweets':ptweets[:5], 'ntweets':ntweets[:5], 'pnews':pnews[:5], 'nnews':nnews[:5]})
 
 
 
@@ -379,7 +394,7 @@ def submitSell(request,league_id,player_id,asset_id):
 			else:
 				asset.save()
 			# message = client.messages.create(
-			#	to="+17329985271", 
+			#	to="+17329985271",
 			#	from_="+17325079667",
 			#	body="You Sold %d shares of %s at $%d!" % (shares,asset.ticker,tmpPrice))
 			url = '/leagues/'+str(league.id)+'/'
@@ -509,7 +524,7 @@ def dashboard(request):
 	if (current_user.is_authenticated):
 		players = Player.objects.filter(userID=request.user)
 
-		
+
 		admin = list()
 		rank = list()
 		for p in players:
@@ -532,7 +547,7 @@ def dashboard(request):
 					admin.append(l.userID.username)
 				if l.userID.id == request.user.id:
 					rank.append(count)
-			
+
 
 		return render(request, 'dashboard.html', {'players': players, 'admin':admin,'rank':rank})
 	else:
@@ -660,7 +675,7 @@ def sms(request):
 	print(processed)
 	shares = processed[0]
 	ticker = processed[1]
-	
+
 	buyingPrice = getPriceFromAPI(ticker,False) #allow crypto in future
 	tmpPrice = buyingPrice*decimal.Decimal(shares)
 	message = '<Response><Message>You bought %s shares of %s for $%s</Message></Response>' % (shares,ticker, tmpPrice)
@@ -672,7 +687,7 @@ def sms(request):
 	player.buyingPower = player.buyingPower-tmpPrice
 	new_transaction.save()
 	return HttpResponse(message, content_type='text/xml')
-	
+
 
 # Create your views here.
 
@@ -696,4 +711,3 @@ def submitShop(request,item):
 		request.user.profile.TitanCoins = request.user.profile.TitanCoins + 300
 
 	print(request.user.profile.TitanCoins)
-
