@@ -98,23 +98,34 @@
 							<p class="page-subtitle small"><font size="4">Birthday: {{request.user.profile.birthday}}</font> </p>
 						</div>
 						<div>
+							<hr>
+							<h1 class="page-header small"><font size="5"><b>TitanCoins: {{request.user.profile.TitanCoins}}</b></font></h1>
+							<hr>
+						</div>
+						<div>
 								<h1 class="page-header small"><font size="5"><b>Achievements</b></font></h1>
 								<hr>
-								<p class="page-subtitle small"><font size = "4">{{request.user.username}}'s Achievements</font></p>
+								<a href="/awards" class="btn btn-primary mb-2"><font size = "4">{{request.user.username}}'s Achievements</font></a>
 							</div>
 						<div class="col-md-12 photolist">
 							<div class="row">
-								{% if request.user.profile.trophies.0 == 1 %}
-								<div class="col-sm-3 col-xs-3"><img src= "/static/home2/titanhead_logo.png" class="" alt=""> </div>
+								{% if request.user.profile.trophies.0 > 0 %}
+								<div class="col-sm-3 col-xs-3"><img src= "/static/home2/atlas.jpg" class="" alt=""> </div>
 								{% endif %}
-								{% if request.user.profile.trophies.1 == 1 %}
-								<div class="col-sm-3 col-xs-3"><img src="/static/home2/titanhead_logo.png" class="" alt=""> </div>
+								{% if request.user.profile.trophies.1 > 0 %}
+								<div class="col-sm-3 col-xs-3"><img src="/static/home2/Metis.jpg" class="" alt=""> </div>
 								{% endif %}
-								{% if request.user.profile.trophies.2 == 1 %}
-								<div class="col-sm-3 col-xs-3"><img src="/static/home2/titanhead_logo.png" class="" alt=""> </div>
+								{% if request.user.profile.trophies.2 > 0 %}
+								<div class="col-sm-3 col-xs-3"><img src="/static/home2/cronus.jpg" class="" alt=""> </div>
 								{% endif %}
-								{% if request.user.profile.trophies.3 == 1 %}
-								<div class="col-sm-3 col-xs-3"><img src="/static/home2/titanhead_logo.png" class="" alt=""> </div>
+								{% if request.user.profile.trophies.3 > 1 %}
+								<div class="col-sm-3 col-xs-3"><img src="/static/home2/prometheus.jpg" class="" alt=""> </div>
+								{% endif %}
+								{% if request.user.profile.trophies.4 > 1 %}
+								<div class="col-sm-3 col-xs-3"><img src="/static/home2/hyperion.jpg" class="" alt=""> </div>
+								{% endif %}
+								{% if request.user.profile.trophies.5 > 1 %}
+								<div class="col-sm-3 col-xs-3"><img src="/static/home2/uranus.jpg" class="" alt=""> </div>
 								{% endif %}
 							</div>
 						</div>

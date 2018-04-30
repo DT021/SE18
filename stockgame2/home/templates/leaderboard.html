@@ -74,13 +74,13 @@
 	<div class="container" style = "padding-top:100px;">
 		<!-- Jumbotron Header -->
       <header class="jumbotron my-4" style = "background-color: rgb(255,255,255); opacity: 0.9;">
-        <h1 class="display-3">Your rank is: {{rank}}</h1>
+        <h1 class="display-3">Your rank in {{league.name}} is: {{rank}}</h1>
     {% if rank == 1 %}
         <p class="lead">Congratulations! You've won in a private league! Check your achievements page for more rewards!</p>
     {% elif rank < 4 %}
     	<p class="lead">Congratulations! You've placed top 3! Check your achievements page for more rewards!</p>
     {% else %}
-        <p class="lead">Thank you for playing! Check your achievements page for more rewards!</p>
+        <p class="lead">This league has ended. Thank you for playing! Check your achievements page for more rewards!</p>
     {% endif %}
         <a href="/awards" class="btn btn-primary btn-lg">Achievements</a>
       </header>

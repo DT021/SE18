@@ -530,16 +530,16 @@ def dashboard(request):
 		for p in players:
 			count = 0
 			people = Player.objects.filter(leagueID = p.leagueID).order_by('-cumWorth')
-			for i in people:
-				worth = 0
-				assets = Asset.objects.filter(playerID=i.id)
-				for a in assets:
-						marketPrice = getPriceFromAPI(a.ticker, p.leagueID.isCrypto)
-						worth+= (marketPrice*a.shares)
-				i.totalWorth = worth
-				i.cumWorth = i.totalWorth + i.buyingPower
-				i.save()
-			people = Player.objects.filter(leagueID = p.leagueID).order_by('-cumWorth')
+			# for i in people:
+				# worth = 0
+				# assets = Asset.objects.filter(playerID=i.id)
+				# for a in assets:
+						# marketPrice = getPriceFromAPI(a.ticker, p.leagueID.isCrypto)
+						# worth+= (marketPrice*a.shares)
+				# i.totalWorth = worth
+				# i.cumWorth = i.totalWorth + i.buyingPower
+				# i.save()
+			# people = Player.objects.filter(leagueID = p.leagueID).order_by('-cumWorth')
 
 			for l in people:
 				count+=1
@@ -592,7 +592,7 @@ def leagues(request,league_id):
 		if p.userID.id == request.user.id:
 			currPlayer = p
 			rank = count
-		if p.isAi and count > 0: # AI placing worse than user
+		if p.isAi and count > rank: # AI placing worse than user
 			numAIbeat += 1
 	if (endDate < presentDate): # league has ended, redirect to leaderboard.html
 		if not (league.hasEnded): # need to handle trophies
@@ -607,6 +607,7 @@ def leagues(request,league_id):
 				if current_user.profile.trophies[5] < count: # new record for # ppl managed
 					current_user.profile.trophies[5] = count
 			current_user.save()
+			#current_user.profile.TitanCoins += 
 		return render(request, 'leaderboard.html', {'league': league, 'admin': admin, 'players':players,'currPlayer':currPlayer, 'rank':rank})
 
 	pAssets = Asset.objects.filter(playerID = currPlayer.id)
