@@ -167,15 +167,27 @@ def submitBuy(request,league_id,player_id):
 	# else:
 		shares = form.cleaned_data.get('shares')
 		isCrypto = form.cleaned_data.get('isCrypto')
-		#isCrypto = False
+		print(isCrypto)
 		#buyingPrice = form.cleaned_data.get('buyingPrice')
 		if isCrypto == True:
-			buyingPrice = getCryptoPriceFromAPI(ticker, isCrypto)
-		if isCrypto == False:
-			buyingPrice = getPriceFromAPI(ticker,isCrypto) #allow crypto in future
-		#player = Player.objects.get(id=3)
-		#tempPid = 1
-		#tempLid = League.objects.get(name="k1")
+			buyingPrice = getCryptoPriceFromAPI2(ticker, True)
+		else:
+			buyingPrice = getPriceFromAPI(ticker,False) #allow crypto in future
+		if buyingPrice == -1:
+			storage = messages.get_messages(request)
+			messages.add_message(request, messages.ERROR, 'Please enter a valid ticker.')
+			storage.used = False
+			return render(request, 'buypage.html', {'form': form,'league':league,'player':player})
+		elif buyingPrice == -22:
+			storage = messages.get_messages(request)
+			messages.add_message(request, messages.ERROR, 'Too many requests at this time.')
+			storage.used = False
+			return render(request, 'buypage.html', {'form': form,'league':league,'player':player})
+		elif buyingPrice <0:
+			storage = messages.get_messages(request)
+			messages.add_message(request, messages.ERROR, 'Invalid Input.')
+			storage.used = False
+			return render(request, 'buypage.html', {'form': form,'league':league,'player':player})
 		tmpPrice = buyingPrice*shares
 		if tmpPrice > player.buyingPower:
 			storage = messages.get_messages(request)

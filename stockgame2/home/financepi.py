@@ -98,6 +98,25 @@ def getCryptoPriceFromAPI(symbol, isCrypto):
 
     return openPrice
 
+def getCryptoPriceFromAPI2(symbol,isCrypto):
+	APIKEY = 'C1D9E9FC-4D44-4F52-BF51-7EA190BB4DBF'
+	headers = {'X-CoinAPI-Key' : APIKEY}
+	url ='https://rest.coinapi.io/v1/exchangerate/'+symbol+'/USD'
+
+	response = requests.get(url, headers=headers)
+	binary = response.content
+	jsonData = json.loads(binary) #gets JSON data
+
+	# Check if any errors, return -1
+	if ('Error Message' in jsonData):
+		return -1
+
+	if ('Information' in jsonData):
+		return -22
+	price = jsonData['rate']
+	print(price)
+	return decimal.Decimal(price)
+	
 def getPriceFromAPI_m(symbol, isCrypto):
 	param = {
 	'q': symbol, # Stock symbol (ex: "AAPL")

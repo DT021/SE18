@@ -21,17 +21,17 @@ class BuyForm(forms.Form):
 	shares = forms.DecimalField(decimal_places=0, max_digits=40)
 	isCrypto = forms.BooleanField(required = False)
 	buyingPrice = forms.DecimalField(decimal_places = 2, max_digits=40, required=False)
-	def clean_ticker(self):
-		isCrypto = False
-		ticker = self.cleaned_data['ticker']
-		buyingPrice = getPriceFromAPI(ticker,isCrypto)
-		if buyingPrice == -1:
-			raise ValidationError(_("Ticker does not exist. "))
-		elif buyingPrice == -22:
-			raise ValidationError(_("Too many requests at this time."))
-		elif buyingPrice <0:
-			raise ValidationError (_("Invalid input"))
-		return ticker
+	# def clean_ticker(self):
+		# isCrypto = False
+		# ticker = self.cleaned_data['ticker']
+		# buyingPrice = getPriceFromAPI(ticker,isCrypto)
+		# if buyingPrice == -1:
+			# raise ValidationError(_("Ticker does not exist. "))
+		# elif buyingPrice == -22:
+			# raise ValidationError(_("Too many requests at this time."))
+		# elif buyingPrice <0:
+			# raise ValidationError (_("Invalid input"))
+		# return ticker
 	
 
 class SellForm(forms.Form):
