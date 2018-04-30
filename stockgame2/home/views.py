@@ -624,7 +624,7 @@ def settings(request):
 def awards(request):
 	template = loader.get_template('awards.html')
 	return HttpResponse(template.render({},request))
->>>>>>> master
+
 def receipt(request):
 	template = loader.get_template('receipt.html')
 	return HttpResponse(template.render({},request))
@@ -634,7 +634,7 @@ def leaderboard(request, league_id):
 def processInvalid(request):
 	template = loader.get_template('processInvalid.html')
 	return HttpResponse(template.render({},request))
-<<<<<<< HEAD
+
 
 @csrf_exempt
 def sms(request):
@@ -658,7 +658,7 @@ def sms(request):
 	new_transaction.save()
 	return HttpResponse(message, content_type='text/xml')
 	
-=======
+
 # Create your views here.
 
 def shop(request):
