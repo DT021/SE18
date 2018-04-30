@@ -577,7 +577,7 @@ def leagues(request,league_id):
 		if p.userID.id == request.user.id:
 			currPlayer = p
 			rank = count
-		if p.isAi and count > 0: # AI placing worse than user
+		if p.isAi and count > rank: # AI placing worse than user
 			numAIbeat += 1
 	if (endDate < presentDate): # league has ended, redirect to leaderboard.html
 		if not (league.hasEnded): # need to handle trophies
@@ -592,6 +592,7 @@ def leagues(request,league_id):
 				if current_user.profile.trophies[5] < count: # new record for # ppl managed
 					current_user.profile.trophies[5] = count
 			current_user.save()
+			#current_user.profile.TitanCoins += 
 		return render(request, 'leaderboard.html', {'league': league, 'admin': admin, 'players':players,'currPlayer':currPlayer, 'rank':rank})
 
 	pAssets = Asset.objects.filter(playerID = currPlayer.id)
