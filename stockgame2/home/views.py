@@ -750,11 +750,16 @@ def submitShop(request,item):
 		request.user.profile.TitanCoins = request.user.profile.TitanCoins + 500
 	elif item == 3:
 
-		request.user.profile.TitanCoins = request.user.profile.TitanCoins + 300
+		request.user.profile.TitanCoins = request.user.profile.TitanCoins + 1000
 	elif item == 4:
 
 		if (request.user.profile.TitanCoins<100):
 			return HttpResponseRedirect('/dashboard')
-		request.user.profile.TitanCoins = request.user.profile.TitanCoins + 300
+		return HttpResponseRedirect('/createaipage')
+	elif item == 5:
+
+		if (request.user.profile.TitanCoins<100):
+			return HttpResponseRedirect('/dashboard')
+		return HttpResponseRedirect('/dashboard')
 
 	print(request.user.profile.TitanCoins)
