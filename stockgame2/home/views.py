@@ -514,7 +514,7 @@ def aboutus(request):
 	template = loader.get_template('aboutus.html')
 	return HttpResponse(template.render({},request))
 def home(request):
-	APIkey = '42b2610b2d1a421fbc3e5551202e2094'
+	APIkey = 'fc573c0fbf134ed9af6e3e0459df0802'
 
 	listOfStocks = getDow()
 	ticker = random.choice(listOfStocks)
