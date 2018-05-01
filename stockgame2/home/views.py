@@ -749,6 +749,9 @@ def sms(request):
 		new_asset.save()
 		new_transaction = Transaction(leagueID = league, playerID = player.id, price = tmpPrice, ticker = ticker, shares = shares, isBuy = True)
 		player.buyingPower = player.buyingPower-tmpPrice
+		player.totalWorth += tmpPrice
+		player.cumWorth = player.buyingPower + player.totalWorth
+		player.save()
 		new_transaction.save()
 		return HttpResponse(message, content_type='text/xml')
 
