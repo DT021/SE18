@@ -110,11 +110,11 @@
 								
 		  					{% for p in players %}
           						<tr>
-            						<td class="cell100 column1">{{forloop.counter}}</td>
-            						<td class="cell100 column2">{{p.userID.username}}</td> 
-            						<td class="cell100 column3">{{p.totalWorth}}</td>
-									<td class="cell100 column4">{{p.buyingPower}}</td>
-									<td class="cell100 column3">{{p.cumWorth}}</td>
+            						<td class="cell100 column1" style="color:#FFFFFF">{{forloop.counter}}</td>
+            						<td class="cell100 column2" style="color:#FFFFFF">{{p.userID.username}}</td> 
+            						<td class="cell100 column3" style="color:#FFFFFF">{{p.totalWorth}}</td>
+									<td class="cell100 column4" style="color:#FFFFFF">{{p.buyingPower}}</td>
+									<td class="cell100 column3" style="color:#FFFFFF">{{p.cumWorth}}</td>
           						</tr>
 		  					{% endfor %}
 								<!--<tr class="row100 body">

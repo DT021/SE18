@@ -671,6 +671,7 @@ def leagues(request,league_id):
 		for a in assets:
 				if league.isCrypto:
 					marketPrice = getCryptoPriceFromAPI2(a.ticker, league.isCrypto)
+					print(marketPrice)
 				else:
 					marketPrice = getPriceFromAPI(a.ticker, league.isCrypto)
 				worth+= (marketPrice*a.shares)

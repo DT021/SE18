@@ -99,7 +99,7 @@ def getCryptoPriceFromAPI(symbol, isCrypto):
     return round(decimal.Decimal(openPrice),2)
 
 def getCryptoPriceFromAPI2(symbol,isCrypto):
-	APIKEY = 'C1D9E9FC-4D44-4F52-BF51-7EA190BB4DBF'
+	APIKEY = '0BE9E347-2C93-4385-A9CD-80BA48A442D6'
 	headers = {'X-CoinAPI-Key' : APIKEY}
 	url ='https://rest.coinapi.io/v1/exchangerate/'+symbol+'/USD'
 
@@ -112,7 +112,10 @@ def getCryptoPriceFromAPI2(symbol,isCrypto):
 		return -1
 	price = jsonData['rate']
 	print(price)
-	return round(decimal.Decimal(price),2)
+	#return round(decimal.Decimal(price),2)
+	return decimal.Decimal(price)
+def getCryptoPriceFromAPI3(symbol,isCrypto):
+	url = 'https://min-api.cryptocompare.com/data/price?fsym='+symbol+'&tsyms=USD'
 	
 def getPriceFromAPI_m(symbol, isCrypto):
 	param = {
