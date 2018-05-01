@@ -59,7 +59,7 @@ def easyAI(isCrypto, buyingPower, currAssets, currAmts):
   ################ SELL ORDER
   lenAssets = len(currAssets)
   if lenAssets == 0:
-    return [randBuyStock, randBuyNum, 'none123', 0]
+    return [randBuyStock, randBuyNum, 'none123', 0, 0]
   randInd =random.randint(0, lenAssets-1)
   randSellStock = currAssets[randInd]
   randNumToSell = random.randint(0, currAmts[randInd])

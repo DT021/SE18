@@ -262,116 +262,124 @@ def createai(request):
 def aipage(request, league_id):
 
     # get ai player
-    aiplayer = Player.objects.filter(leagueID = league_id, isAi = True)
-    if not aiplayer:
-        return redirect('/shop')
+	aiplayer = Player.objects.filter(leagueID = league_id, isAi = True)
+	if not aiplayer:
+		return redirect('/shop')
 
-    l = aiplayer.first()
+	l = aiplayer.first()
 
 	# perform transactions
-    count = 0
+	count = 0
 
-    currasset = list()
-    curramt = list()
-    result = list()
-    easyBuyIndex = 0
+	currasset = list()
+	curramt = list()
+	result = list()
+	easyBuyIndex = 0
 
-    medweight = 0
-    medbias = 0
-    medloss = 0
+	medweight = 0
+	medbias = 0
+	medloss = 0
 
-    ptweets = []
-    ntweets = []
-    pnews = []
-    nnews = []
-    assething = Asset.objects.filter(leagueID = league_id)
+	ptweets = []
+	ntweets = []
+	pnews = []
+	nnews = []
+	assething = Asset.objects.filter(leagueID = league_id)
 
-    if l.userID.id == 3:
-        for h in assething:
-            if h.playerID == l.id:
-                currasset.append(h.ticker)
-                curramt.append(h.shares)
-        result = easyAI(l.leagueID.isCrypto,l.buyingPower,currasset,curramt)
-        print(result)
-        shares = result[1]
-        ticker = result[0]
-        if shares != 0:
-            buydash(ticker, shares,l.leagueID.id, l.id)
-        if result[3] != 0:
-            asset123 = Asset.objects.filter(ticker = result[2], playerID = l.id)
-            selldash(result[3],l.id,l.leagueID.id,asset123.first().id)
-        easyBuyIndex = result[4]
-        diff = 1
-        result.clear()
-        currasset.clear()
-        curramt.clear()
+	if l.userID.id == 3:
+		for h in assething:
+			if h.playerID == l.id:
+				currasset.append(h.ticker)
+				curramt.append(h.shares)
+		result = easyAI(l.leagueID.isCrypto,l.buyingPower,currasset,curramt)
+		print(result)
+		shares = result[1]
+		ticker = result[0]
+		if shares != 0:
+			buydash(ticker, shares,l.leagueID.id, l.id)
+		if result[3] != 0:
+			asset123 = Asset.objects.filter(ticker = result[2], playerID = l.id)
+			selldash(result[3],l.id,l.leagueID.id,asset123.first().id)
+		easyBuyIndex = result[4]
+		diff = 1
+		result.clear()
+		currasset.clear()
+		curramt.clear()
 
-    if l.userID.id == 4:
-        diff = 2
-        for h in assething:
-            if h.playerID == l.id:
-                currasset.append(h.ticker)
-                curramt.append(h.shares)
-        result = getBuy_med(l.buyingPower)
-        ticker = result[0]
-        shares = result[1]
-        medweight = result[2]
-        medloss = result[3]
-        if shares != 0:
-            buydash(ticker, shares,l.leagueID.id, l.id)
-        print(currasset)
-        print(curramt)
-        result.clear()
-        result = getSell_med(currasset,curramt)
-        ticker = result[0]
-        shares = result[1]
-        print(ticker)
-        print(shares)
-        if shares != 0:
-            asset123 = Asset.objects.filter(ticker = ticker, playerID = l.id)
-            selldash(shares,l.id,l.leagueID.id,asset123.first().id)
-        currasset.clear()
-        curramt.clear()
+	if l.userID.id == 4:
+		diff = 2
+		for h in assething:
+			if h.playerID == l.id:
+				currasset.append(h.ticker)
+				curramt.append(h.shares)
+		result = getBuy_med(l.buyingPower)
+		ticker = result[0]
+		shares = result[1]
+		medweight = result[2]
+		medloss = result[3]
+		if shares != 0:
+			buydash(ticker, shares,l.leagueID.id, l.id)
+		print(currasset)
+		print(curramt)
+		result.clear()
+		result = getSell_med(currasset,curramt)
+		ticker = result[0]
+		shares = result[1]
+		print(ticker)
+		print(shares)
+		if shares != 0:
+			asset123 = Asset.objects.filter(ticker = ticker, playerID = l.id)
+			selldash(shares,l.id,l.leagueID.id,asset123.first().id)
+		currasset.clear()
+		curramt.clear()
 
-    if l.userID.id == 5:
-        diff = 3
-        for h in assething:
-            if h.playerID == l.id:
-                currasset.append(h.ticker)
-                curramt.append(h.shares)
-        result = getBuy_hard(l.buyingPower)
-        ticker = result[0]
-        shares = result[1]
-        ptweets = result[2]
-        ntweets = result[3]
-        pnews = result[4]
-        nnews = result[5]
-        if shares != 0:
-            buydash(ticker, shares,l.leagueID.id, l.id)
-        print(currasset)
-        print(curramt)
-        result.clear()
-        result = getSell_hard(currasset,curramt)
-        ticker = result[0]
-        shares = result[1]
-        if shares != 0:
-            asset123 = Asset.objects.filter(ticker = ticker, playerID = l.id)
-            print(asset123)
-            selldash(shares,l.id,l.leagueID.id,asset123.first().id)
-        currasset.clear()
-        curramt.clear()
+	if l.userID.id == 5:
+		diff = 3
+		for h in assething:
+			if h.playerID == l.id:
+				currasset.append(h.ticker)
+				curramt.append(h.shares)
+		result = getBuy_hard(l.buyingPower)
+		ticker = result[0]
+		shares = result[1]
+		ptweets = result[2]
+		ntweets = result[3]
+		pnews = result[4]
+		nnews = result[5]
+		if shares != 0:
+			buydash(ticker, shares,l.leagueID.id, l.id)
+		print(currasset)
+		print(curramt)
+		result.clear()
+		result = getSell_hard(currasset,curramt)
+		ticker = result[0]
+		shares = result[1]
+		if shares != 0:
+			asset123 = Asset.objects.filter(ticker = ticker, playerID = l.id)
+			print(asset123)
+			selldash(shares,l.id,l.leagueID.id,asset123.first().id)
+		currasset.clear()
+		curramt.clear()
 
-    # query for changes in the database
-    cumWorth = l.cumWorth
-    buyingPower = l.buyingPower
-    pTransactions = Transaction.objects.filter(playerID = l.id)
-    print(pTransactions)
-    pAssets = Asset.objects.filter(leagueID = league_id, playerID = l.id)
-    print(pAssets)
-    p, n, neutPercent, len, ptweets, ntweets = getTwitterSentiments(ticker)
-    perPos, perNeg, perNeut, numAll, pnews, nnews = getNewsSentiments(ticker)
+	# query for changes in the database
+	cumWorth = l.cumWorth
+	buyingPower = l.buyingPower
+	pTransactions = Transaction.objects.filter(playerID = l.id).order_by('-id')
+	print(pTransactions)
+	pAssets = Asset.objects.filter(leagueID = league_id, playerID = l.id)
+	if (ticker != 'none123' or diff == 3):
+		p, n, neutPercent, len, ptweets, ntweets = getTwitterSentiments(ticker)
+		pPos, pNeg, pNeut, numAll, pnews, nnews = getNewsSentiments(ticker)
+	if ptweets == ['None', 'None', 'None', 'None', 'None'] or not ptweets:
+		ptweets = 'None'
+	if ntweets == ['None', 'None', 'None', 'None', 'None'] or not ntweets:
+		ntweets = 'None'
+	if pnews == ['None', 'None', 'None', 'None', 'None'] or not pnews:
+		pnews = 'None'
+	if nnews == ['None', 'None', 'None', 'None', 'None'] or not nnews:
+		nnews = 'None'
 
-    return render(request, 'aipage.html', {'assets': pAssets, 'cumWorth': cumWorth, 'buyingPower': buyingPower, 'transactions': pTransactions, 'diff':diff,
+	return render(request, 'aipage.html', {'assets': pAssets, 'cumWorth': cumWorth, 'buyingPower': buyingPower, 'transactions': pTransactions, 'diff':diff,
     'easyBuyIndex':easyBuyIndex, 'medWeight':medweight, 'medLoss':medloss, 'ptweets':ptweets[:5], 'ntweets':ntweets[:5], 'pnews':pnews[:5], 'nnews':nnews[:5]})
 
 
@@ -766,4 +774,3 @@ def submitShop(request,item):
 		if (request.user.profile.TitanCoins<100):
 			return HttpResponseRedirect('/dashboard')
 		return HttpResponseRedirect('/dashboard')
-

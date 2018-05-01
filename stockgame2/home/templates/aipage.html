@@ -74,8 +74,8 @@
               <div class="card">
 
                 <h1>Elmer, the AI</h1>
-                <p class="title">Artificial Intellifence / Investment Enthusiast</p>
-                <p>Harvard University</p>
+                <p class="title">Artificial Intelligence / Investment Enthusiast</p>
+                <p>Rutgers University</p>
                 <!--<a href="#"><i class="fa fa-dribbble"></i></a>
                 <a href="#"><i class="fa fa-twitter"></i></a>
                 <a href="#"><i class="fa fa-linkedin"></i></a>
@@ -94,7 +94,7 @@
 					<div class="panel panel-default">
 
 							<div class="row">
-                <div class="card text-white bg-dark mb-3">
+                <div class="card text-white bg-dark mb-3 text-center" style="width:100%;">
                   <h4>Buying Power: {{buyingPower}}</h4>
                   <h4>Total Worth: {{cumWorth}}</h4>
                 </div>
@@ -141,21 +141,29 @@
                </li>
                <h2>My most recent transaction stats </h2>
                <h3>Five positive tweets</h3>
+               {%if ptweets != 'None'%}
                {%for tweet in ptweets%}
                       <li class="list-group-item"><span class="fa fa-twitter"></span>{{tweet.text}}</li>
                {%endfor%}
+               {%endif%}
                <h3>Five negative tweets</h3>
+               {%if ntweets != 'None'%}
                {%for tweet in ntweets%}
                       <li class="list-group-item"><span class="fa fa-twitter"></span>{{tweet.text}}</li>
                {%endfor%}
+               {%endif%}
                <h3>Five positive news </h3>
+               {%if pnews != 'None'%}
                {%for article in pnews%}
                       <li class="list-group-item"><span class="fa fa-twitter"></span><a href = {{article.url}}>{{article.title}}</a></li>
                {%endfor%}
+               {%endif%}
                <h3>Five negative news </h3>
+               {%if nnews != 'None'%}
                {%for article in pnews%}
                       <li class="list-group-item"><span class="fa fa-twitter"></span><a href = {{article.url}}>{{article.title}}</a></li>
                {%endfor%}
+               {%endif%}
 
             </ul>
             {%endif%}
@@ -163,18 +171,6 @@
 
           </div>
 					<div class="panel panel-default">
-						<div>
-							<h1 class="page-header small">All Time Stats</h1>
-							<p class="page-subtitle small">Like to work fr different business</p>
-						</div>
-						<div class="col-md-12">
-							<ul class="list-group">
-								<li class="list-group-item"><span class="fa fa-male"></span> Holds $X across all leagues</li>
-								<li class="list-group-item"><span class="fa fa-institution"></span> Sold X stocks since joining</li>
-								<li class="list-group-item"><span class="fa fa-clock-o"></span> Aquired X stocks since joining </li>
-								<li class="list-group-item"><span class="fa fa-user"></span> Attained global rank of X </li>
-							</ul>
-						</div>
 						<div class="clearfix"></div>
 					</div>
 				</div>
@@ -182,6 +178,33 @@
 					<br>
 					<div class="panel panel-default">
 						<div class="col-md-12">
+
+              <!-- TradingView Widget BEGIN -->
+              <div class="tradingview-widget-container">
+                <div id="tradingview_50274"></div>
+                <div class="tradingview-widget-copyright"><a href="https://www.tradingview.com/symbols/NASDAQ-AAPL/" rel="noopener" target="_blank"><span class="blue-text">AAPL chart</span></a> by TradingView</div>
+                <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
+                <script type="text/javascript">
+                new TradingView.widget(
+                {
+                "width": 500,
+                "height": 500,
+                "symbol": "NASDAQ:AAPL",
+                "interval": "D",
+                "timezone": "Etc/UTC",
+                "theme": "Light",
+                "style": "1",
+                "locale": "en",
+                "toolbar_bg": "#f1f3f6",
+                "enable_publishing": false,
+                "allow_symbol_change": true,
+                "container_id": "tradingview_50274"
+              }
+                );
+                </script>
+              </div>
+              <!-- TradingView Widget END -->
+
               <!-- Styles -->
 							<div class="media">
                   <div class = "row">
@@ -209,7 +232,7 @@
               <tr>
                 <th>Asset Name</th>
                 <th>Number of Shares</th>
-                <th>Buy or sell</th>
+                <th>Buying Price</th>
               </tr>
               {% for a in assets%}
                 <tr>

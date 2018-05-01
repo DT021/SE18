@@ -107,34 +107,36 @@ def get_news_sentiment(description):
         return 'negative'
 
 def getTwitterSentiments(ticker):
-	api = TwitterClient()
+    dticker = '$' + ticker
+    api = TwitterClient()
     # calling function to get tweets
-	tweets = api.get_tweets(query = ticker, count = 200)
+    tweets = api.get_tweets(query = ticker, count = 200)
 
     # picking positive tweets from tweets
-	ptweets = [tweet for tweet in tweets if tweet['sentiment'] == 'positive']
+    ptweets = [tweet for tweet in tweets if tweet['sentiment'] == 'positive']
     # percentage of positive tweets
     ##print("Positive tweets percentage: {} %".format(100*len(ptweets)/len(tweets)))
-	ntweets = [tweet for tweet in tweets if tweet['sentiment'] == 'negative']
+    ntweets = [tweet for tweet in tweets if tweet['sentiment'] == 'negative']
     # percentage of negative tweets
     ##print("Negative tweets percentage: {} %".format(100*len(ntweets)/len(tweets)))
     # percentage of neutral tweets
     ##print("Neutral tweets percentage: {} %".format(100*(len(tweets) - len(ntweets) - len(ptweets))/len(tweets)))
 
     ##print("Total Number of Tweets: {}".format(len(tweets)))
-	if len(tweets) == 0:
-		return 0, 0, 0, 0, 0, 0
-	posPercent = len(ptweets)/len(tweets)
-	negPercent = len(ntweets)/len(tweets)
-	neutPercent = 1 - posPercent - negPercent
+    if len(tweets) == 0:
+        return 0, 0, 0, 0, ['None', 'None', 'None', 'None', 'None'], ['None', 'None', 'None', 'None', 'None']
+    posPercent = len(ptweets)/len(tweets)
+    negPercent = len(ntweets)/len(tweets)
+    neutPercent = 1 - posPercent - negPercent
 
-	return posPercent, negPercent, neutPercent, len(tweets), ptweets, ntweets
+    return posPercent, negPercent, neutPercent, len(tweets), ptweets, ntweets
 
 
 def getNewsSentiments(ticker):
 
+
     # Authentication
-    APIkey = '42b2610b2d1a421fbc3e5551202e2094'
+    APIkey = 'ec0b9cfc64e641b69bf714e68840ca76'
 
     url = ('https://newsapi.org/v2/everything?'
 		'apiKey=' + APIkey +
@@ -185,7 +187,7 @@ def getNewsSentiments(ticker):
     pnews = [a for a in arts if a['sentiment'] == 'positive']
     nnews = [a for a in arts if a['sentiment'] == 'negative']
     if numAll == 0:
-        return 0, 0, 0, 0, 0, 0
+        return 0, 0, 0, 0, ['None', 'None', 'None', 'None', 'None'], ['None', 'None', 'None', 'None', 'None']
     perPos = len(pnews)/numAll
     perNeg = len(nnews)/numAll
     perNeut = 1 - perPos - perNeg
