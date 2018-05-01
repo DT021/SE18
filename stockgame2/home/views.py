@@ -720,7 +720,8 @@ def processInvalid(request):
 @csrf_exempt
 def sms(request):
 	league = League.objects.get(name="SoftwareEngineering")
-	player = Player.objects.get(name="SEDemo")
+	user = User.objects.get(name="SEDemo")
+	player = Player.objects.get(userID=user.id)
 	purchase = request.POST.get('Body', '')
 	processed = purchase.split()
 	print(processed)
