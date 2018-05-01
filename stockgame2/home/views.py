@@ -720,20 +720,34 @@ def sms(request):
 	purchase = request.POST.get('Body', '')
 	processed = purchase.split()
 	print(processed)
-	shares = processed[0]
-	ticker = processed[1]
+	operation = processed[0]
+	shares = processed[1]
+	ticker = processed[2]
+	if operation == BUY:
+		buyingPrice = getPriceFromAPI(ticker,False) #allow crypto in future
+		tmpPrice = buyingPrice*decimal.Decimal(shares)
+		message = '<Response><Message>You bought %s shares of %s for $%s</Message></Response>' % (shares,ticker, tmpPrice)
+		if tmpPrice > player.buyingPower:
+			return redirect('/home')
+		new_asset = Asset(ticker = ticker, playerID = player.id, leagueID = league, shares = shares, buyingPrice = buyingPrice)
+		new_asset.save()
+		new_transaction = Transaction(leagueID = league, playerID = player.id, price = tmpPrice, ticker = ticker, shares = shares, isBuy = True)
+		player.buyingPower = player.buyingPower-tmpPrice
+		new_transaction.save()
+		return HttpResponse(message, content_type='text/xml')
 
-	buyingPrice = getPriceFromAPI(ticker,False) #allow crypto in future
-	tmpPrice = buyingPrice*decimal.Decimal(shares)
-	message = '<Response><Message>You bought %s shares of %s for $%s</Message></Response>' % (shares,ticker, tmpPrice)
-	if tmpPrice > player.buyingPower:
-		return redirect('/home')
-	new_asset = Asset(ticker = ticker, playerID = player.id, leagueID = league, shares = shares, buyingPrice = buyingPrice)
-	new_asset.save()
-	new_transaction = Transaction(leagueID = league, playerID = player.id, price = tmpPrice, ticker = ticker, shares = shares, isBuy = True)
-	player.buyingPower = player.buyingPower-tmpPrice
-	new_transaction.save()
-	return HttpResponse(message, content_type='text/xml')
+	if operation == SELL:
+		buyingPrice = getPriceFromAPI(ticker,False) #allow crypto in future
+		tmpPrice = buyingPrice*decimal.Decimal(shares)
+		message = '<Response><Message>You bought %s shares of %s for $%s</Message></Response>' % (shares,ticker, tmpPrice)
+		if tmpPrice > player.buyingPower:
+			return redirect('/home')
+		new_asset = Asset(ticker = ticker, playerID = player.id, leagueID = league, shares = shares, buyingPrice = buyingPrice)
+		new_asset.save()
+		new_transaction = Transaction(leagueID = league, playerID = player.id, price = tmpPrice, ticker = ticker, shares = shares, isBuy = True)
+		player.buyingPower = player.buyingPower-tmpPrice
+		new_transaction.save()
+		return HttpResponse(message, content_type='text/xml')
 
 
 # Create your views here.
