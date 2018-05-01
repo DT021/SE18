@@ -725,7 +725,7 @@ def sms(request):
 	processed = purchase.split()
 	print(processed)
 	operation = processed[0]
-	shares = processed[1]
+	shares = decimal.Decimal(processed[1])
 	ticker = processed[2]
 	if operation == "BUY":
 		buyingPrice = getPriceFromAPI(ticker,False) #allow crypto in future
