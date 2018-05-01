@@ -272,6 +272,7 @@ def aipage(request, league_id):
 	# perform transactions
 	count = 0
 
+	buyticker = 'None'
 	currasset = list()
 	curramt = list()
 	result = list()
@@ -296,6 +297,7 @@ def aipage(request, league_id):
 		print(result)
 		shares = result[1]
 		ticker = result[0]
+		buyticker = ticker
 		if shares != 0:
 			buydash(ticker, shares,l.leagueID.id, l.id)
 		if result[3] != 0:
@@ -315,6 +317,7 @@ def aipage(request, league_id):
 				curramt.append(h.shares)
 		result = getBuy_med(l.buyingPower)
 		ticker = result[0]
+		buyticker = ticker
 		shares = result[1]
 		medweight = result[2]
 		medloss = result[3]
