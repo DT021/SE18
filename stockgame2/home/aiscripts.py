@@ -136,7 +136,7 @@ def getNewsSentiments(ticker):
 
 
     # Authentication
-    APIkey = 'b33b392f1f39444eb2821e5134c156ee'
+    APIkey = 'd83d3b2a902e440e8cb76ed86610aeef'
 
     url = ('https://newsapi.org/v2/everything?'
 		'apiKey=' + APIkey +
