@@ -81,8 +81,9 @@
     	<p class="lead">Congratulations! You've placed top 3! Check your achievements page for more rewards!</p>
     {% else %}
         <p class="lead">This league has ended. Thank you for playing! Check your achievements page for more rewards!</p>
-    {% endif %}
-        <a href="/awards" class="btn btn-primary btn-lg">Achievements</a>
+		{% endif %}
+		<em class="lead"><b>TitanCoins: {{request.user.profile.TitanCoins}}</b></em>
+		 <div><a href="/awards" class="btn btn-primary btn-lg">Achievements</a></div>
       </header>
 		<!-- <div class="container-table100" style = "background-color: rgb(255,255,255); opacity: 0.8;"> -->
 			<!-- <div class="wrap-table100"> -->
