@@ -342,6 +342,7 @@ def aipage(request, league_id):
 				curramt.append(h.shares)
 		result = getBuy_hard(l.buyingPower)
 		ticker = result[0]
+		buyticker = ticker
 		shares = result[1]
 		ptweets = result[2]
 		ntweets = result[3]
@@ -368,9 +369,9 @@ def aipage(request, league_id):
 	pTransactions = Transaction.objects.filter(playerID = l.id).order_by('-id')
 	print(pTransactions)
 	pAssets = Asset.objects.filter(leagueID = league_id, playerID = l.id)
-	if (ticker != 'none123' or diff == 3):
-		p, n, neutPercent, len, ptweets, ntweets = getTwitterSentiments(ticker)
-		pPos, pNeg, pNeut, numAll, pnews, nnews = getNewsSentiments(ticker)
+	if (buyticker != 'none123' or diff == 3):
+		p, n, neutPercent, len, ptweets, ntweets = getTwitterSentiments(buyticker)
+		pPos, pNeg, pNeut, numAll, pnews, nnews = getNewsSentiments(buyticker)
 	if ptweets == ['None', 'None', 'None', 'None', 'None'] or not ptweets:
 		ptweets = 'None'
 	if ntweets == ['None', 'None', 'None', 'None', 'None'] or not ntweets:
