@@ -643,7 +643,7 @@ def leagues(request,league_id):
 		if p.isAi and count > rank: # AI placing worse than user
 			numAIbeat += 1
 	if (endDate < presentDate): # league has ended, redirect to leaderboard.html
-		if not (league.hasEnded): # need to handle trophies
+		if league.hasEnded == False: # need to handle trophies
 			league.hasEnded = True
 			current_user.profile.trophies[3] += 1 # increment for game played
 			current_user.profile.TitanCoins += 50
