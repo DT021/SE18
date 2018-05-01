@@ -742,17 +742,18 @@ def shop(request):
 	return render(request, 'shop.html', {})
 @csrf_exempt
 def submitShop(request,item):
+	userprof = Profile.objects.get(user=request.user)
 	if item == 1:
 
-		request.user.profile.TitanCoins = request.user.profile.TitanCoins + 100
+		userprof.TitanCoins=userprof.TitanCoins+100
 		return HttpResponseRedirect('/dashboard')
 	elif item == 2:
 
-		request.user.profile.TitanCoins = request.user.profile.TitanCoins + 500
+		userprof.TitanCoins=userprof.TitanCoins+500
 		return HttpResponseRedirect('/dashboard')
 	elif item == 3:
 
-		request.user.profile.TitanCoins = request.user.profile.TitanCoins + 1000
+		userprof.TitanCoins=userprof.TitanCoins+1000
 		return HttpResponseRedirect('/dashboard')
 	elif item == 4:
 
