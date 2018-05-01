@@ -264,7 +264,7 @@ def aipage(request, league_id):
     # get ai player
     aiplayer = Player.objects.filter(leagueID = league_id, isAi = True)
     if not aiplayer:
-        return render(request, 'createaipage.html')
+        return redirect('/shop')
 
     l = aiplayer.first()
 
