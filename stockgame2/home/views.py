@@ -213,12 +213,13 @@ def submitBuy(request,league_id,player_id):
 		player.cumWorth = player.totalWorth + player.buyingPower
 		player.save()
 		new_transaction.save()
-
-		# message = client.messages.create(
-		#	to="+17329985271",
-		#	from_="+17325079667",
-		#	body="You bought %d shares of %s at $%d!" % (shares,ticker,tmpPrice))
-
+		try:
+			message = client.messages.create(
+				to="+17329985271",
+				from_="+17325079667",
+				body="You bought %d shares of %s at $%d!" % (shares,ticker,tmpPrice))
+		except:
+			pass
 		# update trophies array to count buys
 		current_user.profile.trophies[0] += 1
 		current_user.save()
@@ -426,10 +427,13 @@ def submitSell(request,league_id,player_id,asset_id):
 				asset.delete()
 			else:
 				asset.save()
-			# message = client.messages.create(
-			#	to="+17329985271",
-			#	from_="+17325079667",
-			#	body="You Sold %d shares of %s at $%d!" % (shares,asset.ticker,tmpPrice))
+			try:
+				message = client.messages.create(
+					to="+17329985271",
+					from_="+17325079667",
+					body="You sold %d shares of %s at $%d!" % (shares,ticker,tmpPrice))
+			except:
+				pass
 			url = '/leagues/'+str(league.id)+'/'
 			return redirect(url)
 
@@ -715,8 +719,8 @@ def processInvalid(request):
 
 @csrf_exempt
 def sms(request):
-	league = League.objects.get(pk=17)
-	player = Player.objects.get(pk=30)
+	league = League.objects.get(name="SoftwareEngineering")
+	player = Player.objects.get(name="SEDemo")
 	purchase = request.POST.get('Body', '')
 	processed = purchase.split()
 	print(processed)
@@ -739,12 +743,14 @@ def sms(request):
 	if operation == SELL:
 		buyingPrice = getPriceFromAPI(ticker,False) #allow crypto in future
 		tmpPrice = buyingPrice*decimal.Decimal(shares)
-		message = '<Response><Message>You bought %s shares of %s for $%s</Message></Response>' % (shares,ticker, tmpPrice)
-		if tmpPrice > player.buyingPower:
-			return redirect('/home')
-		new_asset = Asset(ticker = ticker, playerID = player.id, leagueID = league, shares = shares, buyingPrice = buyingPrice)
-		new_asset.save()
-		new_transaction = Transaction(leagueID = league, playerID = player.id, price = tmpPrice, ticker = ticker, shares = shares, isBuy = True)
+		asset = Asset.objects.get(ticker=ticker)
+		message = '<Response><Message>You sold %s shares of %s for $%s</Message></Response>' % (shares,ticker, tmpPrice)
+		currShares = asset.shares
+		asset.shares = currShares - shares
+		if asset.shares == 0:
+			asset.delete()
+		else:
+			asset.save()
 		player.buyingPower = player.buyingPower-tmpPrice
 		new_transaction.save()
 		return HttpResponse(message, content_type='text/xml')
