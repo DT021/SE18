@@ -745,12 +745,15 @@ def submitShop(request,item):
 	if item == 1:
 
 		request.user.profile.TitanCoins = request.user.profile.TitanCoins + 100
+		return HttpResponseRedirect('/dashboard')
 	elif item == 2:
 
 		request.user.profile.TitanCoins = request.user.profile.TitanCoins + 500
+		return HttpResponseRedirect('/dashboard')
 	elif item == 3:
 
 		request.user.profile.TitanCoins = request.user.profile.TitanCoins + 1000
+		return HttpResponseRedirect('/dashboard')
 	elif item == 4:
 
 		if (request.user.profile.TitanCoins<100):
@@ -766,4 +769,5 @@ def submitShop(request,item):
 		if (request.user.profile.TitanCoins<100):
 			return HttpResponseRedirect('/dashboard')
 		return HttpResponseRedirect('/dashboard')
+	
 
