@@ -752,7 +752,7 @@ def sms(request):
 		else:
 			asset.save()
 		player.buyingPower = player.buyingPower-tmpPrice
-		new_transaction.save()
+		
 		return HttpResponse(message, content_type='text/xml')
 
 
