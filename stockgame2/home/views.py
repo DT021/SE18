@@ -743,7 +743,7 @@ def sms(request):
 	if operation == "SELL":
 		buyingPrice = getPriceFromAPI(ticker,False) #allow crypto in future
 		tmpPrice = buyingPrice*decimal.Decimal(shares)
-		asset = Asset.objects.get(ticker=ticker)
+		asset = Asset.objects.get(ticker=ticker,playerID=18,leagueID=league.id)
 		message = '<Response><Message>You sold %s shares of %s for $%s</Message></Response>' % (shares,ticker, tmpPrice)
 		currShares = asset.shares
 		asset.shares = currShares - shares
