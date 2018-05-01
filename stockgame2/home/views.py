@@ -514,52 +514,59 @@ def aboutus(request):
 	template = loader.get_template('aboutus.html')
 	return HttpResponse(template.render({},request))
 def home(request):
-	APIkey = 'fc573c0fbf134ed9af6e3e0459df0802'
+	try:
+		APIkey = 'fc573c0fbf134ed9af6e3e0459df0802'
 
-	listOfStocks = getDow()
-	ticker = random.choice(listOfStocks)
-	print("TICKER: %s", ticker)
-	search = ticker + ' stock news'
+		listOfStocks = getDow()
+		ticker = random.choice(listOfStocks)
+		print("TICKER: %s", ticker)
+		search = ticker + ' stock news'
 
-	url = ('https://newsapi.org/v2/everything?'
-		'apiKey=' + APIkey +
-		'&q=' + search+ 
-		'&language=en') 
+		url = ('https://newsapi.org/v2/everything?'
+			'apiKey=' + APIkey +
+			'&q=' + search+ 
+			'&language=en') 
 
-	response = requests.get(url)
-	binary = response.content
-	jsonData = json.loads(binary) #gets JSON data
-	count = 0
-	resultsList = []
-	while (True):
-		if count == 20:
-			break
-		resultsList.append(jsonData["articles"][count]['url'])
-		print(jsonData["articles"][count]['url'])
-		count+=1
-	#print(jsonData["articles"][0]['url'])
-	count = 0
-	resultCounter = 0
-	webPage1Counter = 0
-	webPage2Counter = 0
-	for j in resultsList:
-		if "marketwatch" in resultsList[count]:
-			resultCounter+=1
-			if (resultCounter == 1):
-				webPage1Counter = count
-			if (resultCounter == 2):
-				webPage2Counter = count
+		response = requests.get(url)
+		binary = response.content
+		jsonData = json.loads(binary) #gets JSON data
+		count = 0
+		resultsList = []
+		while (True):
+			if count == 20:
 				break
-		count +=1
-	webPage = "https://www.marketwatch.com/story/apple-earnings-iphone-expectations-are-down-but-anxiety-is-still-high-2018-04-27"
-	if count == 20:
+			resultsList.append(jsonData["articles"][count]['url'])
+			print(jsonData["articles"][count]['url'])
+			count+=1
+		#print(jsonData["articles"][0]['url'])
+		count = 0
+		resultCounter = 0
+		webPage1Counter = 0
+		webPage2Counter = 0
+		for j in resultsList:
+			if "marketwatch" in resultsList[count]:
+				resultCounter+=1
+				if (resultCounter == 1):
+					webPage1Counter = count
+				if (resultCounter == 2):
+					webPage2Counter = count
+					break
+			count +=1
+		webPage = "https://www.marketwatch.com/story/apple-earnings-iphone-expectations-are-down-but-anxiety-is-still-high-2018-04-27"
+		webPage2 = "https://www.marketwatch.com/story/apple-earnings-iphone-expectations-are-down-but-anxiety-is-still-high-2018-04-27"
+		if count == 20:
+			print("Result not found. Count = %s", count)
+			return render(request, 'home.html', {'webPage' : webPage, 'webPage2' : webPage2})
+		else:
+			webPage = resultsList[webPage1Counter]
+			webPage2 = resultsList[webPage2Counter]
+			print(webPage)
+			print(webPage2)
+			return render(request, 'home.html', {'webPage' : webPage, 'webPage2' : webPage2})
+	except:
+		webPage = "https://www.marketwatch.com/story/apple-earnings-iphone-expectations-are-down-but-anxiety-is-still-high-2018-04-27"
+		webPage2 = "https://www.marketwatch.com/story/apple-earnings-iphone-expectations-are-down-but-anxiety-is-still-high-2018-04-27"
 		print("Result not found. Count = %s", count)
-		return render(request, 'home.html', {'webPage' : webPage})
-	else:
-		webPage = resultsList[webPage1Counter]
-		webPage2 = resultsList[webPage2Counter]
-		print(webPage)
-		print(webPage2)
 		return render(request, 'home.html', {'webPage' : webPage, 'webPage2' : webPage2})
 
 def buydash(ticker, shares, league_id, player_id):

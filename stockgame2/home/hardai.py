@@ -10,26 +10,29 @@ def getBuy_hard(buyingPower):
 	hi_score = [-10000000,-10000000,-10000000]
 	hi_item = ['blank','blank','blank']
 	for item in list:
-		pos, neg, neut, tnum, ptweets, ntweets = getTwitterSentiments(item)
-		if neg == 0:
-			neg = 1
-		if tnum == 0:
-			twit_score = 1
-		else:
-			twit_score = pos/neg
-
+		try:
+			pos, neg, neut, tnum, ptweets, ntweets = getTwitterSentiments(item)
+			if neg == 0:
+				neg = 1
+			if tnum == 0:
+				twit_score = 1
+			else:
+				twit_score = pos/neg
+		except:
+			twit_score=1
 		data = getLastMonth(item)
 		[w,b,loss] = runLinearReg(data)
 		linreg_score = w*1000/loss
-
-		pos, neg, neut, lnum, pnews, nnews = getNewsSentiments(item)
-		if neg == 0:
-			neg = 1
-		if lnum == 0:
+		try:
+			pos, neg, neut, lnum, pnews, nnews = getNewsSentiments(item)
+			if neg == 0:
+				neg = 1
+			if lnum == 0:
+				news_score = 1
+			else:
+				news_score = pos/neg
+		except:
 			news_score = 1
-		else:
-			news_score = pos/neg
-
 		print("[BUY] " + item + ": " + str(w) +" "+ str(b) + " " + str(loss))
 		print("		 " + item + ": " + str(pos) +" "+ str(neg) + " " + str(neut))
 		tot_score = twit_score*linreg_score*news_score
