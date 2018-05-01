@@ -137,7 +137,7 @@
                  I am a hard-level artificial intelligence. I use machine learning to analyze monthly stock market trends
                  to determine what stock is increasing at the moment. In addition to monthly trends,
                  I can read Tweets and news articles from across the Internet to determine if there
-                 has been positive or negative publicity for it! You can my stats for my most recent transaction below.
+                 has been positive or negative publicity for it! You can check out my stats for my most recent transaction below.
                </li>
                <h2>My most recent transaction stats </h2>
                <h3>Five positive tweets</h3>
@@ -155,13 +155,13 @@
                <h3>Five positive news </h3>
                {%if pnews != 'None'%}
                {%for article in pnews%}
-                      <li class="list-group-item"><span class="fa fa-twitter"></span><a href = {{article.url}}>{{article.title}}</a></li>
+                      <li class="list-group-item"><span class="fa fa-newspaper-o"></span><a href = {{article.url}}>{{article.title}}</a></li>
                {%endfor%}
                {%endif%}
                <h3>Five negative news </h3>
                {%if nnews != 'None'%}
                {%for article in pnews%}
-                      <li class="list-group-item"><span class="fa fa-twitter"></span><a href = {{article.url}}>{{article.title}}</a></li>
+                      <li class="list-group-item"><span class="fa fa-newspaper-o"></span><a href = {{article.url}}>{{article.title}}</a></li>
                {%endfor%}
                {%endif%}
 
@@ -213,13 +213,13 @@
                   <tr>
                     <th>Asset Name</th>
                     <th>Number of Shares</th>
-                    <th>Buy or sell</th>
+                    <!--<th>Buy or sell</th>-->
                   </tr>
                   {% for t in transactions%}
                     <tr>
                       <td>{{t.ticker}}</td>
                       <td>{{t.shares}}</td>
-                      <td>{{t.isBuy}}</td>
+                      <!--<td>{{t.isBuy}}</td>-->
                     </tr>
                 {% endfor %}
               </div>
