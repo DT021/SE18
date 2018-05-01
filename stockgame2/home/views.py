@@ -751,7 +751,10 @@ def sms(request):
 			asset.delete()
 		else:
 			asset.save()
-		player.buyingPower = player.buyingPower-tmpPrice
+		player.buyingPower = player.buyingPower+tmpPrice
+		player.totalWorth -= tmpPrice
+		player.cumWorth = player.buyingPower + player.totalWorth
+		player.save()
 		
 		return HttpResponse(message, content_type='text/xml')
 
