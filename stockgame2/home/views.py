@@ -737,10 +737,10 @@ def sms(request):
 
 
 # Create your views here.
-
+@csrf_exempt
 def shop(request):
 	return render(request, 'shop.html', {})
-
+@csrf_exempt
 def submitShop(request,item):
 	if item == 1:
 
