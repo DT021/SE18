@@ -96,7 +96,7 @@ def getCryptoPriceFromAPI(symbol, isCrypto):
     recentPrices = timeUpdates[lastRefreshed]
     openPrice = recentPrices[whichprice]
 
-    return openPrice
+   round(decimal.Decimal(openPrice),2)
 
 def getCryptoPriceFromAPI2(symbol,isCrypto):
 	APIKEY = 'C1D9E9FC-4D44-4F52-BF51-7EA190BB4DBF'
@@ -112,7 +112,7 @@ def getCryptoPriceFromAPI2(symbol,isCrypto):
 		return -1
 	price = jsonData['rate']
 	print(price)
-	return decimal.Decimal(price)
+	return round(decimal.Decimal(price),2)
 	
 def getPriceFromAPI_m(symbol, isCrypto):
 	param = {
