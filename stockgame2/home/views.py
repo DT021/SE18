@@ -727,7 +727,7 @@ def sms(request):
 	operation = processed[0]
 	shares = processed[1]
 	ticker = processed[2]
-	if operation == BUY:
+	if operation == "BUY":
 		buyingPrice = getPriceFromAPI(ticker,False) #allow crypto in future
 		tmpPrice = buyingPrice*decimal.Decimal(shares)
 		message = '<Response><Message>You bought %s shares of %s for $%s</Message></Response>' % (shares,ticker, tmpPrice)
@@ -740,7 +740,7 @@ def sms(request):
 		new_transaction.save()
 		return HttpResponse(message, content_type='text/xml')
 
-	if operation == SELL:
+	if operation == "SELL":
 		buyingPrice = getPriceFromAPI(ticker,False) #allow crypto in future
 		tmpPrice = buyingPrice*decimal.Decimal(shares)
 		asset = Asset.objects.get(ticker=ticker)
