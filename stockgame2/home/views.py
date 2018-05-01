@@ -286,7 +286,7 @@ def aipage(request, league_id):
     nnews = []
     assething = Asset.objects.filter(leagueID = league_id)
 
-    if l.userID.id == 14:
+    if l.userID.id == 3:
         for h in assething:
             if h.playerID == l.id:
                 currasset.append(h.ticker)
@@ -306,7 +306,7 @@ def aipage(request, league_id):
         currasset.clear()
         curramt.clear()
 
-    if l.userID.id == 15:
+    if l.userID.id == 4:
         diff = 2
         for h in assething:
             if h.playerID == l.id:
@@ -333,7 +333,7 @@ def aipage(request, league_id):
         currasset.clear()
         curramt.clear()
 
-    if l.userID.id == 16:
+    if l.userID.id == 5:
         diff = 3
         for h in assething:
             if h.playerID == l.id:
