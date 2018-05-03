@@ -45,10 +45,14 @@ from home.hardai import *
 
 
 client = Client(account_sid, auth_token)
+# logout
+# Safa Shaikh
 def logout_view(request):
 	logout(request)
 	# Redirect to a success page.
 	return HttpResponseRedirect('/accounts/login')
+# create a new league
+# Safa Shaikh
 def newLeague(request):
 	date_inpast = False
 	current_user = request.user
@@ -75,6 +79,8 @@ def newLeague(request):
 	else:
 		form = SignUpForm()
 		return render(request, 'createleague.html', {'form': form})
+# join a league
+# Steven Adler
 def joinLeague(request):
 	current_user = request.user
 	if request.method == 'POST':
@@ -109,6 +115,9 @@ def joinLeague(request):
 	else:
 		form = SignUpForm()
 		return render(request, 'joinleague.html', {'form': form})
+
+# new user signup
+# Safa Shaikh		
 def submitSignup(request):
 	if request.method == 'POST':
 		form = SignUpForm(request.POST)
@@ -150,6 +159,8 @@ def submitSignup(request):
 		form = SignUpForm(request.POST)
 		return render(request, 'signup.html', {'form': form})
 
+# buy a stock/cryptocurrency
+# Nick Lurski and Brooks Tawil
 def submitBuy(request,league_id,player_id):
 	league = League.objects.get(pk=league_id)
 	player = Player.objects.get(pk=player_id)
@@ -228,7 +239,8 @@ def submitBuy(request,league_id,player_id):
 	else:
 		return render(request, 'buypage.html', {'form': form,'league':league,'player':player})
 
-
+# create transactionReceipt
+# Brooks Tawil
 def transactionReceipt(request,transaction_id):
 	#lastTransaction = Transaction.objects.latest()
 	lastTransaction = Transaction.objects.get(pk=transaction_id)
@@ -238,7 +250,8 @@ def transactionReceipt(request,transaction_id):
 	shares = lastTransaction.shares
 	return render(request, 'receipt.html', {'price': price, 'ticker': ticker, 'shares': shares,'league':league})
 
-
+# Add AI to your league
+# Timothy Liu
 def createai(request):
 	form = CreateAiForm(request.POST)
 	if(form.is_valid()):
@@ -258,7 +271,8 @@ def createai(request):
 		return render(request, 'home.html')
 
 
-
+# Perform AI function to analyze data and select stock(s) to buy
+# Kristene Aguinaldo
 def aipage(request, league_id):
 
     # get ai player
@@ -389,7 +403,8 @@ def aipage(request, league_id):
 
 
 
-# MUST UPDATE PLAYER BUYING POWER
+# sell a stock
+# Kristene, David, Safa
 def submitSell(request,league_id,player_id,asset_id):
 	current_user = request.user
 	if request.method == 'POST':
@@ -475,6 +490,8 @@ def get_user(request):
 
 	return render(request, 'user.html', {'form': form})
 
+# send invite via email
+# Brooks Tawil
 def sendinvite(request):
 	current_user = request.user
 	if(request.method == 'POST'):
@@ -497,7 +514,7 @@ def sendinvite(request):
 				fail_silently=False,
 			)
 
-
+# landing page
 def index(request):
 	template = loader.get_template('greet.html')
 	return HttpResponse(template.render({},request))
@@ -513,6 +530,8 @@ def login(request):
 def aboutus(request):
 	template = loader.get_template('aboutus.html')
 	return HttpResponse(template.render({},request))
+# home page with tailored news
+# Timothy, David
 def home(request):
 	try:
 		APIkey = 'fc573c0fbf134ed9af6e3e0459df0802'
@@ -569,6 +588,8 @@ def home(request):
 		print("Result not found. Count = %s", count)
 		return render(request, 'home.html', {'webPage' : webPage, 'webPage2' : webPage2})
 
+# update database with AI purchases
+# Timothy Liu
 def buydash(ticker, shares, league_id, player_id):
 	league = League.objects.get(pk=league_id)
 	player = Player.objects.get(pk=player_id)
@@ -619,6 +640,9 @@ def selldash(shares,player_id, league_id, asset_id):
 		asset.delete()
 	else:
 		asset.save()
+
+# dashboard display
+# Timothy, Safa
 def dashboard(request):
 
 	current_user = request.user
@@ -666,6 +690,9 @@ def faq(request):
 def universal(request):
 	template = loader.get_template('universalleague.html')
 	return HttpResponse(template.render({},request))
+
+# individual league page display and updates to asset prices, and trophies
+# Safa, Avanish, Kristian
 def leagues(request,league_id):
 	current_user = request.user
 	league = League.objects.get(pk=league_id)
@@ -739,6 +766,8 @@ def sellform(request,league_id,player_id,asset_id):
 	player = Player.objects.get(pk=player_id)
 	asset = Asset.objects.get(pk=asset_id)
 	return render(request, 'sellform.html', {'league': league,'player':player,'asset':asset})
+# display profile page
+# Safa, Avanish, Kristian, Brooks
 def profile(request):
 	current_user = request.user
 	if (current_user.is_authenticated):
@@ -747,6 +776,8 @@ def profile(request):
 	else:
 		template = loader.get_template('anonuser.html')
 		return HttpResponse(template.render({},request))
+# targeted news on homepage
+# David
 def getTargetedNews(request):
 	link = "https://www.google.co.uk/finance/company_news?q=LON:VOD&output=rss"
 	#print (top_headlines)
@@ -781,7 +812,8 @@ def processInvalid(request):
 	template = loader.get_template('processInvalid.html')
 	return HttpResponse(template.render({},request))
 
-
+# SMS integration
+# Nick
 @csrf_exempt
 def sms(request):
 	league = League.objects.get(name="SoftwareEngineering")
@@ -831,6 +863,8 @@ def sms(request):
 @csrf_exempt
 def shop(request):
 	return render(request, 'shop.html', {})
+# Shop redirects
+# Nick and Brooks
 @csrf_exempt
 def submitShop(request,item):
 	userprof = Profile.objects.get(user=request.user)

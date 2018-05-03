@@ -1,0 +1,37 @@
+Main python source code files are in stockgame2/home/:
+
+
+***unit_tests.py  tests.py  inttests.py***
+//Nick, Steven
+
+***listofstockscrypto.py*** 
+//Kristene and Steven 
+
+*** easyai.py     hardai.py     medai.py  ***
+//Kristene, Steven, Timothy
+
+***aiscripts.py***
+//Kristene
+
+***financepi.py***
+//Kristene and Nick
+
+***models.py   forms.py   views.py ***
+//Done by all team members - see files for function details
+
+All html files are under stockgame2/home/templates 
+//Done by all team members
+
+Path names are found in urls.py
+
+Additional References:
+https://docs.djangoproject.com/en/2.0/
+https://getbootstrap.com/
+https://www.w3schools.com/
+https://www.twilio.com/docs/
+https://www.geeksforgeeks.org/twitter-sentiment-analysis-using-python/
+https://www.coursera.org/specializations/deep-learning#courses
+https://cs224d.stanford.edu/lectures/CS224d-Lecture7.pdf
+https://www.postgresql.org/
+https://simpleisbetterthancomplex.com/tutorial/2016/07/22/how-to-extend-django-user-model.html
+https://medium.com/mlreview/a-simple-deep-learning-model-for-stock-price-prediction-using-tensorflow-30505541d877
