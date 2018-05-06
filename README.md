@@ -10,7 +10,7 @@ LINUX: https://www.python.org/downloads/source/
 # 2 alt.) If you are using a mac type:source macvenv/bin/activate
 # 3.)Type:python manage.py runserver
 # 4.)Go to browser and go to http://localhost:8000
-# 5.)If you do no see any styles or pictures on that localhost:8000, then go to SE18/stockgame2/stockgame/setting.py and scroll all the way down until you see STATICFILES_DIRS. Read the comments under that.
+# 5.)If you do no see any styles or pictures on that localhost:8000, then go to SE18/stockgame2/stockgame/settings.py and scroll all the way down until you see STATICFILES_DIRS. Read the comments under that.
 
 Sample usernames and passwords to login:
 Username: SEDemo		Password: pwdpwdpwd
@@ -48,6 +48,8 @@ see sources.txt for authors information
 All images are located under stockgame2/home/static/home2
 
 See database configuration in stockgame2/stockgame/settings.py
+
+Hosted website: titantrading.herokuapp.com  
 
 
 

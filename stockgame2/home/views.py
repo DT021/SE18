@@ -160,7 +160,7 @@ def submitSignup(request):
 		return render(request, 'signup.html', {'form': form})
 
 # buy a stock/cryptocurrency
-# Nick Lurski and Brooks Tawil
+# Nick Lurski and Brooks Tawil, updates by Safa
 def submitBuy(request,league_id,player_id):
 	league = League.objects.get(pk=league_id)
 	player = Player.objects.get(pk=player_id)
