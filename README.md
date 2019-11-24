@@ -34,7 +34,7 @@ I used PSQL 10
 psql -U postgres -c "CREATE ROLE gyesfxht LOGIN NOSUPERUSER INHERIT CREATEDB CREATEROLE;"
 7. It should say something like role created
 8. Now run 
-psql -U postgres -c “ALTER USER gyesfxht  WITH PASSWORD 'VwftaOkFDwF2LoGElDUxJ7i4kjJyALvy';”
+psql -U postgres -c “ALTER USER <database_name> WITH PASSWORD '<database_pwd>';”
 9. It should say something like user altered
 10. Launch into the venv like you would be running manage.py runserver
 11. Instead run ‘manage.py test home.unit_tests’ or ‘manage.py test home.inttests’
