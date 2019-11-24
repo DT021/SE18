@@ -31,7 +31,7 @@ I used PSQL 10
 5.So here is where things get a little hairy, add the psql bin folder to your PATH environment variables (mine is C:\Program Files\PostgreSQL\10\bin)
 	(you can do this in cmd with ‘set PATH=%PATH%;C:\[PATH]’)
 6. Open the command line and run:
-psql -U postgres -c "CREATE ROLE gyesfxht LOGIN NOSUPERUSER INHERIT CREATEDB CREATEROLE;"
+psql -U postgres -c "CREATE ROLE <database_name> LOGIN NOSUPERUSER INHERIT CREATEDB CREATEROLE;"
 7. It should say something like role created
 8. Now run 
 psql -U postgres -c “ALTER USER <database_name> WITH PASSWORD '<database_pwd>';”
